@@ -100,12 +100,12 @@ The POC must include:
 ---
 
 ## ✅ **Status: In Progress**
-✔ Planning  
-✔ Requirements, architecture and roadmap defined  
-⬜ Stage 1: Project structure & navigation  
-⬜ Stage 2: Mock API + UI  
-⬜ Stage 3: AI integration  
-⬜ Stage 4: Accounts & logging  
+✔ Planning
+✔ Requirements, architecture and roadmap defined
+✔ Stage 1: Project structure & navigation
+✔ Stage 2: Mock API + UI
+⬜ Stage 3: AI integration
+⬜ Stage 4: Accounts & logging
 ⬜ Stage 5: Styling & disclaimers
 
 ---
