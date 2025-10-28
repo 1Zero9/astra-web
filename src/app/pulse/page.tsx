@@ -28,6 +28,8 @@ export default function SecurityPulse() {
   const [focusArea, setFocusArea] = useState("");
   const [tone, setTone] = useState("Professional");
   const [generating, setGenerating] = useState(false);
+  const [generatedContent, setGeneratedContent] = useState<string | null>(null);
+  const [generationError, setGenerationError] = useState<string | null>(null);
   const [lastSync, setLastSync] = useState<Date | null>(null);
   const [readItems, setReadItems] = useState<Set<string>>(new Set());
   const [newItems, setNewItems] = useState<Set<string>>(new Set());
@@ -126,20 +128,45 @@ export default function SecurityPulse() {
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     setGenerating(true);
+    setGenerationError(null);
+    setGeneratedContent(null);
 
     const selectedArticles = news.filter(item => selectedItems.includes(item.link));
 
-    console.log("Generating content with:", {
-      contentType,
-      focusArea,
-      tone,
-      articles: selectedArticles
-    });
+    try {
+      const response = await fetch('/api/generate-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contentType,
+          articles: selectedArticles,
+          focusArea: focusArea || undefined,
+          tone,
+        }),
+      });
 
-    setTimeout(() => {
-      alert(`Content generation coming soon!\n\nType: ${contentType}\nFocus: ${focusArea || "General"}\nTone: ${tone}\nArticles: ${selectedArticles.length}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate content');
+      }
+
+      setGeneratedContent(data.content);
+    } catch (error) {
+      console.error('Error generating content:', error);
+      setGenerationError(error instanceof Error ? error.message : 'Failed to generate content');
+    } finally {
       setGenerating(false);
-    }, 1000);
+    }
+  };
+
+  const copyToClipboard = () => {
+    if (generatedContent) {
+      navigator.clipboard.writeText(generatedContent);
+      alert('Content copied to clipboard!');
+    }
   };
 
   // Detect trending topics
@@ -567,6 +594,34 @@ export default function SecurityPulse() {
                   {generating ? "Generating..." : "Generate Content"}
                 </button>
               </form>
+
+              {/* Generated Content Display */}
+              {generatedContent && (
+                <div className="mt-6 p-4 bg-green-50 border-2 border-green-200 rounded-lg">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-semibold text-green-900">✓ Content Generated</h3>
+                    <button
+                      onClick={copyToClipboard}
+                      className="text-xs px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                    >
+                      Copy to Clipboard
+                    </button>
+                  </div>
+                  <div className="bg-white p-4 rounded border border-green-200 max-h-96 overflow-y-auto">
+                    <pre className="whitespace-pre-wrap text-sm text-gray-800 font-sans">
+                      {generatedContent}
+                    </pre>
+                  </div>
+                </div>
+              )}
+
+              {/* Error Display */}
+              {generationError && (
+                <div className="mt-6 p-4 bg-red-50 border-2 border-red-200 rounded-lg">
+                  <h3 className="font-semibold text-red-900 mb-2">✗ Generation Failed</h3>
+                  <p className="text-sm text-red-700">{generationError}</p>
+                </div>
+              )}
 
               <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
                 <p className="text-xs text-amber-900">
