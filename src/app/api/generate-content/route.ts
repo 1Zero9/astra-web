@@ -1,5 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { ensureGuestUser, GUEST_USER_ID } from '@/lib/guest-user';
 
 // Initialize the Gemini API
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY || '');
@@ -27,12 +29,40 @@ export async function POST(request: NextRequest) {
     const response = await result.response;
     const generatedText = response.text();
 
-    return NextResponse.json({
-      success: true,
-      content: generatedText,
-      contentType,
-      articleCount: articles.length,
-    });
+    // Save generated content to database
+    try {
+      await ensureGuestUser();
+
+      const savedContent = await prisma.generatedContent.create({
+        data: {
+          userId: GUEST_USER_ID,
+          contentType,
+          title: `${contentType} - ${new Date().toLocaleDateString()}`,
+          content: generatedText,
+          focusArea: focusArea || null,
+          tone: tone || null,
+          sourceLinks: articles.map((a) => a.link),
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        content: generatedText,
+        contentType,
+        articleCount: articles.length,
+        savedId: savedContent.id,
+      });
+    } catch (dbError) {
+      console.error('Error saving to database:', dbError);
+      // Still return the generated content even if DB save fails
+      return NextResponse.json({
+        success: true,
+        content: generatedText,
+        contentType,
+        articleCount: articles.length,
+        warning: 'Content generated but not saved to database',
+      });
+    }
   } catch (error) {
     console.error('Error generating content:', error);
     return NextResponse.json(

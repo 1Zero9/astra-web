@@ -17,6 +17,17 @@ interface TrendingTopic {
   isNew: boolean;
 }
 
+interface ContentHistory {
+  id: string;
+  contentType: string;
+  title: string;
+  content: string;
+  focusArea: string | null;
+  tone: string | null;
+  sourceLinks: string[];
+  createdAt: string;
+}
+
 export default function SecurityPulse() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +45,9 @@ export default function SecurityPulse() {
   const [readItems, setReadItems] = useState<Set<string>>(new Set());
   const [newItems, setNewItems] = useState<Set<string>>(new Set());
   const [previousLinks, setPreviousLinks] = useState<Set<string>>(new Set());
+  const [showHistory, setShowHistory] = useState(false);
+  const [contentHistory, setContentHistory] = useState<ContentHistory[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
 
   useEffect(() => {
     // Load read items from localStorage
@@ -154,6 +168,8 @@ export default function SecurityPulse() {
       }
 
       setGeneratedContent(data.content);
+      // Refresh history after generating
+      fetchHistory();
     } catch (error) {
       console.error('Error generating content:', error);
       setGenerationError(error instanceof Error ? error.message : 'Failed to generate content');
@@ -166,6 +182,36 @@ export default function SecurityPulse() {
     if (generatedContent) {
       navigator.clipboard.writeText(generatedContent);
       alert('Content copied to clipboard!');
+    }
+  };
+
+  const fetchHistory = async () => {
+    setLoadingHistory(true);
+    try {
+      const response = await fetch('/api/content-history?limit=10');
+      const data = await response.json();
+      if (data.success) {
+        setContentHistory(data.history);
+      }
+    } catch (error) {
+      console.error('Error fetching history:', error);
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
+
+  const deleteHistoryItem = async (id: string) => {
+    try {
+      const response = await fetch('/api/content-history', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (response.ok) {
+        setContentHistory(prev => prev.filter(item => item.id !== id));
+      }
+    } catch (error) {
+      console.error('Error deleting history item:', error);
     }
   };
 
@@ -523,9 +569,37 @@ export default function SecurityPulse() {
           {/* Content Generation Panel */}
           <div className="lg:col-span-1">
             <div className="bg-white p-6 rounded-lg border-2 border-gray-300 sticky top-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Generate Content</h2>
+              {/* Tabs */}
+              <div className="flex gap-2 mb-4 border-b border-gray-200">
+                <button
+                  onClick={() => setShowHistory(false)}
+                  className={`px-4 py-2 font-medium transition-colors ${
+                    !showHistory
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Generate
+                </button>
+                <button
+                  onClick={() => {
+                    setShowHistory(true);
+                    if (contentHistory.length === 0) fetchHistory();
+                  }}
+                  className={`px-4 py-2 font-medium transition-colors ${
+                    showHistory
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  History
+                </button>
+              </div>
 
-              {selectedItems.length > 0 && (
+              {/* Generate Tab */}
+              {!showHistory && (
+                <>
+                  {selectedItems.length > 0 && (
                 <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                   <p className="text-sm text-blue-900 mb-2">
                     {selectedItems.length} article{selectedItems.length > 1 ? "s" : ""} selected
@@ -628,6 +702,82 @@ export default function SecurityPulse() {
                   <strong>⚠️ Note:</strong> Generated content should be reviewed before distribution.
                 </p>
               </div>
+                </>
+              )}
+
+              {/* History Tab */}
+              {showHistory && (
+                <div className="space-y-4">
+                  {loadingHistory ? (
+                    <div className="text-center py-8 text-gray-500">
+                      <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-3"></div>
+                      <p>Loading history...</p>
+                    </div>
+                  ) : contentHistory.length === 0 ? (
+                    <div className="text-center py-12 text-gray-500">
+                      <p className="text-lg mb-2">No content generated yet</p>
+                      <p className="text-sm">Generate some content to see it here!</p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-semibold text-gray-900">Recent Generated Content</h3>
+                        <button
+                          onClick={fetchHistory}
+                          className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                        >
+                          Refresh
+                        </button>
+                      </div>
+                      <div className="space-y-4 max-h-[600px] overflow-y-auto">
+                        {contentHistory.map((item) => (
+                          <div
+                            key={item.id}
+                            className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors"
+                          >
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex-1">
+                                <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded mb-2">
+                                  {item.contentType}
+                                </span>
+                                <p className="text-xs text-gray-500">
+                                  {new Date(item.createdAt).toLocaleString()}
+                                </p>
+                              </div>
+                              <button
+                                onClick={() => deleteHistoryItem(item.id)}
+                                className="text-red-600 hover:text-red-800 text-xs font-medium"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                            {item.focusArea && (
+                              <p className="text-xs text-gray-600 mb-2">
+                                Focus: {item.focusArea} | Tone: {item.tone}
+                              </p>
+                            )}
+                            <div className="bg-gray-50 p-3 rounded max-h-40 overflow-y-auto">
+                              <pre className="whitespace-pre-wrap text-xs text-gray-700 font-sans">
+                                {item.content.substring(0, 300)}
+                                {item.content.length > 300 && '...'}
+                              </pre>
+                            </div>
+                            <button
+                              onClick={() => {
+                                navigator.clipboard.writeText(item.content);
+                                alert('Content copied to clipboard!');
+                              }}
+                              className="mt-2 text-xs text-blue-600 hover:text-blue-800 font-medium"
+                            >
+                              Copy Full Content
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
