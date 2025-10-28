@@ -56,12 +56,12 @@ export default function SecurityPulse() {
       const data = await response.json();
 
       // Deduplicate by link
-      const uniqueNews = Array.from(
+      const uniqueNews: NewsItem[] = Array.from(
         new Map(data.map((item: NewsItem) => [item.link, item])).values()
       );
 
       // Detect new items
-      const currentLinks = new Set(uniqueNews.map((item: NewsItem) => item.link));
+      const currentLinks = new Set(uniqueNews.map((item) => item.link));
       const newItemLinks = new Set(
         [...currentLinks].filter(link => !previousLinks.has(link))
       );
