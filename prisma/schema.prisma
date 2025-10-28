@@ -1,0 +1,76 @@
+// This is your Prisma schema file for ASTRA
+// Awareness, Security & Threat Response Assistant
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication (future)
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  savedArticles    SavedArticle[]
+  generatedContent GeneratedContent[]
+  preferences      UserPreferences?
+}
+
+// Saved articles from Security Pulse
+model SavedArticle {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  link        String
+  source      String
+  pubDate     String
+  description String?
+  savedAt     DateTime @default(now())
+  tags        String[] // For categorization
+  notes       String?  // User notes
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([savedAt])
+}
+
+// Generated content (emails, summaries, etc.)
+model GeneratedContent {
+  id          String   @id @default(cuid())
+  userId      String
+  contentType String   // "email", "summary", "briefing", etc.
+  title       String
+  content     String   @db.Text
+  focusArea   String?
+  tone        String?
+  sourceLinks String[] // Links to source articles
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([contentType])
+}
+
+// User preferences and settings
+model UserPreferences {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  defaultContentType    String   @default("Security Awareness Email")
+  defaultTone           String   @default("Professional")
+  preferredPublications String[] // Preferred news sources
+  emailNotifications    Boolean  @default(false)
+  updatedAt             DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
