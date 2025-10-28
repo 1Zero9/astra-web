@@ -1,22 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   title: "ASTRA - AI Security Awareness Assistant",
   description: "Awareness, Security & Threat Response Assistant - Generate security awareness content, phishing simulations, and cyber event summaries",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -27,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en-GB">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+        className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}
       >
         <Header />
         {children}
