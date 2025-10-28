@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function Header() {
@@ -19,11 +20,21 @@ export default function Header() {
     <header className="bg-white border-b border-zinc-200">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-zinc-900">ASTRA</div>
-            <span className="text-sm text-zinc-500 hidden sm:inline">
-              Security Awareness Assistant
-            </span>
+          <Link href="/" className="flex items-center space-x-3">
+            <Image
+              src="/images/ASTRA_logo.png"
+              alt="ASTRA Logo"
+              width={40}
+              height={40}
+              className="object-contain"
+              priority
+            />
+            <div className="flex items-center space-x-2">
+              <div className="text-2xl font-bold text-zinc-900">ASTRA</div>
+              <span className="text-sm text-zinc-500 hidden sm:inline">
+                Security Awareness Assistant
+              </span>
+            </div>
           </Link>
 
           <nav className="hidden md:flex items-center space-x-1">
