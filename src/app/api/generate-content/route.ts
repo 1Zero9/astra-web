@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
           content: generatedText,
           focusArea: focusArea || null,
           tone: tone || null,
-          sourceLinks: articles.map((a) => a.link),
+          sourceLinks: articles.map((a: any) => a.link),
         },
       });
 
