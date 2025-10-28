@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
     // Prepare the prompt based on content type
     const prompt = buildPrompt(contentType, articles, focusArea, tone);
 
-    // Use Gemini Pro model
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    // Use Gemini 2.5 Flash model (stable, fast and efficient)
+    const model = genAI.getGenerativeModel({ model: 'models/gemini-2.5-flash' });
 
     // Generate content
     const result = await model.generateContent(prompt);
