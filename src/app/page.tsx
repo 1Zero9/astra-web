@@ -72,11 +72,38 @@ export default function Home() {
             </p>
           </Link>
 
+          <Link
+            href="/prompt-builder"
+            className="group relative bg-gradient-to-br from-amber-50 to-amber-100/50 p-5 rounded-xl shadow-lg border-2 border-amber-200 hover:shadow-2xl hover:border-amber-300 hover:scale-105 transition-all duration-300"
+          >
+            <div className="text-4xl mb-3 text-amber-600">🎯</div>
+            <h3 className="text-lg font-semibold text-zinc-900 mb-2">Prompt Builder</h3>
+            <p className="text-zinc-600 text-xs mb-3">
+              Craft effective AI prompts using proven frameworks
+            </p>
+            <p className="text-amber-700 text-xs font-medium">
+              Enter →
+            </p>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto">
           <div className="group relative bg-gradient-to-br from-zinc-50 to-zinc-100/50 p-5 rounded-xl shadow-lg border-2 border-zinc-200 opacity-60 cursor-not-allowed">
             <div className="text-4xl mb-3 text-zinc-400">🎓</div>
             <h3 className="text-lg font-semibold text-zinc-700 mb-2">Knowledge Explainer</h3>
             <p className="text-zinc-500 text-xs mb-3">
               Explain compliance frameworks
+            </p>
+            <p className="text-zinc-500 text-xs italic">
+              Coming soon
+            </p>
+          </div>
+
+          <div className="group relative bg-gradient-to-br from-zinc-50 to-zinc-100/50 p-5 rounded-xl shadow-lg border-2 border-zinc-200 opacity-60 cursor-not-allowed">
+            <div className="text-4xl mb-3 text-zinc-400">📊</div>
+            <h3 className="text-lg font-semibold text-zinc-700 mb-2">Dashboard</h3>
+            <p className="text-zinc-500 text-xs mb-3">
+              View usage and analytics
             </p>
             <p className="text-zinc-500 text-xs italic">
               Coming soon
