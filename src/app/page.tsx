@@ -3,33 +3,33 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="flex-1 flex items-start justify-center bg-gradient-to-br from-zinc-50 via-white to-zinc-50 pt-8 pb-8">
+    <div className="flex-1 flex items-start justify-center bg-gradient-to-br from-zinc-50 via-white to-zinc-50 pt-4 pb-6">
       <div className="mx-auto max-w-6xl px-4">
         {/* Hero Section - Large Logo */}
-        <div className="text-center mb-10">
-          <div className="flex justify-center mb-4">
+        <div className="text-center mb-6">
+          <div className="flex justify-center mb-2">
             <Image
               src="/images/ASTRA_logo.png"
               alt="ASTRA Logo"
-              width={200}
-              height={200}
+              width={160}
+              height={160}
               className="object-contain"
               priority
             />
           </div>
-          <h1 className="text-5xl sm:text-6xl font-bold text-zinc-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-zinc-900 mb-2">
             ASTRA
           </h1>
-          <p className="text-xl text-zinc-600 mb-2">
+          <p className="text-lg text-zinc-600 mb-1">
             Awareness, Security & Threat Response Assistant
           </p>
-          <p className="text-base text-zinc-500 max-w-2xl mx-auto">
+          <p className="text-sm text-zinc-500 max-w-2xl mx-auto">
             AI-powered security awareness content generation
           </p>
         </div>
 
         {/* Features Grid - Single Screen */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
           <Link
             href="/pulse"
             className="group relative bg-gradient-to-br from-blue-50 to-blue-100/50 p-5 rounded-xl shadow-lg border-2 border-blue-200 hover:shadow-2xl hover:border-blue-300 hover:scale-105 transition-all duration-300"
@@ -87,7 +87,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6 max-w-2xl mx-auto">
           <div className="group relative bg-gradient-to-br from-zinc-50 to-zinc-100/50 p-5 rounded-xl shadow-lg border-2 border-zinc-200 opacity-60 cursor-not-allowed">
             <div className="text-4xl mb-3 text-zinc-400">🎓</div>
             <h3 className="text-lg font-semibold text-zinc-700 mb-2">Knowledge Explainer</h3>
