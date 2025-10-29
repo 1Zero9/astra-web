@@ -32,7 +32,7 @@ export default function Footer() {
                 feedback, and optional marketing follow-up.
               </li>
               <li>
-                <strong>Liability:</strong> Version 1 and developers accept no liability
+                <strong>Liability:</strong> 1Zero9 and developers accept no liability
                 for decisions made using output from this tool.
               </li>
               <li>
@@ -46,26 +46,14 @@ export default function Footer() {
           <div>
             <h3 className="text-sm font-semibold text-zinc-100 mb-3">Contact</h3>
             <p className="text-xs text-zinc-400">
-              Built by: <strong>Stephen Cranfield</strong>
-              <br />
-              Version 1 — Security, Governance & AI Innovation
-              <br />
-              <br />
-              <a
-                href="https://www.version1.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-zinc-300 hover:text-white underline"
-              >
-                www.version1.com
-              </a>
+              Built by <strong>1Zero9</strong>
             </p>
           </div>
         </div>
 
         {/* Bottom bar */}
         <div className="pt-6 border-t border-zinc-800 text-xs text-zinc-500 text-center">
-          © {new Date().getFullYear()} Version 1. All rights reserved. This is a Proof of Concept application.
+          © 2025 1Zero9. All rights reserved. This is a Proof of Concept application.
         </div>
       </div>
     </footer>

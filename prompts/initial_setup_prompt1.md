@@ -25,8 +25,6 @@ This tool is not designed to replace security systems — it enhances communicat
 - Use AI models (**Claude/ChatGPT/OpenAI**) to generate content (phishing templates, news summaries, awareness emails).
 - Build in **small, testable stages** with clear outcomes.
 - Use **Supabase or similar backend (optional)** for user registration, logging, and storing generated content.
-- Style and branding will later align with the **Version 1 design style**:  
-  https://www.version1.com/data-ai/
 - Include:  
   ✅ Registration form  
   ✅ Cookie-based session handling  
@@ -50,10 +48,10 @@ This tool is not designed to replace security systems — it enhances communicat
 ## ⚖️ **Compliance, Legal & Disclaimer Requirements**
 
 The POC must include:
-- ✅ **Disclaimer:** “ASTRA is a proof-of-concept tool. Use at your own discretion. It is not a certified security product.”
+- ✅ **Disclaimer:** "ASTRA is a proof-of-concept tool. Use at your own discretion. It is not a certified security product."
 - ✅ **GDPR Notice:** Registration data is used only for demonstration, feedback, and optional marketing follow-up.
 - ✅ **Source Transparency:** Any AI-generated content based on news must reference source links if applicable.
-- ✅ **Liability Clause:** “Version 1 / Developers accept no liability for decisions made using output from this tool.”
+- ✅ **Liability Clause:** "1Zero9 and developers accept no liability for decisions made using output from this tool."
 
 ---
 
@@ -80,8 +78,8 @@ The POC must include:
 - Track module usage (audit log)
 
 ### **Stage 5 – Styling, GDPR & Disclaimers**
-- Apply Version 1 styling  
-- Add disclaimers, consent text, footer, cookie banner  
+- Apply custom styling
+- Add disclaimers, consent text, footer, cookie banner
 - Refine layout, spacing, and call-to-actions
 
 ---
@@ -125,8 +123,7 @@ This is a **Proof of Concept (POC)**. ASTRA does **not** replace security system
 ---
 
 ## 📬 **Contact / Author**
-Built by: **Stephen Cranfield**  
-Version 1 – Security, Governance & AI Innovation
+Built by **1Zero9**
 
 ---
 
