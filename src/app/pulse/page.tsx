@@ -28,6 +28,17 @@ interface ContentHistory {
   createdAt: string;
 }
 
+type SeverityLevel = 'critical' | 'high' | 'medium' | 'low';
+
+interface SeverityInfo {
+  level: SeverityLevel;
+  label: string;
+  color: string;
+  bgColor: string;
+  borderColor: string;
+  textColor: string;
+}
+
 export default function SecurityPulse() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -293,6 +304,76 @@ export default function SecurityPulse() {
     } catch (error) {
       console.error('Error deleting source:', error);
     }
+  };
+
+  // Detect severity level based on keywords
+  const detectSeverity = (item: NewsItem): SeverityInfo => {
+    const text = `${item.title} ${item.description || ''}`.toLowerCase();
+
+    // Critical keywords
+    const criticalKeywords = [
+      'critical', 'zero-day', '0-day', 'actively exploited', 'emergency',
+      'immediate action', 'urgent patch', 'under attack', 'mass exploitation'
+    ];
+
+    // High severity keywords
+    const highKeywords = [
+      'ransomware', 'breach', 'data leak', 'vulnerability', 'exploit',
+      'malware', 'backdoor', 'apt', 'threat actor', 'compromised',
+      'severe', 'dangerous', 'widespread'
+    ];
+
+    // Medium severity keywords
+    const mediumKeywords = [
+      'warning', 'alert', 'security flaw', 'bug', 'patch', 'update',
+      'phishing', 'campaign', 'attack', 'threat', 'risk'
+    ];
+
+    // Check for critical
+    if (criticalKeywords.some(keyword => text.includes(keyword))) {
+      return {
+        level: 'critical',
+        label: 'CRITICAL',
+        color: 'text-red-700',
+        bgColor: 'bg-red-50',
+        borderColor: 'border-red-500',
+        textColor: 'text-red-900'
+      };
+    }
+
+    // Check for high
+    if (highKeywords.some(keyword => text.includes(keyword))) {
+      return {
+        level: 'high',
+        label: 'HIGH',
+        color: 'text-orange-700',
+        bgColor: 'bg-orange-50',
+        borderColor: 'border-orange-400',
+        textColor: 'text-orange-900'
+      };
+    }
+
+    // Check for medium
+    if (mediumKeywords.some(keyword => text.includes(keyword))) {
+      return {
+        level: 'medium',
+        label: 'MEDIUM',
+        color: 'text-yellow-700',
+        bgColor: 'bg-yellow-50',
+        borderColor: 'border-yellow-400',
+        textColor: 'text-yellow-900'
+      };
+    }
+
+    // Default to low
+    return {
+      level: 'low',
+      label: 'INFO',
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50',
+      borderColor: 'border-blue-300',
+      textColor: 'text-blue-900'
+    };
   };
 
   // Detect trending topics
@@ -587,6 +668,7 @@ export default function SecurityPulse() {
                     const isUnread = !readItems.has(item.link);
                     const isNew = newItems.has(item.link);
                     const isSelected = selectedItems.includes(item.link);
+                    const severity = detectSeverity(item);
 
                     return (
                       <div
@@ -594,6 +676,10 @@ export default function SecurityPulse() {
                         className={`p-5 transition-all border-l-4 ${
                           isSelected
                             ? "bg-blue-50 border-l-blue-500"
+                            : severity.level === 'critical'
+                            ? `${severity.bgColor} ${severity.borderColor} hover:bg-red-100`
+                            : severity.level === 'high'
+                            ? `${severity.bgColor} ${severity.borderColor} hover:bg-orange-100`
                             : isUnread
                             ? "bg-white border-l-blue-400 hover:bg-blue-50/50"
                             : "bg-gray-50/50 border-l-gray-200 hover:bg-gray-100"
@@ -610,7 +696,7 @@ export default function SecurityPulse() {
                             className="mt-1.5 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer flex-shrink-0"
                           />
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-start gap-2 mb-2">
+                            <div className="flex items-start gap-2 mb-2 flex-wrap">
                               <h3 className={`font-semibold leading-tight flex-1 ${isUnread ? 'text-gray-900' : 'text-gray-600'}`}>
                                 <a
                                   href={item.link}
@@ -622,21 +708,43 @@ export default function SecurityPulse() {
                                   {item.title}
                                 </a>
                               </h3>
-                              {isNew && (
-                                <span className="px-2 py-0.5 bg-red-500 text-white rounded-full text-xs font-bold flex-shrink-0 animate-pulse">
-                                  NEW
-                                </span>
-                              )}
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                {(severity.level === 'critical' || severity.level === 'high') && (
+                                  <span className={`px-2 py-0.5 ${
+                                    severity.level === 'critical'
+                                      ? 'bg-red-600 animate-pulse'
+                                      : 'bg-orange-500'
+                                  } text-white rounded-full text-xs font-bold`}>
+                                    {severity.label}
+                                  </span>
+                                )}
+                                {isNew && (
+                                  <span className="px-2 py-0.5 bg-blue-500 text-white rounded-full text-xs font-bold animate-pulse">
+                                    NEW
+                                  </span>
+                                )}
+                              </div>
                             </div>
                             {item.description && (
                               <p className={`text-sm mb-3 leading-relaxed line-clamp-2 ${isUnread ? 'text-gray-600' : 'text-gray-500'}`}>
                                 {item.description}
                               </p>
                             )}
-                            <div className="flex items-center gap-3 text-xs">
+                            <div className="flex items-center gap-3 text-xs flex-wrap">
                               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                 {item.source}
                               </span>
+                              {severity.level !== 'low' && (
+                                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                                  severity.level === 'critical'
+                                    ? 'bg-red-100 text-red-800'
+                                    : severity.level === 'high'
+                                    ? 'bg-orange-100 text-orange-800'
+                                    : 'bg-yellow-100 text-yellow-800'
+                                }`}>
+                                  {severity.level === 'critical' ? '🔴' : severity.level === 'high' ? '🟠' : '🟡'} {severity.label}
+                                </span>
+                              )}
                               <span className={`font-medium ${isUnread ? 'text-gray-600' : 'text-gray-400'}`}>
                                 {getTimeAgo(item.pubDate)}
                               </span>
