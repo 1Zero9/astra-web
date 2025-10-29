@@ -326,7 +326,7 @@ export default function PromptBuilder() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className={`min-h-screen transition-colors ${learningMode ? 'bg-gradient-to-br from-purple-50 via-purple-100/30 to-purple-50' : 'bg-zinc-50'}`}>
       <main className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
@@ -363,10 +363,13 @@ export default function PromptBuilder() {
 
           {learningMode && (
             <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
-              <h3 className="font-semibold text-purple-900 mb-2">Learning Mode Active</h3>
-              <p className="text-sm text-purple-800">
+              <h3 className="font-semibold text-purple-900 mb-2">🧠 Learning Mode Active</h3>
+              <p className="text-sm text-purple-800 mb-2">
                 Build a comprehensive mega prompt step by step. Each step refines and builds upon previous ones,
                 with AI learning from your inputs to create an optimized final prompt.
+              </p>
+              <p className="text-xs text-purple-700 border-t border-purple-200 pt-2 mt-2">
+                <strong>⚠️ Note:</strong> AI generation powered by Google Gemini 2.5 Flash. Always review and verify all generated prompts before use.
               </p>
             </div>
           )}
@@ -438,21 +441,41 @@ export default function PromptBuilder() {
                     />
                   </div>
 
-                  <div className="flex gap-3">
+                  <div className="space-y-3">
                     <button
                       onClick={addLearningStep}
                       disabled={!currentStepInput.trim() || enhancing}
-                      className="flex-1 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
+                      className="w-full bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
                     >
-                      {enhancing ? '🤖 AI Processing...' : `Add Step ${learningSteps.length + 1}`}
+                      {enhancing ? '🤖 AI Processing...' : `✓ Add Step ${learningSteps.length + 1} & Continue`}
                     </button>
+
                     {learningSteps.length > 0 && (
-                      <button
-                        onClick={resetLearning}
-                        className="px-6 py-3 border-2 border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors font-medium"
-                      >
-                        Reset
-                      </button>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => {
+                            // Show the final mega prompt without adding another step
+                            if (!megaPrompt && learningSteps.length > 0) {
+                              setMegaPrompt(learningSteps[learningSteps.length - 1].enhanced);
+                            }
+                          }}
+                          className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+                        >
+                          🎯 Finalize Mega Prompt
+                        </button>
+                        <button
+                          onClick={resetLearning}
+                          className="px-6 py-3 border-2 border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors font-medium"
+                        >
+                          Reset All
+                        </button>
+                      </div>
+                    )}
+
+                    {learningSteps.length > 0 && !megaPrompt && (
+                      <p className="text-sm text-purple-700 text-center">
+                        💡 Add more steps to refine your prompt, or click "Finalize" when ready
+                      </p>
                     )}
                   </div>
                 </div>
@@ -493,8 +516,15 @@ export default function PromptBuilder() {
                         {megaPrompt}
                       </pre>
                     </div>
-                    <div className="mt-3 text-xs text-gray-600">
-                      This prompt has evolved through {learningSteps.length} learning step{learningSteps.length > 1 ? 's' : ''}
+                    <div className="mt-3 space-y-2">
+                      <p className="text-xs text-gray-600">
+                        This prompt has evolved through {learningSteps.length} learning step{learningSteps.length > 1 ? 's' : ''}
+                      </p>
+                      <div className="bg-purple-50 border border-purple-200 rounded p-2">
+                        <p className="text-xs text-purple-800">
+                          <strong>⚠️ Note:</strong> Generated by Google Gemini 2.5 Flash. Always review and verify before use.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -573,9 +603,12 @@ export default function PromptBuilder() {
                         {generatedPrompt}
                       </pre>
                     </div>
-                    <div className="mt-3 bg-purple-50 border border-purple-200 rounded p-3">
+                    <div className="mt-3 bg-purple-50 border border-purple-200 rounded p-3 space-y-2">
                       <p className="text-xs text-purple-900">
                         <strong>💡 Tip:</strong> Click "AI Enhance" to have our AI improve your prompt with better clarity, structure, and effectiveness.
+                      </p>
+                      <p className="text-xs text-purple-800 border-t border-purple-200 pt-2">
+                        <strong>⚠️ Note:</strong> AI enhancement powered by Google Gemini 2.5 Flash. Always review and verify all generated prompts before use.
                       </p>
                     </div>
                   </div>
