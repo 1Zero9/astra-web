@@ -3,16 +3,16 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="flex-1 flex items-start justify-center bg-gradient-to-br from-zinc-50 via-white to-zinc-50 pt-16 pb-8">
+    <div className="flex-1 flex items-start justify-center bg-gradient-to-br from-zinc-50 via-white to-zinc-50 pt-8 pb-8">
       <div className="mx-auto max-w-6xl px-4">
         {/* Hero Section - Large Logo */}
-        <div className="text-center mb-16">
-          <div className="flex justify-center mb-8">
+        <div className="text-center mb-10">
+          <div className="flex justify-center mb-4">
             <Image
               src="/images/ASTRA_logo.png"
               alt="ASTRA Logo"
-              width={240}
-              height={240}
+              width={200}
+              height={200}
               className="object-contain"
               priority
             />
