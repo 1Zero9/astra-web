@@ -499,7 +499,7 @@ export default function PromptBuilder() {
                   </div>
                 )}
               </div>
-            ) : (
+            ) : selectedMethodology ? (
               <div className="space-y-6">
                 {/* Form Fields */}
                 <div className="bg-white p-6 rounded-lg border-2 border-gray-300">
@@ -581,7 +581,7 @@ export default function PromptBuilder() {
                   </div>
                 )}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </main>
