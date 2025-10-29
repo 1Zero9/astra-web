@@ -20,6 +20,12 @@ interface PromptField {
   options?: string[];
 }
 
+interface LearningStep {
+  input: string;
+  enhanced: string;
+  stepNumber: number;
+}
+
 const METHODOLOGIES: PromptMethodology[] = [
   {
     id: 'clear',
@@ -203,11 +209,19 @@ export default function PromptBuilder() {
   const [selectedMethodology, setSelectedMethodology] = useState<PromptMethodology | null>(null);
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [generatedPrompt, setGeneratedPrompt] = useState('');
+  const [learningMode, setLearningMode] = useState(false);
+  const [learningSteps, setLearningSteps] = useState<LearningStep[]>([]);
+  const [currentStepInput, setCurrentStepInput] = useState('');
+  const [enhancing, setEnhancing] = useState(false);
+  const [megaPrompt, setMegaPrompt] = useState('');
 
   const handleMethodologySelect = (methodology: PromptMethodology) => {
     setSelectedMethodology(methodology);
     setFormData({});
     setGeneratedPrompt('');
+    setLearningSteps([]);
+    setCurrentStepInput('');
+    setMegaPrompt('');
   };
 
   const handleInputChange = (fieldId: string, value: string) => {
@@ -232,10 +246,82 @@ export default function PromptBuilder() {
     setGeneratedPrompt(prompt.trim());
   };
 
-  const copyToClipboard = () => {
-    if (generatedPrompt) {
-      navigator.clipboard.writeText(generatedPrompt);
-      alert('Prompt copied to clipboard!');
+  const enhancePrompt = async () => {
+    if (!generatedPrompt) return;
+
+    setEnhancing(true);
+    try {
+      const response = await fetch('/api/enhance-prompt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userPrompt: generatedPrompt,
+          methodology: selectedMethodology?.name,
+          mode: 'enhance',
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setGeneratedPrompt(data.enhancedPrompt);
+      } else {
+        alert(data.error || 'Failed to enhance prompt');
+      }
+    } catch (error) {
+      console.error('Error enhancing prompt:', error);
+      alert('Failed to enhance prompt');
+    } finally {
+      setEnhancing(false);
+    }
+  };
+
+  const addLearningStep = async () => {
+    if (!currentStepInput.trim()) return;
+
+    setEnhancing(true);
+    try {
+      const response = await fetch('/api/enhance-prompt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userPrompt: currentStepInput,
+          methodology: selectedMethodology?.name,
+          previousSteps: learningSteps,
+          mode: 'learn',
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        const newStep: LearningStep = {
+          input: currentStepInput,
+          enhanced: data.enhancedPrompt,
+          stepNumber: learningSteps.length + 1,
+        };
+        setLearningSteps(prev => [...prev, newStep]);
+        setMegaPrompt(data.enhancedPrompt);
+        setCurrentStepInput('');
+      } else {
+        alert(data.error || 'Failed to process learning step');
+      }
+    } catch (error) {
+      console.error('Error processing learning step:', error);
+      alert('Failed to process learning step');
+    } finally {
+      setEnhancing(false);
+    }
+  };
+
+  const resetLearning = () => {
+    setLearningSteps([]);
+    setCurrentStepInput('');
+    setMegaPrompt('');
+  };
+
+  const copyToClipboard = (text: string) => {
+    if (text) {
+      navigator.clipboard.writeText(text);
+      alert('Copied to clipboard!');
     }
   };
 
@@ -243,10 +329,47 @@ export default function PromptBuilder() {
     <div className="min-h-screen bg-zinc-50">
       <main className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Prompt Builder</h1>
-          <p className="text-gray-600">
-            Craft effective AI prompts using proven methodologies
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Prompt Builder</h1>
+              <p className="text-gray-600">
+                Craft effective AI prompts using proven methodologies
+              </p>
+            </div>
+            {/* Mode Toggle */}
+            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg border-2 border-gray-300">
+              <button
+                onClick={() => setLearningMode(false)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  !learningMode
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Basic Mode
+              </button>
+              <button
+                onClick={() => setLearningMode(true)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  learningMode
+                    ? 'bg-purple-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                🧠 Learning Mode
+              </button>
+            </div>
+          </div>
+
+          {learningMode && (
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+              <h3 className="font-semibold text-purple-900 mb-2">Learning Mode Active</h3>
+              <p className="text-sm text-purple-800">
+                Build a comprehensive mega prompt step by step. Each step refines and builds upon previous ones,
+                with AI learning from your inputs to create an optimized final prompt.
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
@@ -283,13 +406,98 @@ export default function PromptBuilder() {
 
           {/* Prompt Builder Form */}
           <div className="xl:col-span-8">
-            {!selectedMethodology ? (
+            {!selectedMethodology && !learningMode ? (
               <div className="bg-white p-12 rounded-lg border-2 border-gray-300 text-center">
                 <div className="text-6xl mb-4">🎯</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Select a Framework</h3>
                 <p className="text-gray-600">
                   Choose a prompt methodology from the left to get started
                 </p>
+              </div>
+            ) : learningMode ? (
+              <div className="space-y-6">
+                {/* Learning Mode Interface */}
+                <div className="bg-white p-6 rounded-lg border-2 border-purple-300">
+                  <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                    Step-by-Step Prompt Building
+                  </h2>
+
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Step {learningSteps.length + 1}: Add your prompt requirements
+                    </label>
+                    <textarea
+                      value={currentStepInput}
+                      onChange={(e) => setCurrentStepInput(e.target.value)}
+                      placeholder={learningSteps.length === 0
+                        ? "Start with your main objective or task description...\n\nExample: Create a security awareness email about phishing"
+                        : "Add more details, requirements, or refinements...\n\nExample: Make it suitable for non-technical staff, include real-world examples"
+                      }
+                      rows={6}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                    />
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={addLearningStep}
+                      disabled={!currentStepInput.trim() || enhancing}
+                      className="flex-1 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
+                    >
+                      {enhancing ? '🤖 AI Processing...' : `Add Step ${learningSteps.length + 1}`}
+                    </button>
+                    {learningSteps.length > 0 && (
+                      <button
+                        onClick={resetLearning}
+                        className="px-6 py-3 border-2 border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors font-medium"
+                      >
+                        Reset
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Learning Steps History */}
+                {learningSteps.length > 0 && (
+                  <div className="bg-white p-6 rounded-lg border-2 border-gray-300">
+                    <h3 className="font-semibold text-gray-900 mb-4">Learning Journey ({learningSteps.length} steps)</h3>
+                    <div className="space-y-4 max-h-96 overflow-y-auto">
+                      {learningSteps.map((step) => (
+                        <div key={step.stepNumber} className="border-l-4 border-purple-400 pl-4 py-2">
+                          <div className="text-xs font-semibold text-purple-700 mb-1">
+                            Step {step.stepNumber}
+                          </div>
+                          <div className="text-sm text-gray-600 mb-2 italic">
+                            "{step.input}"
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Mega Prompt Display */}
+                {megaPrompt && (
+                  <div className="bg-white p-6 rounded-lg border-2 border-green-300">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="font-semibold text-green-900">🎯 Your Mega Prompt</h3>
+                      <button
+                        onClick={() => copyToClipboard(megaPrompt)}
+                        className="text-sm px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                      >
+                        Copy to Clipboard
+                      </button>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded border border-gray-200 max-h-96 overflow-y-auto">
+                      <pre className="whitespace-pre-wrap text-sm text-gray-800 font-sans">
+                        {megaPrompt}
+                      </pre>
+                    </div>
+                    <div className="mt-3 text-xs text-gray-600">
+                      This prompt has evolved through {learningSteps.length} learning step{learningSteps.length > 1 ? 's' : ''}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="space-y-6">
@@ -344,17 +552,31 @@ export default function PromptBuilder() {
                   <div className="bg-white p-6 rounded-lg border-2 border-green-300">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-semibold text-green-900">✓ Your Prompt</h3>
-                      <button
-                        onClick={copyToClipboard}
-                        className="text-sm px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                      >
-                        Copy to Clipboard
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={enhancePrompt}
+                          disabled={enhancing}
+                          className="text-sm px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                        >
+                          {enhancing ? '🤖 Enhancing...' : '🤖 AI Enhance'}
+                        </button>
+                        <button
+                          onClick={() => copyToClipboard(generatedPrompt)}
+                          className="text-sm px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                        >
+                          Copy to Clipboard
+                        </button>
+                      </div>
                     </div>
                     <div className="bg-gray-50 p-4 rounded border border-gray-200 max-h-96 overflow-y-auto">
                       <pre className="whitespace-pre-wrap text-sm text-gray-800 font-sans">
                         {generatedPrompt}
                       </pre>
+                    </div>
+                    <div className="mt-3 bg-purple-50 border border-purple-200 rounded p-3">
+                      <p className="text-xs text-purple-900">
+                        <strong>💡 Tip:</strong> Click "AI Enhance" to have our AI improve your prompt with better clarity, structure, and effectiveness.
+                      </p>
                     </div>
                   </div>
                 )}
