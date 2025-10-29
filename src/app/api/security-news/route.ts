@@ -1,13 +1,5 @@
 import { NextResponse } from 'next/server';
-
-// Security news RSS feeds
-const RSS_FEEDS = [
-  { url: 'https://www.bleepingcomputer.com/feed/', source: 'Bleeping Computer' },
-  { url: 'https://feeds.feedburner.com/TheHackersNews', source: 'The Hacker News' },
-  { url: 'https://krebsonsecurity.com/feed/', source: 'Krebs on Security' },
-  { url: 'https://www.darkreading.com/rss.xml', source: 'Dark Reading' },
-  { url: 'https://thehackernews.com/feeds/posts/default', source: 'Hacker News' },
-];
+import { prisma } from '@/lib/prisma';
 
 interface NewsItem {
   title: string;
@@ -21,8 +13,18 @@ export async function GET() {
   try {
     const allNews: NewsItem[] = [];
 
+    // Fetch active RSS sources from database
+    const rssSources = await prisma.rSSSource.findMany({
+      where: { isActive: true },
+      select: { url: true, name: true },
+    });
+
+    if (rssSources.length === 0) {
+      return NextResponse.json([]);
+    }
+
     // Fetch all RSS feeds in parallel
-    const feedPromises = RSS_FEEDS.map(async ({ url, source }) => {
+    const feedPromises = rssSources.map(async ({ url, name }) => {
       try {
         const response = await fetch(url, {
           headers: {
@@ -32,15 +34,15 @@ export async function GET() {
         });
 
         if (!response.ok) {
-          console.error(`Failed to fetch ${source}: ${response.statusText}`);
+          console.error(`Failed to fetch ${name}: ${response.statusText}`);
           return [];
         }
 
         const xmlText = await response.text();
-        const items = parseRSS(xmlText, source);
+        const items = parseRSS(xmlText, name);
         return items;
       } catch (error) {
-        console.error(`Error fetching ${source}:`, error);
+        console.error(`Error fetching ${name}:`, error);
         return [];
       }
     });

@@ -48,6 +48,11 @@ export default function SecurityPulse() {
   const [showHistory, setShowHistory] = useState(false);
   const [contentHistory, setContentHistory] = useState<ContentHistory[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
+  const [showSources, setShowSources] = useState(false);
+  const [rssSources, setRssSources] = useState<any[]>([]);
+  const [loadingSources, setLoadingSources] = useState(false);
+  const [newSource, setNewSource] = useState({ name: '', url: '', description: '' });
+  const [addingSource, setAddingSource] = useState(false);
 
   useEffect(() => {
     // Load read items from localStorage
@@ -215,6 +220,81 @@ export default function SecurityPulse() {
     }
   };
 
+  const fetchSources = async () => {
+    setLoadingSources(true);
+    try {
+      const response = await fetch('/api/rss-sources');
+      const data = await response.json();
+      if (data.success) {
+        setRssSources(data.sources);
+      }
+    } catch (error) {
+      console.error('Error fetching RSS sources:', error);
+    } finally {
+      setLoadingSources(false);
+    }
+  };
+
+  const addRssSource = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newSource.name || !newSource.url) return;
+
+    setAddingSource(true);
+    try {
+      const response = await fetch('/api/rss-sources', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newSource),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setRssSources(prev => [...prev, data.source].sort((a, b) => a.name.localeCompare(b.name)));
+        setNewSource({ name: '', url: '', description: '' });
+        alert('RSS source added successfully!');
+      } else {
+        alert(data.error || 'Failed to add RSS source');
+      }
+    } catch (error) {
+      console.error('Error adding RSS source:', error);
+      alert('Failed to add RSS source');
+    } finally {
+      setAddingSource(false);
+    }
+  };
+
+  const toggleSourceStatus = async (id: string, isActive: boolean) => {
+    try {
+      const response = await fetch('/api/rss-sources', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, isActive: !isActive }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setRssSources(prev => prev.map(s => s.id === id ? data.source : s));
+      }
+    } catch (error) {
+      console.error('Error toggling source:', error);
+    }
+  };
+
+  const deleteSource = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this RSS source?')) return;
+
+    try {
+      const response = await fetch('/api/rss-sources', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (response.ok) {
+        setRssSources(prev => prev.filter(s => s.id !== id));
+      }
+    } catch (error) {
+      console.error('Error deleting source:', error);
+    }
+  };
+
   // Detect trending topics
   const getTrendingTopics = (): TrendingTopic[] => {
     const keywords = new Map<string, NewsItem[]>();
@@ -286,7 +366,20 @@ export default function SecurityPulse() {
   const publications = Array.from(new Set(news.map(item => item.source))).sort();
 
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen bg-zinc-50 relative">
+      {/* Glass Loading Overlay */}
+      {generating && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20 text-center">
+            <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mb-4"></div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Generating Content</h3>
+            <p className="text-gray-600 animate-pulse">
+              AI is crafting your security content...
+            </p>
+          </div>
+        </div>
+      )}
+
       <main className="mx-auto max-w-7xl px-4 py-8">
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-3xl font-bold text-gray-900">Security Pulse</h1>
@@ -340,8 +433,8 @@ export default function SecurityPulse() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+          <div className="xl:col-span-7">
             {/* Filters */}
             <div className="bg-white p-4 rounded-lg border-2 border-gray-300 mb-6">
               <div className="flex items-center justify-between mb-4">
@@ -567,14 +660,17 @@ export default function SecurityPulse() {
           </div>
 
           {/* Content Generation Panel */}
-          <div className="lg:col-span-1">
+          <div className="xl:col-span-5">
             <div className="bg-white p-6 rounded-lg border-2 border-gray-300 sticky top-4">
               {/* Tabs */}
               <div className="flex gap-2 mb-4 border-b border-gray-200">
                 <button
-                  onClick={() => setShowHistory(false)}
+                  onClick={() => {
+                    setShowHistory(false);
+                    setShowSources(false);
+                  }}
                   className={`px-4 py-2 font-medium transition-colors ${
-                    !showHistory
+                    !showHistory && !showSources
                       ? 'text-blue-600 border-b-2 border-blue-600'
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
@@ -584,20 +680,35 @@ export default function SecurityPulse() {
                 <button
                   onClick={() => {
                     setShowHistory(true);
+                    setShowSources(false);
                     if (contentHistory.length === 0) fetchHistory();
                   }}
                   className={`px-4 py-2 font-medium transition-colors ${
-                    showHistory
+                    showHistory && !showSources
                       ? 'text-blue-600 border-b-2 border-blue-600'
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
                   History
                 </button>
+                <button
+                  onClick={() => {
+                    setShowHistory(false);
+                    setShowSources(true);
+                    if (rssSources.length === 0) fetchSources();
+                  }}
+                  className={`px-4 py-2 font-medium transition-colors ${
+                    showSources
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Sources
+                </button>
               </div>
 
               {/* Generate Tab */}
-              {!showHistory && (
+              {!showHistory && !showSources && (
                 <>
                   {selectedItems.length > 0 && (
                 <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
@@ -706,7 +817,7 @@ export default function SecurityPulse() {
               )}
 
               {/* History Tab */}
-              {showHistory && (
+              {showHistory && !showSources && (
                 <div className="space-y-4">
                   {loadingHistory ? (
                     <div className="text-center py-8 text-gray-500">
@@ -776,6 +887,136 @@ export default function SecurityPulse() {
                       </div>
                     </>
                   )}
+                </div>
+              )}
+
+              {/* Sources Tab */}
+              {showSources && (
+                <div className="space-y-4">
+                  {/* Add New Source Form */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-900 mb-3">Add New RSS Source</h3>
+                    <form onSubmit={addRssSource} className="space-y-3">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Source Name *
+                        </label>
+                        <input
+                          type="text"
+                          value={newSource.name}
+                          onChange={(e) => setNewSource(prev => ({ ...prev, name: e.target.value }))}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                          placeholder="e.g., Bleeping Computer"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          RSS Feed URL *
+                        </label>
+                        <input
+                          type="url"
+                          value={newSource.url}
+                          onChange={(e) => setNewSource(prev => ({ ...prev, url: e.target.value }))}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                          placeholder="https://example.com/feed/"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Description (optional)
+                        </label>
+                        <input
+                          type="text"
+                          value={newSource.description}
+                          onChange={(e) => setNewSource(prev => ({ ...prev, description: e.target.value }))}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                          placeholder="Brief description"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={addingSource}
+                        className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium text-sm"
+                      >
+                        {addingSource ? 'Adding...' : 'Add Source'}
+                      </button>
+                    </form>
+                  </div>
+
+                  {/* Sources List */}
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="font-semibold text-gray-900">RSS Sources ({rssSources.length})</h3>
+                      <button
+                        onClick={fetchSources}
+                        disabled={loadingSources}
+                        className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                      >
+                        {loadingSources ? 'Refreshing...' : 'Refresh'}
+                      </button>
+                    </div>
+
+                    {loadingSources ? (
+                      <div className="text-center py-8 text-gray-500">
+                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-3"></div>
+                        <p>Loading sources...</p>
+                      </div>
+                    ) : rssSources.length === 0 ? (
+                      <div className="text-center py-8 text-gray-500">
+                        <p className="text-sm">No RSS sources configured</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3 max-h-[500px] overflow-y-auto">
+                        {rssSources.map((source) => (
+                          <div
+                            key={source.id}
+                            className={`p-3 border rounded-lg ${
+                              source.isActive
+                                ? 'border-green-200 bg-green-50'
+                                : 'border-gray-200 bg-gray-50'
+                            }`}
+                          >
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex-1">
+                                <h4 className="font-semibold text-gray-900 text-sm">{source.name}</h4>
+                                {source.description && (
+                                  <p className="text-xs text-gray-600 mt-1">{source.description}</p>
+                                )}
+                                <p className="text-xs text-gray-500 mt-1 break-all">{source.url}</p>
+                              </div>
+                              <div className="flex items-center gap-2 ml-2">
+                                <button
+                                  onClick={() => toggleSourceStatus(source.id, source.isActive)}
+                                  className={`px-2 py-1 rounded text-xs font-medium ${
+                                    source.isActive
+                                      ? 'bg-green-600 text-white hover:bg-green-700'
+                                      : 'bg-gray-400 text-white hover:bg-gray-500'
+                                  }`}
+                                  title={source.isActive ? 'Disable source' : 'Enable source'}
+                                >
+                                  {source.isActive ? 'Active' : 'Inactive'}
+                                </button>
+                                <button
+                                  onClick={() => deleteSource(source.id)}
+                                  className="text-red-600 hover:text-red-800 text-xs font-medium"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                    <p className="text-xs text-amber-900">
+                      <strong>Note:</strong> Changes to RSS sources will take effect on the next news refresh. Only active sources will be used to fetch news.
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
