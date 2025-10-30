@@ -75,15 +75,13 @@ model UserPreferences {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// RSS feed sources for Security Pulse
+// RSS Source model
 model RSSSource {
-  id          String   @id @default(cuid())
-  name        String   // Display name (e.g., "Bleeping Computer")
-  url         String   @unique // RSS feed URL
-  isActive    Boolean  @default(true) // Enable/disable without deleting
-  description String?  // Optional description
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([isActive])
+  id        String   @id @default(cuid())
+  name      String   @unique
+  url       String   @unique
+  description String? // Optional description for the RSS source
+  isActive    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
