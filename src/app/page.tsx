@@ -3,7 +3,11 @@ import Image from "next/image";
 
 export default function Home() {
   return (
+<<<<<<< HEAD
+    <div className="flex-1 flex items-start justify-center bg-gradient-to-br from-zinc-50 via-white to-zinc-50 pt-16 pb-8">
+=======
     <div className="flex-1 flex items-start justify-center bg-gradient-to-br from-zinc-50 via-white to-zinc-50 pt-4 pb-6">
+>>>>>>> 5753e495c1066ef05778b28356d2f8ca6b4daf46
       <div className="mx-auto max-w-6xl px-4">
         {/* Hero Section - Large Logo */}
         <div className="text-center mb-6">
