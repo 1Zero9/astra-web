@@ -11,3 +11,5 @@
     - Restored the correct `package.json` and `package-lock.json` (from the former `astra-web` submodule) to the root.
 - Ran `npm install` successfully in the root directory.
 - Synced all changes to the remote repository.
+- Updated `package.json` and `package-lock.json` with correct Next.js dependencies.
+- Converted `next.config.ts` to `next.config.js` for Vercel compatibility.
