@@ -13,3 +13,14 @@
 - Synced all changes to the remote repository.
 - Updated `package.json` and `package-lock.json` with correct Next.js dependencies.
 - Converted `next.config.ts` to `next.config.js` for Vercel compatibility.
+- Resolved merge conflict in `src/app/page.tsx`.
+- Added `@tailwindcss/postcss` and `@google/generative-ai` as dependencies.
+- Removed `reactCompiler` and `turbopack` options from `next.config.js`.
+- Modified `postcss.config.js` to use `tailwindcss` directly.
+- Created `tailwind.config.js`.
+- Deleted `postcss.config.mjs`.
+- Modified `src/app/globals.css` to explicitly import Tailwind CSS files.
+- Modified `tsconfig.json` to exclude `prisma.config.ts` and aggressively exclude `node_modules`.
+- Modified `package.json` to specify Prisma schema path in `build` and `postinstall` scripts.
+- Restored `prisma/schema.prisma` from git history.
+- Added `RSSSource` model with `description` and `isActive` fields to `prisma/schema.prisma`.
