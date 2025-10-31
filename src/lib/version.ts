@@ -3,10 +3,10 @@
 
 export const VERSION = {
   // Main ASTRA version
-  app: '1.1.0',
+  app: '1.2.0',
 
   // Module versions
-  pulse: '2.0.0',
+  pulse: '2.1.0',
   phishing: '1.0.0',
   awareness: '1.0.0',
   promptBuilder: '1.0.0',
@@ -27,6 +27,19 @@ export const VERSION = {
 };
 
 export const CHANGELOG = {
+  '2.1.0': {
+    module: 'Pulse',
+    date: '2025-10-31',
+    changes: [
+      'Added 4-tab navigation: Browse, Saved, Reading List, Analytics',
+      'Saved Articles tab - view and manage bookmarks',
+      'Reading List tab - priority queue with high/medium/low',
+      'Analytics tab - reading stats and insights',
+      'Complete management UI with delete and edit functions',
+      'Dynamic counts on each tab',
+      'Full workflow: Save → View → Manage',
+    ]
+  },
   '2.0.0': {
     module: 'Pulse',
     date: '2025-10-31',

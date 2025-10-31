@@ -75,6 +75,15 @@ export default function SecurityPulse() {
   const [summaryArticle, setSummaryArticle] = useState<NewsItem | null>(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
 
+  // Tab state
+  const [activeTab, setActiveTab] = useState<'browse' | 'saved' | 'reading-list' | 'analytics'>('browse');
+  const [savedArticles, setSavedArticles] = useState<any[]>([]);
+  const [readingList, setReadingList] = useState<any[]>([]);
+  const [loadingSaved, setLoadingSaved] = useState(false);
+  const [loadingReadingList, setLoadingReadingList] = useState(false);
+  const [analytics, setAnalytics] = useState<any>(null);
+  const [loadingAnalytics, setLoadingAnalytics] = useState(false);
+
   useEffect(() => {
     // Load read items from localStorage
     const stored = localStorage.getItem('astra-read-items');
@@ -249,6 +258,96 @@ export default function SecurityPulse() {
       console.error('Error generating summary:', error);
     } finally {
       setLoadingSummary(false);
+    }
+  };
+
+  // Fetch saved articles
+  const fetchSavedArticles = async () => {
+    setLoadingSaved(true);
+    try {
+      const response = await fetch('/api/saved-articles');
+      const data = await response.json();
+      if (data.success) {
+        setSavedArticles(data.articles);
+      }
+    } catch (error) {
+      console.error('Error fetching saved articles:', error);
+    } finally {
+      setLoadingSaved(false);
+    }
+  };
+
+  // Fetch reading list
+  const fetchReadingList = async () => {
+    setLoadingReadingList(true);
+    try {
+      const response = await fetch('/api/reading-list');
+      const data = await response.json();
+      if (data.success) {
+        setReadingList(data.items);
+      }
+    } catch (error) {
+      console.error('Error fetching reading list:', error);
+    } finally {
+      setLoadingReadingList(false);
+    }
+  };
+
+  // Fetch analytics
+  const fetchAnalytics = async () => {
+    setLoadingAnalytics(true);
+    try {
+      const response = await fetch('/api/analytics?type=overview&days=30');
+      const data = await response.json();
+      if (data.success) {
+        setAnalytics(data.analytics);
+      }
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
+    } finally {
+      setLoadingAnalytics(false);
+    }
+  };
+
+  // Remove from saved articles
+  const removeFromSaved = async (id: string) => {
+    try {
+      await fetch('/api/saved-articles', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      fetchSavedArticles();
+    } catch (error) {
+      console.error('Error removing from saved:', error);
+    }
+  };
+
+  // Remove from reading list
+  const removeFromReadingList = async (id: string) => {
+    try {
+      await fetch('/api/reading-list', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      fetchReadingList();
+    } catch (error) {
+      console.error('Error removing from reading list:', error);
+    }
+  };
+
+  // Update reading list priority
+  const updatePriority = async (id: string, priority: string) => {
+    try {
+      await fetch('/api/reading-list', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, priority }),
+      });
+      fetchReadingList();
+    } catch (error) {
+      console.error('Error updating priority:', error);
     }
   };
 
@@ -676,6 +775,64 @@ export default function SecurityPulse() {
           <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded">CVE Badges</span>
         </div>
 
+        {/* Main Tabs */}
+        <div className="flex gap-2 mb-6 border-b-2 border-gray-200">
+          <button
+            onClick={() => {
+              setActiveTab('browse');
+            }}
+            className={`px-6 py-3 font-semibold transition-all ${
+              activeTab === 'browse'
+                ? 'text-blue-600 border-b-4 border-blue-600 -mb-0.5'
+                : 'text-gray-600 hover:text-gray-900 hover:border-b-4 hover:border-gray-300 -mb-0.5'
+            }`}
+          >
+            📰 Browse ({news.length})
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('saved');
+              if (savedArticles.length === 0) fetchSavedArticles();
+            }}
+            className={`px-6 py-3 font-semibold transition-all ${
+              activeTab === 'saved'
+                ? 'text-amber-600 border-b-4 border-amber-600 -mb-0.5'
+                : 'text-gray-600 hover:text-gray-900 hover:border-b-4 hover:border-gray-300 -mb-0.5'
+            }`}
+          >
+            ⭐ Saved ({savedArticles.length})
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('reading-list');
+              if (readingList.length === 0) fetchReadingList();
+            }}
+            className={`px-6 py-3 font-semibold transition-all ${
+              activeTab === 'reading-list'
+                ? 'text-purple-600 border-b-4 border-purple-600 -mb-0.5'
+                : 'text-gray-600 hover:text-gray-900 hover:border-b-4 hover:border-gray-300 -mb-0.5'
+            }`}
+          >
+            📚 Reading List ({readingList.length})
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('analytics');
+              if (!analytics) fetchAnalytics();
+            }}
+            className={`px-6 py-3 font-semibold transition-all ${
+              activeTab === 'analytics'
+                ? 'text-green-600 border-b-4 border-green-600 -mb-0.5'
+                : 'text-gray-600 hover:text-gray-900 hover:border-b-4 hover:border-gray-300 -mb-0.5'
+            }`}
+          >
+            📊 Analytics
+          </button>
+        </div>
+
+        {/* Browse Tab Content */}
+        {activeTab === 'browse' && (
+          <>
         {/* Trending Topics */}
         {trendingTopics.length > 0 && (
           <div className="bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-200 rounded-lg p-4 mb-6">
@@ -1366,6 +1523,229 @@ export default function SecurityPulse() {
             </div>
           </div>
         </div>
+          </>
+        )}
+
+        {/* Saved Articles Tab */}
+        {activeTab === 'saved' && (
+          <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">⭐ Saved Articles</h2>
+              <button
+                onClick={fetchSavedArticles}
+                className="px-4 py-2 bg-amber-100 text-amber-700 hover:bg-amber-200 rounded-lg font-medium transition-colors"
+              >
+                Refresh
+              </button>
+            </div>
+
+            {loadingSaved ? (
+              <div className="text-center py-12">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-amber-200 border-t-amber-600 mb-4"></div>
+                <p className="text-gray-600">Loading saved articles...</p>
+              </div>
+            ) : savedArticles.length === 0 ? (
+              <div className="text-center py-16 text-gray-500">
+                <div className="text-6xl mb-4">⭐</div>
+                <p className="text-xl mb-2">No saved articles yet</p>
+                <p className="text-sm">Click the ⭐ Save button on any article to bookmark it</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {savedArticles.map((article) => (
+                  <div key={article.id} className="border border-gray-200 rounded-lg p-5 hover:border-amber-300 hover:bg-amber-50/30 transition-all">
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="text-lg font-semibold text-gray-900 flex-1">
+                        <a href={article.link} target="_blank" rel="noopener noreferrer" className="hover:text-amber-600">
+                          {article.title}
+                        </a>
+                      </h3>
+                      <button
+                        onClick={() => removeFromSaved(article.id)}
+                        className="ml-4 text-red-600 hover:text-red-800 text-sm font-medium"
+                      >
+                        Remove
+                      </button>
+                    </div>
+
+                    {article.description && (
+                      <p className="text-sm text-gray-600 mb-3">{article.description}</p>
+                    )}
+
+                    <div className="flex items-center gap-3 text-xs flex-wrap">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded font-medium">{article.source}</span>
+                      <span className="text-gray-500">{new Date(article.savedAt).toLocaleDateString('en-GB')}</span>
+                      {article.tags && article.tags.length > 0 && (
+                        <>
+                          {article.tags.map((tag: string) => (
+                            <span key={tag} className="px-2 py-1 bg-red-100 text-red-800 rounded font-mono text-xs">
+                              {tag}
+                            </span>
+                          ))}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Reading List Tab */}
+        {activeTab === 'reading-list' && (
+          <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">📚 Reading List</h2>
+              <button
+                onClick={fetchReadingList}
+                className="px-4 py-2 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-lg font-medium transition-colors"
+              >
+                Refresh
+              </button>
+            </div>
+
+            {loadingReadingList ? (
+              <div className="text-center py-12">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-purple-200 border-t-purple-600 mb-4"></div>
+                <p className="text-gray-600">Loading reading list...</p>
+              </div>
+            ) : readingList.length === 0 ? (
+              <div className="text-center py-16 text-gray-500">
+                <div className="text-6xl mb-4">📚</div>
+                <p className="text-xl mb-2">Reading list is empty</p>
+                <p className="text-sm">Click the 📚 Read Later button to add articles</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {readingList.map((item) => (
+                  <div key={item.id} className={`border-2 rounded-lg p-5 transition-all ${
+                    item.priority === 'high' ? 'border-red-300 bg-red-50/30' :
+                    item.priority === 'medium' ? 'border-purple-300 bg-purple-50/30' :
+                    'border-gray-300 bg-gray-50/30'
+                  }`}>
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <select
+                            value={item.priority}
+                            onChange={(e) => updatePriority(item.id, e.target.value)}
+                            className={`px-2 py-1 rounded font-medium text-xs ${
+                              item.priority === 'high' ? 'bg-red-200 text-red-900' :
+                              item.priority === 'medium' ? 'bg-purple-200 text-purple-900' :
+                              'bg-gray-200 text-gray-900'
+                            }`}
+                          >
+                            <option value="high">🔴 High</option>
+                            <option value="medium">🟣 Medium</option>
+                            <option value="low">⚪ Low</option>
+                          </select>
+                          <span className="text-xs text-gray-500">Added {new Date(item.addedAt).toLocaleDateString('en-GB')}</span>
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          <a href={item.link} target="_blank" rel="noopener noreferrer" className="hover:text-purple-600">
+                            {item.title}
+                          </a>
+                        </h3>
+                      </div>
+                      <button
+                        onClick={() => removeFromReadingList(item.id)}
+                        className="ml-4 text-red-600 hover:text-red-800 text-sm font-medium"
+                      >
+                        Remove
+                      </button>
+                    </div>
+
+                    {item.description && (
+                      <p className="text-sm text-gray-600 mb-3">{item.description}</p>
+                    )}
+
+                    <div className="flex items-center gap-3 text-xs">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded font-medium">{item.source}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Analytics Tab */}
+        {activeTab === 'analytics' && (
+          <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">📊 Analytics</h2>
+              <button
+                onClick={fetchAnalytics}
+                className="px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 rounded-lg font-medium transition-colors"
+              >
+                Refresh
+              </button>
+            </div>
+
+            {loadingAnalytics ? (
+              <div className="text-center py-12">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-green-200 border-t-green-600 mb-4"></div>
+                <p className="text-gray-600">Loading analytics...</p>
+              </div>
+            ) : !analytics ? (
+              <div className="text-center py-16 text-gray-500">
+                <div className="text-6xl mb-4">📊</div>
+                <p className="text-xl mb-2">No analytics data yet</p>
+                <p className="text-sm">Start reading articles to see your stats</p>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {/* Stats Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                    <div className="text-3xl font-bold text-blue-600">{analytics.readArticles || 0}</div>
+                    <div className="text-sm text-gray-600 mt-1">Articles Read</div>
+                  </div>
+                  <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-4">
+                    <div className="text-3xl font-bold text-amber-600">{analytics.savedArticles || 0}</div>
+                    <div className="text-sm text-gray-600 mt-1">Saved Articles</div>
+                  </div>
+                  <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
+                    <div className="text-3xl font-bold text-purple-600">{analytics.readingListCount || 0}</div>
+                    <div className="text-sm text-gray-600 mt-1">Reading List</div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+                    <div className="text-3xl font-bold text-green-600">{analytics.generatedContent || 0}</div>
+                    <div className="text-sm text-gray-600 mt-1">Content Generated</div>
+                  </div>
+                  <div className="bg-indigo-50 border-2 border-indigo-200 rounded-lg p-4">
+                    <div className="text-3xl font-bold text-indigo-600">{analytics.aiSummariesGenerated || 0}</div>
+                    <div className="text-sm text-gray-600 mt-1">AI Summaries</div>
+                  </div>
+                </div>
+
+                {/* Top Topics */}
+                {analytics.topTopics && analytics.topTopics.length > 0 && (
+                  <div className="border border-gray-200 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">🔥 Top Topics</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {analytics.topTopics.map((topic: any) => (
+                        <span key={topic.topic} className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
+                          {topic.topic} ({topic.count})
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <p className="text-sm text-gray-600">
+                    <strong>Period:</strong> {analytics.period || 'Last 30 days'}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );
