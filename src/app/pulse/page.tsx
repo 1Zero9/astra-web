@@ -168,6 +168,20 @@ export default function SecurityPulse() {
     return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
   };
 
+  const getFullDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const dateStr = date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+    const timeStr = date.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    return { dateStr, timeStr, relative: getTimeAgo(dateString) };
+  };
+
   const toggleSelection = (link: string) => {
     setSelectedItems((prev) =>
       prev.includes(link) ? prev.filter((l) => l !== link) : [...prev, link]
@@ -643,7 +657,7 @@ export default function SecurityPulse() {
   const publications = Array.from(new Set(news.map(item => item.source))).sort();
 
   return (
-    <div className="min-h-screen bg-zinc-50 relative">
+    <div className="min-h-screen bg-slate-100 flex flex-col">
       {/* Glass Loading Overlay */}
       {(generating || loadingSummary) && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center">
@@ -737,13 +751,13 @@ export default function SecurityPulse() {
         </div>
       )}
 
-      <main className="mx-auto max-w-7xl px-4 py-6">
-        {/* Header */}
-        <div className="mb-4">
-          <div className="flex items-center justify-between mb-3">
+      {/* Sticky Header */}
+      <header className="sticky top-0 z-30 bg-white border-b border-slate-300">
+        <div className="mx-auto max-w-7xl px-4 py-3">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">SECURITY PULSE</h1>
-              <span className="px-2 py-0.5 bg-slate-800 text-slate-100 text-xs font-mono rounded">
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">SECURITY PULSE</h1>
+              <span className="px-2 py-0.5 bg-slate-800 text-slate-100 text-xs font-mono">
                 {getModuleVersion('pulse')}
               </span>
             </div>
@@ -755,7 +769,7 @@ export default function SecurityPulse() {
                 </span>
                 <button
                   onClick={() => fetchNews()}
-                  className="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded text-xs font-medium transition-colors"
+                  className="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-medium transition-colors"
                   disabled={loading}
                 >
                   {loading ? 'SYNCING...' : 'REFRESH'}
@@ -763,90 +777,95 @@ export default function SecurityPulse() {
               </div>
             )}
           </div>
-
           <div className="text-xs text-slate-600 font-mono">
             THREAT INTELLIGENCE FEED • {unreadCount} UNREAD • {newCount} NEW
           </div>
         </div>
 
         {/* Command Bar */}
-        <div className="bg-slate-50 border-y border-slate-300 py-2 px-3 mb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={markAllAsRead}
-                className="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-300 rounded text-xs font-medium text-slate-700 transition-colors"
-              >
-                MARK ALL READ
-              </button>
-              <button
-                onClick={markSelectedAsUnread}
-                disabled={selectedItems.length === 0}
-                className="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-300 rounded text-xs font-medium text-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                MARK UNREAD ({selectedItems.length})
-              </button>
-              <div className="w-px h-6 bg-slate-300"></div>
-              <span className="text-xs text-slate-600 font-mono">
-                {filteredNews.length} ITEMS
-              </span>
-            </div>
+        <div className="bg-slate-50 border-t border-slate-300 py-2">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={markAllAsRead}
+                  className="px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors"
+                >
+                  MARK ALL READ
+                </button>
+                <button
+                  onClick={markSelectedAsUnread}
+                  disabled={selectedItems.length === 0}
+                  className="px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  MARK UNREAD ({selectedItems.length})
+                </button>
+                <div className="w-px h-5 bg-slate-300 mx-2"></div>
+                <span className="text-xs text-slate-600 font-mono">
+                  {filteredNews.length} ITEMS
+                </span>
+              </div>
 
-            {/* Tabs */}
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setActiveTab('browse')}
-                className={`px-4 py-1.5 text-xs font-semibold transition-colors ${
-                  activeTab === 'browse'
-                    ? 'bg-slate-800 text-white'
-                    : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
-                } rounded`}
-              >
-                FEED ({news.length})
-              </button>
-              <button
-                onClick={() => {
-                  setActiveTab('saved');
-                  if (savedArticles.length === 0) fetchSavedArticles();
-                }}
-                className={`px-4 py-1.5 text-xs font-semibold transition-colors ${
-                  activeTab === 'saved'
-                    ? 'bg-slate-800 text-white'
-                    : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
-                } rounded`}
-              >
-                SAVED ({savedArticles.length})
-              </button>
-              <button
-                onClick={() => {
-                  setActiveTab('reading-list');
-                  if (readingList.length === 0) fetchReadingList();
-                }}
-                className={`px-4 py-1.5 text-xs font-semibold transition-colors ${
-                  activeTab === 'reading-list'
-                    ? 'bg-slate-800 text-white'
-                    : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
-                } rounded`}
-              >
-                QUEUE ({readingList.length})
-              </button>
-              <button
-                onClick={() => {
-                  setActiveTab('analytics');
-                  if (!analytics) fetchAnalytics();
-                }}
-                className={`px-4 py-1.5 text-xs font-semibold transition-colors ${
-                  activeTab === 'analytics'
-                    ? 'bg-slate-800 text-white'
-                    : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
-                } rounded`}
-              >
-                METRICS
-              </button>
+              {/* Tabs */}
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setActiveTab('browse')}
+                  className={`px-4 py-1 text-xs font-semibold transition-colors ${
+                    activeTab === 'browse'
+                      ? 'bg-slate-800 text-white'
+                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                  }`}
+                >
+                  FEED ({news.length})
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('saved');
+                    if (savedArticles.length === 0) fetchSavedArticles();
+                  }}
+                  className={`px-4 py-1 text-xs font-semibold transition-colors ${
+                    activeTab === 'saved'
+                      ? 'bg-slate-800 text-white'
+                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                  }`}
+                >
+                  SAVED ({savedArticles.length})
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('reading-list');
+                    if (readingList.length === 0) fetchReadingList();
+                  }}
+                  className={`px-4 py-1 text-xs font-semibold transition-colors ${
+                    activeTab === 'reading-list'
+                      ? 'bg-slate-800 text-white'
+                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                  }`}
+                >
+                  QUEUE ({readingList.length})
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('analytics');
+                    if (!analytics) fetchAnalytics();
+                  }}
+                  className={`px-4 py-1 text-xs font-semibold transition-colors ${
+                    activeTab === 'analytics'
+                      ? 'bg-slate-800 text-white'
+                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                  }`}
+                >
+                  METRICS
+                </button>
+              </div>
             </div>
           </div>
         </div>
+      </header>
 
+      {/* Main Content */}
+      <main className="flex-1 overflow-auto">
+        <div className="mx-auto max-w-7xl px-4 py-4">
         {/* Browse Tab Content */}
         {activeTab === 'browse' && (
           <>
@@ -886,83 +905,48 @@ export default function SecurityPulse() {
                   setFilterVendor("");
                   setFilterSeverity("");
                 }}
-                className="px-3 py-1.5 text-xs bg-slate-200 hover:bg-slate-300 border border-slate-300 rounded font-medium transition-colors"
+                className="px-3 py-1.5 text-xs bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
               >
-                CLEAR
+                CLEAR FILTERS
               </button>
             )}
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-          <div className="xl:col-span-7">
-              {(filterPublication || filterVendor || filterSeverity) && (
-                <div className="mt-4 flex items-center gap-2 flex-wrap">
-                  <span className="text-sm text-gray-600">Active filters:</span>
-                  {filterPublication && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-xs">
-                      Publication: {filterPublication}
-                      <button onClick={() => setFilterPublication("")} className="hover:text-blue-900">×</button>
-                    </span>
-                  )}
-                  {filterVendor && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-800 rounded-md text-xs">
-                      Vendor: {filterVendor}
-                      <button onClick={() => setFilterVendor("")} className="hover:text-purple-900">×</button>
-                    </span>
-                  )}
-                  {filterSeverity && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 rounded-md text-xs">
-                      Keyword: {filterSeverity}
-                      <button onClick={() => setFilterSeverity("")} className="hover:text-green-900">×</button>
-                    </span>
-                  )}
-                </div>
+          {/* Active Filters Indicator */}
+          {(filterPublication || filterVendor || filterSeverity) && (
+            <div className="flex items-center gap-2 text-xs font-mono">
+              <span className="text-slate-600">ACTIVE:</span>
+              {filterPublication && (
+                <span className="px-2 py-1 bg-slate-700 text-slate-100 border border-slate-800">
+                  PUB: {filterPublication.toUpperCase()}
+                </span>
+              )}
+              {filterVendor && (
+                <span className="px-2 py-1 bg-slate-700 text-slate-100 border border-slate-800">
+                  VENDOR: {filterVendor.toUpperCase()}
+                </span>
+              )}
+              {filterSeverity && (
+                <span className="px-2 py-1 bg-slate-700 text-slate-100 border border-slate-800">
+                  KEYWORD: {filterSeverity.toUpperCase()}
+                </span>
               )}
             </div>
+          )}
+        </div>
 
-            {/* News List */}
-            <div className="bg-white rounded-lg border-2 border-gray-300">
-              <div className="p-4 border-b border-gray-200">
-                <div className="flex items-center justify-between mb-2">
-                  <h2 className="text-lg font-semibold text-gray-900">Latest Security News</h2>
-                  {unreadCount > 0 && (
-                    <button
-                      onClick={markAllAsRead}
-                      className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-                    >
-                      Mark all as read
-                    </button>
-                  )}
-                </div>
-                <div className="flex items-center gap-4 text-sm">
-                  <p className="text-gray-600">
-                    {filteredNews.length} articles {(filterPublication || filterVendor || filterSeverity) && "matching filters"}
-                  </p>
-                  {unreadCount > 0 && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-                      <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                      {unreadCount} unread
-                    </span>
-                  )}
-                  {newCount > 0 && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-100 text-red-800 rounded-full text-xs font-medium animate-pulse">
-                      <span className="w-2 h-2 bg-red-600 rounded-full"></span>
-                      {newCount} new
-                    </span>
-                  )}
-                </div>
-              </div>
+        {/* News List */}
+        <div className="bg-white border border-slate-300 mt-4">
 
               {loading ? (
-                <div className="p-12 text-center text-gray-500">
-                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-3"></div>
-                  <p>Loading latest security news...</p>
+                <div className="p-12 text-center text-slate-600">
+                  <div className="inline-block animate-spin h-8 w-8 border-2 border-slate-300 border-t-slate-700 mb-3"></div>
+                  <p className="text-xs font-mono uppercase tracking-wide">LOADING FEED...</p>
                 </div>
               ) : filteredNews.length === 0 ? (
-                <div className="p-12 text-center text-gray-500">
-                  <p className="text-lg mb-2">No articles found</p>
-                  <p className="text-sm">Try adjusting your filters</p>
+                <div className="p-12 text-center text-slate-600">
+                  <p className="text-sm font-mono uppercase mb-2">NO ARTICLES FOUND</p>
+                  <p className="text-xs text-slate-500">Adjust filters or refresh feed</p>
                 </div>
               ) : (
                 <div className="border border-slate-300">
@@ -987,9 +971,9 @@ export default function SecurityPulse() {
                             className="mt-1 h-4 w-4 text-slate-700 border-slate-300 focus:ring-slate-500 cursor-pointer flex-shrink-0"
                           />
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between gap-3 mb-2">
+                            <div className="flex items-start justify-between gap-4 mb-2">
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1">
+                                <div className="flex items-center gap-2 mb-1.5">
                                   {isUnread && <span className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"></span>}
                                   <span className="text-xs font-mono text-slate-600">{item.source.toUpperCase()}</span>
                                   {severity.level === 'critical' && (
@@ -1031,9 +1015,17 @@ export default function SecurityPulse() {
                                   </p>
                                 )}
                               </div>
-                              <span className="text-xs text-slate-500 whitespace-nowrap font-mono">
-                                {getTimeAgo(item.pubDate)}
-                              </span>
+                              <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
+                                <span className="text-xs font-semibold text-slate-700 font-mono whitespace-nowrap">
+                                  {getFullDateTime(item.pubDate).relative.toUpperCase()}
+                                </span>
+                                <span className="text-[10px] text-slate-500 font-mono whitespace-nowrap">
+                                  {getFullDateTime(item.pubDate).dateStr}
+                                </span>
+                                <span className="text-[10px] text-slate-500 font-mono whitespace-nowrap">
+                                  {getFullDateTime(item.pubDate).timeStr}
+                                </span>
+                              </div>
                             </div>
 
                             {/* Action Buttons */}
@@ -1082,371 +1074,6 @@ export default function SecurityPulse() {
                 </div>
               )}
             </div>
-          </div>
-
-          {/* Content Generation Panel */}
-          <div className="xl:col-span-5">
-            <div className="bg-white p-6 rounded-lg border-2 border-gray-300 sticky top-4">
-              {/* Tabs */}
-              <div className="flex gap-2 mb-4 border-b border-gray-200">
-                <button
-                  onClick={() => {
-                    setShowHistory(false);
-                    setShowSources(false);
-                  }}
-                  className={`px-4 py-2 font-medium transition-colors ${
-                    !showHistory && !showSources
-                      ? 'text-blue-600 border-b-2 border-blue-600'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  Generate
-                </button>
-                <button
-                  onClick={() => {
-                    setShowHistory(true);
-                    setShowSources(false);
-                    if (contentHistory.length === 0) fetchHistory();
-                  }}
-                  className={`px-4 py-2 font-medium transition-colors ${
-                    showHistory && !showSources
-                      ? 'text-blue-600 border-b-2 border-blue-600'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  History
-                </button>
-                <button
-                  onClick={() => {
-                    setShowHistory(false);
-                    setShowSources(true);
-                    if (rssSources.length === 0) fetchSources();
-                  }}
-                  className={`px-4 py-2 font-medium transition-colors ${
-                    showSources
-                      ? 'text-blue-600 border-b-2 border-blue-600'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  Sources
-                </button>
-              </div>
-
-              {/* Generate Tab */}
-              {!showHistory && !showSources && (
-                <>
-                  {selectedItems.length > 0 && (
-                <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-900 mb-2">
-                    {selectedItems.length} article{selectedItems.length > 1 ? "s" : ""} selected
-                  </p>
-                  <button
-                    onClick={markSelectedAsUnread}
-                    className="text-xs text-blue-700 hover:text-blue-900 font-medium underline"
-                  >
-                    Mark as unread
-                  </button>
-                </div>
-              )}
-
-              <form onSubmit={handleGenerate} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Content Type
-                  </label>
-                  <select
-                    value={contentType}
-                    onChange={(e) => setContentType(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option>Security Awareness Email</option>
-                    <option>Executive Summary</option>
-                    <option>Team Briefing</option>
-                    <option>Viva Engage Post</option>
-                    <option>Slide Bullets</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Focus Area (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    value={focusArea}
-                    onChange={(e) => setFocusArea(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., vulnerabilities, best practices"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Tone
-                  </label>
-                  <select
-                    value={tone}
-                    onChange={(e) => setTone(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option>Professional</option>
-                    <option>Urgent</option>
-                    <option>Educational</option>
-                    <option>Casual</option>
-                  </select>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={selectedItems.length === 0 || generating}
-                  className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
-                >
-                  {generating ? "Generating..." : "Generate Content"}
-                </button>
-              </form>
-
-              {/* Generated Content Display */}
-              {generatedContent && (
-                <div className="mt-6 p-4 bg-green-50 border-2 border-green-200 rounded-lg">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-green-900">✓ Content Generated</h3>
-                    <button
-                      onClick={copyToClipboard}
-                      className="text-xs px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
-                    >
-                      Copy to Clipboard
-                    </button>
-                  </div>
-                  <div className="bg-white p-4 rounded border border-green-200 max-h-96 overflow-y-auto">
-                    <pre className="whitespace-pre-wrap text-sm text-gray-800 font-sans">
-                      {generatedContent}
-                    </pre>
-                  </div>
-                </div>
-              )}
-
-              {/* Error Display */}
-              {generationError && (
-                <div className="mt-6 p-4 bg-red-50 border-2 border-red-200 rounded-lg">
-                  <h3 className="font-semibold text-red-900 mb-2">✗ Generation Failed</h3>
-                  <p className="text-sm text-red-700">{generationError}</p>
-                </div>
-              )}
-
-              <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                <p className="text-xs text-amber-900">
-                  <strong>⚠️ Note:</strong> Generated content should be reviewed before distribution.
-                </p>
-              </div>
-                </>
-              )}
-
-              {/* History Tab */}
-              {showHistory && !showSources && (
-                <div className="space-y-4">
-                  {loadingHistory ? (
-                    <div className="text-center py-8 text-gray-500">
-                      <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-3"></div>
-                      <p>Loading history...</p>
-                    </div>
-                  ) : contentHistory.length === 0 ? (
-                    <div className="text-center py-12 text-gray-500">
-                      <p className="text-lg mb-2">No content generated yet</p>
-                      <p className="text-sm">Generate some content to see it here!</p>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-semibold text-gray-900">Recent Generated Content</h3>
-                        <button
-                          onClick={fetchHistory}
-                          className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-                        >
-                          Refresh
-                        </button>
-                      </div>
-                      <div className="space-y-4 max-h-[600px] overflow-y-auto">
-                        {contentHistory.map((item) => (
-                          <div
-                            key={item.id}
-                            className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors"
-                          >
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="flex-1">
-                                <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded mb-2">
-                                  {item.contentType}
-                                </span>
-                                <p className="text-xs text-gray-500">
-                                  {new Date(item.createdAt).toLocaleString()}
-                                </p>
-                              </div>
-                              <button
-                                onClick={() => deleteHistoryItem(item.id)}
-                                className="text-red-600 hover:text-red-800 text-xs font-medium"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                            {item.focusArea && (
-                              <p className="text-xs text-gray-600 mb-2">
-                                Focus: {item.focusArea} | Tone: {item.tone}
-                              </p>
-                            )}
-                            <div className="bg-gray-50 p-3 rounded max-h-40 overflow-y-auto">
-                              <pre className="whitespace-pre-wrap text-xs text-gray-700 font-sans">
-                                {item.content.substring(0, 300)}
-                                {item.content.length > 300 && '...'}
-                              </pre>
-                            </div>
-                            <button
-                              onClick={() => {
-                                navigator.clipboard.writeText(item.content);
-                                alert('Content copied to clipboard!');
-                              }}
-                              className="mt-2 text-xs text-blue-600 hover:text-blue-800 font-medium"
-                            >
-                              Copy Full Content
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
-
-              {/* Sources Tab */}
-              {showSources && (
-                <div className="space-y-4">
-                  {/* Add New Source Form */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <h3 className="font-semibold text-gray-900 mb-3">Add New RSS Source</h3>
-                    <form onSubmit={addRssSource} className="space-y-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Source Name *
-                        </label>
-                        <input
-                          type="text"
-                          value={newSource.name}
-                          onChange={(e) => setNewSource(prev => ({ ...prev, name: e.target.value }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                          placeholder="e.g., Bleeping Computer"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          RSS Feed URL *
-                        </label>
-                        <input
-                          type="url"
-                          value={newSource.url}
-                          onChange={(e) => setNewSource(prev => ({ ...prev, url: e.target.value }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                          placeholder="https://example.com/feed/"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Description (optional)
-                        </label>
-                        <input
-                          type="text"
-                          value={newSource.description}
-                          onChange={(e) => setNewSource(prev => ({ ...prev, description: e.target.value }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                          placeholder="Brief description"
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        disabled={addingSource}
-                        className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium text-sm"
-                      >
-                        {addingSource ? 'Adding...' : 'Add Source'}
-                      </button>
-                    </form>
-                  </div>
-
-                  {/* Sources List */}
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="font-semibold text-gray-900">RSS Sources ({rssSources.length})</h3>
-                      <button
-                        onClick={fetchSources}
-                        disabled={loadingSources}
-                        className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-                      >
-                        {loadingSources ? 'Refreshing...' : 'Refresh'}
-                      </button>
-                    </div>
-
-                    {loadingSources ? (
-                      <div className="text-center py-8 text-gray-500">
-                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-3"></div>
-                        <p>Loading sources...</p>
-                      </div>
-                    ) : rssSources.length === 0 ? (
-                      <div className="text-center py-8 text-gray-500">
-                        <p className="text-sm">No RSS sources configured</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-3 max-h-[500px] overflow-y-auto">
-                        {rssSources.map((source) => (
-                          <div
-                            key={source.id}
-                            className={`p-3 border rounded-lg ${
-                              source.isActive
-                                ? 'border-green-200 bg-green-50'
-                                : 'border-gray-200 bg-gray-50'
-                            }`}
-                          >
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="flex-1">
-                                <h4 className="font-semibold text-gray-900 text-sm">{source.name}</h4>
-                                {source.description && (
-                                  <p className="text-xs text-gray-600 mt-1">{source.description}</p>
-                                )}
-                                <p className="text-xs text-gray-500 mt-1 break-all">{source.url}</p>
-                              </div>
-                              <div className="flex items-center gap-2 ml-2">
-                                <button
-                                  onClick={() => toggleSourceStatus(source.id, source.isActive)}
-                                  className={`px-2 py-1 rounded text-xs font-medium ${
-                                    source.isActive
-                                      ? 'bg-green-600 text-white hover:bg-green-700'
-                                      : 'bg-gray-400 text-white hover:bg-gray-500'
-                                  }`}
-                                  title={source.isActive ? 'Disable source' : 'Enable source'}
-                                >
-                                  {source.isActive ? 'Active' : 'Inactive'}
-                                </button>
-                                <button
-                                  onClick={() => deleteSource(source.id)}
-                                  className="text-red-600 hover:text-red-800 text-xs font-medium"
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                    <p className="text-xs text-amber-900">
-                      <strong>Note:</strong> Changes to RSS sources will take effect on the next news refresh. Only active sources will be used to fetch news.
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
           </>
         )}
 
