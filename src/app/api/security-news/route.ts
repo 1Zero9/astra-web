@@ -7,6 +7,9 @@ interface NewsItem {
   pubDate: string;
   source: string;
   description?: string;
+  cves?: string[];
+  author?: string;
+  category?: string;
 }
 
 export async function GET() {
@@ -92,6 +95,20 @@ function parseRSS(xmlText: string, source: string): NewsItem[] {
       // Strip HTML tags from description
       description = description.replace(/<[^>]*>/g, '').trim().substring(0, 200);
 
+      // Extract author
+      const authorMatch = itemContent.match(/<(?:author|dc:creator)>(.*?)<\/(?:author|dc:creator)>/i);
+      const author = authorMatch ? stripCDATA(authorMatch[1]).trim() : undefined;
+
+      // Extract category
+      const categoryMatch = itemContent.match(/<category>(.*?)<\/category>/i);
+      const category = categoryMatch ? stripCDATA(categoryMatch[1]).trim() : undefined;
+
+      // Extract CVEs from title and description
+      const cveRegex = /CVE-\d{4}-\d{4,}/gi;
+      const titleCVEs = title.match(cveRegex) || [];
+      const descCVEs = description.match(cveRegex) || [];
+      const allCVEs = Array.from(new Set([...titleCVEs, ...descCVEs]));
+
       if (title && link) {
         items.push({
           title: title.trim(),
@@ -99,6 +116,9 @@ function parseRSS(xmlText: string, source: string): NewsItem[] {
           pubDate,
           source,
           description: description || undefined,
+          cves: allCVEs.length > 0 ? allCVEs : undefined,
+          author,
+          category,
         });
       }
     }
