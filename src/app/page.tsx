@@ -49,40 +49,39 @@ const modules: ModuleConfig[] = [
 export default function Home() {
   const [footerExpanded, setFooterExpanded] = useState(false);
   return (
-    <div className="flex-1 relative overflow-hidden">
-      {/* Animated gradient background - ASTRA Brand Colors */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1A3B66] via-[#2C7BE5] to-[#1A3B66]">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+    <div className="flex-1 relative overflow-hidden h-screen flex flex-col">
+      {/* Dark gradient background - ASTRA Brand Colors */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0A1628] via-[#1A3B66] to-[#0A1628]">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5"></div>
+        <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-[#2C7BE5]/20 blur-[120px]"></div>
+        <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-[#1A3B66]/30 blur-[120px]"></div>
       </div>
 
       {/* Content */}
-      <div className="relative mx-auto max-w-6xl px-4 py-12 space-y-12">
-        {/* Minimal Hero */}
-        <div className="flex flex-col items-center text-center space-y-6">
-          <div className="relative">
-            <div className="absolute inset-0 bg-white/20 blur-3xl rounded-full"></div>
+      <div className="relative mx-auto max-w-6xl px-4 py-6 flex-1 flex flex-col justify-center space-y-8">
+        {/* Logo Hero */}
+        <div className="flex flex-col items-center text-center">
+          <div className="relative group">
+            <div className="absolute inset-0 bg-[#2C7BE5]/30 blur-3xl rounded-full group-hover:bg-[#2C7BE5]/40 transition-all duration-500"></div>
+            <div className="absolute inset-0 animate-pulse bg-white/10 blur-2xl rounded-full"></div>
             <Image
               src="/images/ASTRA_logo.png"
               alt="ASTRA Logo"
-              width={300}
-              height={300}
-              className="object-contain relative z-10"
+              width={200}
+              height={200}
+              className="object-contain relative z-10 drop-shadow-2xl"
               priority
             />
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white">
-            ASTRA
-          </h1>
         </div>
 
         {/* Module Cards */}
-        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <section className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {modules.map((module) => (
             <Link
               key={module.name}
               href={module.href}
-              className="group relative h-48 sm:h-52"
+              className="group relative h-36 sm:h-40"
             >
               {/* Glass card with gradient */}
               <div className={`absolute inset-0 bg-gradient-to-br ${module.gradient} rounded-3xl shadow-2xl border border-white/30 backdrop-blur-lg transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-3xl group-active:scale-[0.98]`}>
@@ -96,26 +95,26 @@ export default function Home() {
                 </div>
 
                 {/* Content */}
-                <div className="relative h-full flex flex-col justify-between p-5 sm:p-6 text-left">
+                <div className="relative h-full flex flex-col justify-between p-4 text-left">
                   <div className="flex items-start justify-between">
-                    <div className="text-4xl sm:text-5xl filter drop-shadow-lg">
+                    <div className="text-3xl filter drop-shadow-lg">
                       {module.icon}
                     </div>
                     {module.badge && (
-                      <span className="px-2 py-1 bg-black/30 backdrop-blur-md border border-white/30 rounded-full text-xs font-bold text-white uppercase tracking-wide">
+                      <span className="px-2 py-0.5 bg-black/30 backdrop-blur-md border border-white/30 rounded-full text-[10px] font-bold text-white uppercase tracking-wide">
                         {module.badge}
                       </span>
                     )}
                   </div>
 
-                  <div className="space-y-2">
-                    <h3 className="text-xl sm:text-2xl font-bold text-white drop-shadow-lg">
+                  <div className="space-y-1">
+                    <h3 className="text-lg font-bold text-white drop-shadow-lg">
                       {module.name}
                     </h3>
-                    <p className="text-sm text-white/80 leading-snug line-clamp-2">
+                    <p className="text-xs text-white/80 leading-snug line-clamp-2">
                       {module.description}
                     </p>
-                    <div className="flex items-center text-white/90 text-sm font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                    <div className="flex items-center text-white/90 text-xs font-semibold group-hover:translate-x-2 transition-transform duration-300">
                       <span>Launch →</span>
                     </div>
                   </div>
@@ -126,19 +125,18 @@ export default function Home() {
         </section>
 
         {/* Expandable Footer */}
-        <div className="text-center pt-4 pb-2">
+        <div className="text-center pt-2">
           <button
             onClick={() => setFooterExpanded(!footerExpanded)}
-            className="text-xs text-white/50 hover:text-white/70 transition-colors cursor-pointer"
+            className="text-[10px] text-white/40 hover:text-white/60 transition-colors cursor-pointer"
           >
             {getFullVersionInfo()} {footerExpanded ? '▲' : '▼'}
           </button>
 
           {footerExpanded && (
-            <div className="mt-4 text-xs text-white/60 space-y-1 animate-in fade-in duration-300">
-              <p>Built by <span className="font-semibold text-white/70">1Zero9</span></p>
-              <p>© 2025 • Proof of Concept Tool</p>
-              <p className="text-white/50">Review all generated output with your security team before sharing</p>
+            <div className="mt-2 text-[10px] text-white/50 space-y-0.5">
+              <p>Built by <span className="font-semibold text-white/60">1Zero9</span></p>
+              <p>© 2025 • POC Tool</p>
             </div>
           )}
         </div>
