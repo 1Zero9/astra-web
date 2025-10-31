@@ -1,171 +1,173 @@
-import Link from "next/link";
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { VERSION, getFullVersionInfo } from "@/lib/version";
 
 export default function Home() {
+  const [activeModule, setActiveModule] = useState<string | null>(null);
+
+  const modules = [
+    {
+      id: 'pulse',
+      name: 'Security Pulse',
+      description: 'Curated AI briefings on the latest threat intelligence and security news.',
+      icon: '⚡',
+      gradient: 'from-blue-500/90 to-indigo-600/90',
+      href: '/pulse'
+    },
+    {
+      id: 'phishing',
+      name: 'Phishing Simulator',
+      description: 'Generate realistic phishing emails with safe callouts for awareness training.',
+      icon: '🪝',
+      gradient: 'from-purple-500/90 to-pink-600/90',
+      href: '/phishing'
+    },
+    {
+      id: 'awareness',
+      name: 'Awareness Campaigns',
+      description: 'Turn policies or articles into polished awareness content in minutes.',
+      icon: '📣',
+      gradient: 'from-green-500/90 to-emerald-600/90',
+      href: '/awareness'
+    },
+    {
+      id: 'prompt-builder',
+      name: 'Prompt Builder',
+      description: 'Rapidly prototype prompts with ready-to-use frameworks and guardrails.',
+      icon: '🎯',
+      gradient: 'from-amber-500/90 to-orange-600/90',
+      href: '/prompt-builder',
+      badge: 'Beta'
+    }
+  ];
+
   return (
-    <div className="flex-1 bg-gradient-to-br from-zinc-50 via-white to-zinc-50">
-      <div className="mx-auto max-w-6xl px-4 pt-16 pb-12 space-y-16">
-        <div className="flex flex-col items-center text-center space-y-4">
-          <Image
-            src="/images/ASTRA_logo.png"
-            alt="ASTRA Logo"
-            width={140}
-            height={140}
-            className="object-contain"
-            priority
-          />
-          <div className="space-y-2">
-            <h1 className="text-4xl sm:text-5xl font-bold text-zinc-900">ASTRA</h1>
-            <p className="text-lg text-zinc-600">
+    <div className="flex-1 relative overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+      </div>
+
+      {/* Content */}
+      <div className="relative mx-auto max-w-6xl px-4 pt-16 pb-12 space-y-16">
+        {/* Hero Section */}
+        <div className="flex flex-col items-center text-center space-y-6">
+          <div className="relative">
+            <div className="absolute inset-0 bg-white/20 blur-3xl rounded-full"></div>
+            <Image
+              src="/images/ASTRA_logo.png"
+              alt="ASTRA Logo"
+              width={120}
+              height={120}
+              className="object-contain relative z-10"
+              priority
+            />
+          </div>
+          <div className="space-y-3">
+            <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+              ASTRA
+            </h1>
+            <p className="text-xl text-white/90 font-medium">
               Awareness, Security & Threat Response Assistant
             </p>
-            <p className="text-sm text-zinc-500 max-w-2xl mx-auto">
+            <p className="text-sm text-white/70 max-w-2xl mx-auto leading-relaxed">
               Build security awareness campaigns, simulate phishing scenarios, and stay informed on
               cyber threats with an AI co-pilot.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row items-center gap-3">
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-6 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800"
-            >
-              Go to dashboard
-            </Link>
-            <Link
-              href="#modules"
-              className="inline-flex items-center justify-center rounded-full border border-zinc-300 px-6 py-2 text-sm font-semibold text-zinc-700 transition hover:border-zinc-400 hover:text-zinc-900"
-            >
-              Explore modules
-            </Link>
-          </div>
         </div>
 
-        <section id="modules" className="space-y-6">
-          <div className="space-y-2 text-center">
-            <span className="inline-flex items-center rounded-full bg-zinc-900/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-600">
-              Core modules
-            </span>
-            <p className="text-sm text-zinc-500">
-              Pick a workflow to start generating insights and training material.
+        {/* Glass Morphism Module Cards */}
+        <section id="modules" className="space-y-8">
+          <div className="text-center space-y-2">
+            <div className="inline-flex items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wide text-white/90">
+                Core Modules
+              </span>
+            </div>
+            <p className="text-sm text-white/60">
+              Select a module to launch the application
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            <Link
-              href="/pulse"
-              className="group flex flex-col rounded-2xl border border-blue-100 bg-white p-6 shadow-md transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="text-4xl mb-4 text-blue-600">⚡</div>
-              <h3 className="text-lg font-semibold text-zinc-900">Security Pulse</h3>
-              <p className="mt-2 text-sm text-zinc-600">
-                Curated AI briefings on the latest threat intelligence and security news.
-              </p>
-              <span className="mt-4 inline-flex items-center text-sm font-semibold text-blue-600">
-                Open module →
-              </span>
-            </Link>
-            <Link
-              href="/phishing"
-              className="group flex flex-col rounded-2xl border border-purple-100 bg-white p-6 shadow-md transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="text-4xl mb-4 text-purple-600">🪝</div>
-              <h3 className="text-lg font-semibold text-zinc-900">Phishing Simulator</h3>
-              <p className="mt-2 text-sm text-zinc-600">
-                Generate realistic phishing emails with safe callouts for awareness training.
-              </p>
-              <span className="mt-4 inline-flex items-center text-sm font-semibold text-purple-600">
-                Open module →
-              </span>
-            </Link>
-            <Link
-              href="/awareness"
-              className="group flex flex-col rounded-2xl border border-green-100 bg-white p-6 shadow-md transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="text-4xl mb-4 text-green-600">📣</div>
-              <h3 className="text-lg font-semibold text-zinc-900">Awareness Campaigns</h3>
-              <p className="mt-2 text-sm text-zinc-600">
-                Turn policies or articles into polished awareness content in minutes.
-              </p>
-              <span className="mt-4 inline-flex items-center text-sm font-semibold text-green-600">
-                Open module →
-              </span>
-            </Link>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {modules.map((module) => (
+              <a
+                key={module.id}
+                href={module.href}
+                className="group relative h-64 cursor-pointer"
+              >
+                {/* Glass card with gradient */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${module.gradient} rounded-3xl shadow-2xl border border-white/30 backdrop-blur-lg transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-3xl`}>
+                  {/* Multi-layer glass effect */}
+                  <div className="absolute inset-0 bg-white/10 backdrop-blur-lg rounded-3xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/10 rounded-3xl"></div>
+
+                  {/* Shine effect on hover */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent rounded-3xl"></div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative h-full flex flex-col justify-between p-8">
+                    <div className="flex items-start justify-between">
+                      <div className="text-6xl filter drop-shadow-lg">
+                        {module.icon}
+                      </div>
+                      {module.badge && (
+                        <span className="px-3 py-1 bg-black/30 backdrop-blur-md border border-white/30 rounded-full text-xs font-bold text-white uppercase tracking-wide">
+                          {module.badge}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="space-y-3">
+                      <h3 className="text-2xl font-bold text-white drop-shadow-lg">
+                        {module.name}
+                      </h3>
+                      <p className="text-sm text-white/80 leading-relaxed">
+                        {module.description}
+                      </p>
+                      <div className="flex items-center text-white/90 text-sm font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                        <span>Launch →</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            ))}
           </div>
         </section>
 
-        <section className="space-y-6">
-          <div className="space-y-2 text-center">
-            <span className="inline-flex items-center rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-600">
-              Astra labs
-            </span>
-            <p className="text-sm text-zinc-500">
-              Experimental tools that are useful today but still evolving.
-            </p>
-          </div>
-          <div className="mx-auto max-w-3xl">
-            <Link
-              href="/prompt-builder"
-              className="group flex flex-col rounded-2xl border border-amber-100 bg-white p-6 shadow-md transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="flex items-center justify-between">
-                <div className="text-4xl text-amber-500">🎯</div>
-                <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-                  Beta
-                </span>
+        {/* Stats/Info Glass Panel */}
+        <section>
+          <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-2xl">
+            <div className="absolute inset-1 bg-white/5 rounded-2xl backdrop-blur-sm"></div>
+            <div className="absolute inset-2 bg-gradient-to-br from-white/10 to-transparent"></div>
+
+            <div className="relative space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="text-3xl">⚠️</div>
+                <h3 className="text-lg font-bold text-white">POC Tool Notice</h3>
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-zinc-900">Prompt Builder</h3>
-              <p className="mt-2 text-sm text-zinc-600">
-                Rapidly prototype prompts with ready-to-use frameworks and guardrails.
+              <p className="text-sm text-white/80 leading-relaxed">
+                ASTRA is a Proof of Concept tool. Review all generated content with your security team before distribution.
+                Not a replacement for certified security systems or professional threat monitoring platforms.
               </p>
-              <span className="mt-4 inline-flex items-center text-sm font-semibold text-amber-600">
-                Try it now →
-              </span>
-            </Link>
-          </div>
-        </section>
-
-        <section className="space-y-6">
-          <div className="space-y-2 text-center">
-            <span className="inline-flex items-center rounded-full bg-zinc-900/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-600">
-              On the roadmap
-            </span>
-            <p className="text-sm text-zinc-500">
-              Ideas we are shaping with feedback from early security teams.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 mx-auto max-w-3xl">
-            <div className="rounded-2xl border border-dashed border-zinc-300 bg-white/60 p-6 text-center text-zinc-500">
-              <div className="text-4xl mb-4">🎓</div>
-              <h3 className="text-lg font-semibold text-zinc-700">Knowledge Explainer</h3>
-              <p className="mt-2 text-sm">
-                Plain-language walkthroughs for ISO, NIST, and other compliance frameworks.
-              </p>
-              <p className="mt-4 text-xs font-medium uppercase tracking-wide">Coming soon</p>
-            </div>
-            <div className="rounded-2xl border border-dashed border-zinc-300 bg-white/60 p-6 text-center text-zinc-500">
-              <div className="text-4xl mb-4">📊</div>
-              <h3 className="text-lg font-semibold text-zinc-700">Usage Dashboard</h3>
-              <p className="mt-2 text-sm">
-                Analytics to benchmark content adoption and phishing simulation results.
-              </p>
-              <p className="mt-4 text-xs font-medium uppercase tracking-wide">Coming soon</p>
             </div>
           </div>
         </section>
 
-        <div className="mx-auto max-w-3xl">
-          <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-xs text-amber-800">
-            <strong>⚠️ POC Tool:</strong> Review generated output with your security team before
-            sharing.
-          </div>
-        </div>
-
-        <div className="text-center text-sm text-zinc-500">
-          <p className="font-mono">
+        {/* Footer */}
+        <div className="text-center space-y-2 pt-8">
+          <p className="font-mono text-sm text-white/60">
             {getFullVersionInfo()}
           </p>
-          <p className="text-xs mt-1">
-            Built by <span className="font-semibold">1Zero9</span> • © 2025
+          <p className="text-xs text-white/50">
+            Built by <span className="font-semibold text-white/70">1Zero9</span> • © 2025
           </p>
         </div>
       </div>
