@@ -94,29 +94,31 @@ export default function Home() {
               priority
             />
           </div>
-          <div className="space-y-2">
-            <h1 className="text-6xl sm:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+
+          {/* Glass morphism container for text */}
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl px-8 py-6 space-y-2">
+            <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
               ASTRA
             </h1>
-            <p className="text-2xl sm:text-3xl text-white/90 font-semibold">
+            <p className="text-lg sm:text-xl text-white/90 font-semibold">
               Awareness, Security & Threat Response Assistant
             </p>
-            <p className="text-base text-white/80 max-w-3xl mx-auto leading-relaxed pt-2">
+            <p className="text-sm text-white/80 max-w-2xl mx-auto leading-relaxed pt-2">
               Build security awareness campaigns, simulate phishing scenarios, and stay informed on cyber threats with an AI co-pilot.
             </p>
           </div>
 
-          {/* CTAs - Right After Hero */}
+          {/* CTAs - Right After Hero - Glass Morphism */}
           <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
             <button
               onClick={() => openModule('pulse')}
-              className="inline-flex items-center justify-center px-8 py-3 bg-[#2C7BE5] hover:bg-[#2C7BE5]/90 text-white text-lg font-bold rounded-full shadow-xl transition-all duration-300 hover:scale-105"
+              className="inline-flex items-center justify-center px-8 py-3 bg-[#2C7BE5]/80 hover:bg-[#2C7BE5]/90 backdrop-blur-lg border border-white/20 text-white text-base font-bold rounded-full shadow-xl transition-all duration-300 hover:scale-105"
             >
               Launch Security Pulse →
             </button>
             <a
               href="#modules"
-              className="inline-flex items-center justify-center px-8 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border-2 border-white/30 text-white text-lg font-semibold rounded-full transition-all duration-300"
+              className="inline-flex items-center justify-center px-8 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-lg border-2 border-white/30 text-white text-base font-semibold rounded-full transition-all duration-300"
             >
               Explore All Modules
             </a>
