@@ -7,14 +7,16 @@ import { usePathname } from "next/navigation";
 export default function Header() {
   const pathname = usePathname();
 
-  const navigation = [
-    { name: "Dashboard", href: "/dashboard" },
+  const navigation: Array<{ name: string; href: string; badge?: string }> = [
+    { name: "Home", href: "/" },
     { name: "Security Pulse", href: "/pulse" },
     { name: "Phishing Simulator", href: "/phishing" },
-    { name: "Awareness Content", href: "/awareness" },
+    { name: "Awareness Campaigns", href: "/awareness" },
+    { name: "Prompt Builder", href: "/prompt-builder", badge: "Beta" },
   ];
 
-  const isActive = (href: string) => pathname === href;
+  const isActive = (href: string) =>
+    pathname === href || (href !== "/" && pathname.startsWith(href));
 
   return (
     <header className="bg-white border-b border-zinc-200">
@@ -48,7 +50,14 @@ export default function Header() {
                     : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50"
                 }`}
               >
-                {item.name}
+                <span className="flex items-center gap-2">
+                  <span>{item.name}</span>
+                  {item.badge ? (
+                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase text-amber-700">
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </span>
               </Link>
             ))}
           </nav>
@@ -74,7 +83,14 @@ export default function Header() {
                   : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50"
               }`}
             >
-              {item.name}
+              <span className="flex items-center gap-2">
+                <span>{item.name}</span>
+                {item.badge ? (
+                  <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase text-amber-700">
+                    {item.badge}
+                  </span>
+                ) : null}
+              </span>
             </Link>
           ))}
         </nav>
