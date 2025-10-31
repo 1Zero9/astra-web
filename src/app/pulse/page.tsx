@@ -1076,9 +1076,11 @@ export default function SecurityPulse() {
             </div>
           </>
         )}
+        </div>
 
         {/* Saved Articles Tab */}
         {activeTab === 'saved' && (
+          <div className="mx-auto max-w-7xl px-4 py-4">
           <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">⭐ Saved Articles</h2>
@@ -1141,10 +1143,12 @@ export default function SecurityPulse() {
               </div>
             )}
           </div>
+          </div>
         )}
 
         {/* Reading List Tab */}
         {activeTab === 'reading-list' && (
+          <div className="mx-auto max-w-7xl px-4 py-4">
           <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">📚 Reading List</h2>
@@ -1219,10 +1223,12 @@ export default function SecurityPulse() {
               </div>
             )}
           </div>
+          </div>
         )}
 
         {/* Analytics Tab */}
         {activeTab === 'analytics' && (
+          <div className="mx-auto max-w-7xl px-4 py-4">
           <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">📊 Analytics</h2>
@@ -1295,6 +1301,7 @@ export default function SecurityPulse() {
                 </div>
               </div>
             )}
+          </div>
           </div>
         )}
       </main>
