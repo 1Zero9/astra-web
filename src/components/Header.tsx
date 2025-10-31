@@ -8,7 +8,6 @@ export default function Header() {
   const pathname = usePathname();
 
   const navigation: Array<{ name: string; href: string; badge?: string }> = [
-    { name: "Home", href: "/" },
     { name: "Security Pulse", href: "/pulse" },
     { name: "Phishing Simulator", href: "/phishing" },
     { name: "Awareness Campaigns", href: "/awareness" },

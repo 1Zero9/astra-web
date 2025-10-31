@@ -698,7 +698,7 @@ export default function SecurityPulse() {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-center p-4" onClick={() => setShowSummaryModal(false)}>
           <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
             <div className="p-6 border-b border-gray-200">
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-gray-900 mb-2">🤖 AI Analysis</h2>
                   <h3 className="text-lg text-gray-700 mb-1">{summaryArticle.title}</h3>
@@ -740,13 +740,13 @@ export default function SecurityPulse() {
                     </div>
                   )}
 
-                  <div className="flex gap-2">
+                  <div className="flex flex-col gap-2 sm:flex-row">
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(currentSummary.summary);
                         alert('Summary copied to clipboard!');
                       }}
-                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-center"
                     >
                       Copy Summary
                     </button>
@@ -774,7 +774,7 @@ export default function SecurityPulse() {
       {/* Sticky Header */}
       <header className="sticky top-0 z-30 bg-white border-b border-slate-300">
         <div className="mx-auto max-w-7xl px-4 py-3">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-2">
             <div className="flex items-center gap-3">
               <h1 className="text-xl font-bold text-slate-900 tracking-tight">SECURITY PULSE</h1>
               <span className="px-2 py-0.5 bg-slate-800 text-slate-100 text-xs font-mono">
@@ -782,14 +782,14 @@ export default function SecurityPulse() {
               </span>
             </div>
             {lastSync && (
-              <div className="flex items-center gap-3 text-xs text-slate-600">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
                 <span className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                   <span className="font-mono">SYNC: {lastSync.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
                 </span>
                 <button
                   onClick={() => fetchNews()}
-                  className="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-medium transition-colors"
+                  className="w-full sm:w-auto px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-medium transition-colors"
                   disabled={loading}
                 >
                   {loading ? 'SYNCING...' : 'REFRESH'}
@@ -805,18 +805,18 @@ export default function SecurityPulse() {
         {/* Command Bar */}
         <div className="bg-slate-50 border-t border-slate-300 py-2">
           <div className="mx-auto max-w-7xl px-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
                 <button
                   onClick={markAllAsRead}
-                  className="px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors"
+                  className="w-full sm:w-auto px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors"
                 >
                   MARK ALL READ
                 </button>
                 <button
                   onClick={markSelectedAsUnread}
                   disabled={selectedItems.length === 0}
-                  className="px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   MARK UNREAD ({selectedItems.length})
                 </button>
@@ -827,10 +827,10 @@ export default function SecurityPulse() {
               </div>
 
               {/* Tabs */}
-              <div className="flex items-center gap-1">
+              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
                 <button
                   onClick={() => setActiveTab('browse')}
-                  className={`px-4 py-1 text-xs font-semibold transition-colors ${
+                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
                     activeTab === 'browse'
                       ? 'bg-slate-800 text-white'
                       : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
@@ -843,7 +843,7 @@ export default function SecurityPulse() {
                     setActiveTab('saved');
                     if (savedArticles.length === 0) fetchSavedArticles();
                   }}
-                  className={`px-4 py-1 text-xs font-semibold transition-colors ${
+                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
                     activeTab === 'saved'
                       ? 'bg-slate-800 text-white'
                       : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
@@ -856,7 +856,7 @@ export default function SecurityPulse() {
                     setActiveTab('reading-list');
                     if (readingList.length === 0) fetchReadingList();
                   }}
-                  className={`px-4 py-1 text-xs font-semibold transition-colors ${
+                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
                     activeTab === 'reading-list'
                       ? 'bg-slate-800 text-white'
                       : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
@@ -869,7 +869,7 @@ export default function SecurityPulse() {
                     setActiveTab('analytics');
                     if (!analytics) fetchAnalytics();
                   }}
-                  className={`px-4 py-1 text-xs font-semibold transition-colors ${
+                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
                     activeTab === 'analytics'
                       ? 'bg-slate-800 text-white'
                       : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
@@ -879,7 +879,7 @@ export default function SecurityPulse() {
                 </button>
                 <button
                   onClick={() => setActiveTab('generate')}
-                  className={`px-4 py-1 text-xs font-semibold transition-colors ${
+                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
                     activeTab === 'generate'
                       ? 'bg-slate-800 text-white'
                       : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
@@ -901,11 +901,11 @@ export default function SecurityPulse() {
           <>
         {/* Filters */}
         <div className="bg-white border border-slate-300 mb-3 p-3">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <select
               value={filterPublication}
               onChange={(e) => setFilterPublication(e.target.value)}
-              className="px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              className="w-full sm:w-auto px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
             >
               <option value="">ALL SOURCES</option>
               {publications.map((pub) => (
@@ -918,14 +918,14 @@ export default function SecurityPulse() {
               type="text"
               value={filterVendor}
               onChange={(e) => setFilterVendor(e.target.value)}
-              className="px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              className="w-full sm:w-auto px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
               placeholder="FILTER BY VENDOR..."
             />
             <input
               type="text"
               value={filterSeverity}
               onChange={(e) => setFilterSeverity(e.target.value)}
-              className="px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              className="w-full sm:w-auto px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
               placeholder="FILTER BY KEYWORD..."
             />
             {(filterPublication || filterVendor || filterSeverity) && (
@@ -935,7 +935,7 @@ export default function SecurityPulse() {
                   setFilterVendor("");
                   setFilterSeverity("");
                 }}
-                className="px-3 py-1.5 text-xs bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
+                className="w-full sm:w-auto px-3 py-1.5 text-xs bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
               >
                 CLEAR FILTERS
               </button>
@@ -944,7 +944,7 @@ export default function SecurityPulse() {
 
           {/* Active Filters Indicator */}
           {(filterPublication || filterVendor || filterSeverity) && (
-            <div className="flex items-center gap-2 text-xs font-mono">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
               <span className="text-slate-600">ACTIVE:</span>
               {filterPublication && (
                 <span className="px-2 py-1 bg-slate-700 text-slate-100 border border-slate-800">
@@ -1001,9 +1001,9 @@ export default function SecurityPulse() {
                             className="mt-1 h-4 w-4 text-slate-700 border-slate-300 focus:ring-slate-500 cursor-pointer flex-shrink-0"
                           />
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between gap-4 mb-2">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-2">
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1.5">
+                                <div className="flex flex-wrap items-center gap-2 mb-1.5">
                                   {isUnread && <span className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"></span>}
                                   <span className="text-xs font-mono text-slate-600">{item.source.toUpperCase()}</span>
                                   {severity.level === 'critical' && (
@@ -1045,7 +1045,7 @@ export default function SecurityPulse() {
                                   </p>
                                 )}
                               </div>
-                              <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
+                              <div className="flex flex-col items-start sm:items-end gap-0.5 flex-shrink-0 text-left sm:text-right">
                                 <span className="text-xs font-semibold text-slate-700 font-mono whitespace-nowrap">
                                   {getFullDateTime(item.pubDate).relative.toUpperCase()}
                                 </span>
@@ -1059,24 +1059,24 @@ export default function SecurityPulse() {
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="flex gap-2 mt-2">
+                            <div className="flex flex-wrap gap-2 mt-2">
                               <button
                                 onClick={() => bookmarkArticle(item)}
-                                className="text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
+                                className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
                                 title="Save for later"
                               >
                                 SAVE
                               </button>
                               <button
                                 onClick={() => addToReadingList(item)}
-                                className="text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
+                                className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
                                 title="Add to queue"
                               >
                                 QUEUE
                               </button>
                               <button
                                 onClick={() => showAISummary(item)}
-                                className="text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
+                                className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
                                 title="AI Analysis"
                               >
                                 ANALYZE
@@ -1089,7 +1089,7 @@ export default function SecurityPulse() {
                                     setReadItems(newReadItems);
                                     localStorage.setItem('astra-read-items', JSON.stringify([...newReadItems]));
                                   }}
-                                  className="text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
+                                  className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
                                   title="Mark as unread"
                                 >
                                   UNREAD
@@ -1112,11 +1112,11 @@ export default function SecurityPulse() {
         {activeTab === 'saved' && (
           <div className="mx-auto max-w-7xl px-4 py-4">
           <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">⭐ Saved Articles</h2>
               <button
                 onClick={fetchSavedArticles}
-                className="px-4 py-2 bg-amber-100 text-amber-700 hover:bg-amber-200 rounded-lg font-medium transition-colors"
+                className="w-full md:w-auto px-4 py-2 bg-amber-100 text-amber-700 hover:bg-amber-200 rounded-lg font-medium transition-colors"
               >
                 Refresh
               </button>
@@ -1137,7 +1137,7 @@ export default function SecurityPulse() {
               <div className="space-y-4">
                 {savedArticles.map((article) => (
                   <div key={article.id} className="border border-gray-200 rounded-lg p-5 hover:border-amber-300 hover:bg-amber-50/30 transition-all">
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between mb-3">
                       <h3 className="text-lg font-semibold text-gray-900 flex-1">
                         <a href={article.link} target="_blank" rel="noopener noreferrer" className="hover:text-amber-600">
                           {article.title}
@@ -1145,7 +1145,7 @@ export default function SecurityPulse() {
                       </h3>
                       <button
                         onClick={() => removeFromSaved(article.id)}
-                        className="ml-4 text-red-600 hover:text-red-800 text-sm font-medium"
+                        className="md:ml-4 w-full md:w-auto text-red-600 hover:text-red-800 text-sm font-medium text-left md:text-right"
                       >
                         Remove
                       </button>
@@ -1180,11 +1180,11 @@ export default function SecurityPulse() {
         {activeTab === 'reading-list' && (
           <div className="mx-auto max-w-7xl px-4 py-4">
           <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">📚 Reading List</h2>
               <button
                 onClick={fetchReadingList}
-                className="px-4 py-2 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-lg font-medium transition-colors"
+                className="w-full md:w-auto px-4 py-2 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-lg font-medium transition-colors"
               >
                 Refresh
               </button>
@@ -1209,9 +1209,9 @@ export default function SecurityPulse() {
                     item.priority === 'medium' ? 'border-purple-300 bg-purple-50/30' :
                     'border-gray-300 bg-gray-50/30'
                   }`}>
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between mb-3">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
                           <select
                             value={item.priority}
                             onChange={(e) => updatePriority(item.id, e.target.value)}
@@ -1235,7 +1235,7 @@ export default function SecurityPulse() {
                       </div>
                       <button
                         onClick={() => removeFromReadingList(item.id)}
-                        className="ml-4 text-red-600 hover:text-red-800 text-sm font-medium"
+                        className="md:ml-4 w-full md:w-auto text-red-600 hover:text-red-800 text-sm font-medium text-left md:text-right"
                       >
                         Remove
                       </button>

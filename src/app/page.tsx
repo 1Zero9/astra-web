@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { VERSION, getFullVersionInfo } from "@/lib/version";
+import { getFullVersionInfo } from "@/lib/version";
 
 export default function Home() {
   const [activeModule, setActiveModule] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [moduleLoading, setModuleLoading] = useState(false);
 
   const modules = [
     {
@@ -45,12 +46,14 @@ export default function Home() {
   ];
 
   const openModule = (moduleId: string) => {
+    setModuleLoading(true);
     setIsAnimating(true);
     setActiveModule(moduleId);
   };
 
   const closeModule = () => {
     setIsAnimating(false);
+    setModuleLoading(false);
     setTimeout(() => setActiveModule(null), 300);
   };
 
@@ -77,7 +80,7 @@ export default function Home() {
       </div>
 
       {/* Content */}
-      <div className={`relative mx-auto max-w-6xl px-4 pt-16 pb-12 space-y-16 transition-all duration-700 ${activeModule ? 'blur-xl opacity-30 scale-95' : ''}`}>
+      <div className={`relative mx-auto max-w-6xl px-4 pt-14 pb-10 space-y-12 sm:pt-16 sm:pb-12 sm:space-y-16 transition-all duration-700 ${activeModule ? 'blur-xl opacity-30 scale-95' : ''}`}>
         {/* Hero Section */}
         <div className="flex flex-col items-center text-center space-y-6">
           <div className="relative">
@@ -85,8 +88,8 @@ export default function Home() {
             <Image
               src="/images/ASTRA_logo.png"
               alt="ASTRA Logo"
-              width={120}
-              height={120}
+              width={200}
+              height={200}
               className="object-contain relative z-10"
               priority
             />
@@ -118,12 +121,12 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {modules.map((module) => (
               <button
                 key={module.id}
                 onClick={() => openModule(module.id)}
-                className="group relative h-64 cursor-pointer"
+                className="group relative h-60 sm:h-64 cursor-pointer"
               >
                 {/* Glass card with gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${module.gradient} rounded-3xl shadow-2xl border border-white/30 backdrop-blur-lg transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-3xl group-active:scale-[0.98]`}>
@@ -137,9 +140,9 @@ export default function Home() {
                   </div>
 
                   {/* Content */}
-                  <div className="relative h-full flex flex-col justify-between p-8 text-left">
-                    <div className="flex items-start justify-between">
-                      <div className="text-6xl filter drop-shadow-lg">
+                  <div className="relative h-full flex flex-col justify-between p-6 sm:p-8 text-left">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="text-5xl sm:text-6xl filter drop-shadow-lg">
                         {module.icon}
                       </div>
                       {module.badge && (
@@ -169,7 +172,7 @@ export default function Home() {
 
         {/* Stats/Info Glass Panel - Brand Colors */}
         <section>
-          <div className="relative bg-[#F8F9FA]/10 backdrop-blur-xl rounded-3xl p-8 border border-[#2C7BE5]/30 shadow-2xl">
+          <div className="relative bg-[#F8F9FA]/10 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-[#2C7BE5]/30 shadow-2xl">
             <div className="absolute inset-1 bg-[#1A3B66]/5 rounded-2xl backdrop-blur-sm"></div>
             <div className="absolute inset-2 bg-gradient-to-br from-[#2C7BE5]/10 to-transparent"></div>
 
@@ -212,14 +215,14 @@ export default function Home() {
 
           {/* Modal Container - Reduced Size */}
           <div
-            className={`relative w-full h-full max-w-[85vw] max-h-[85vh] transition-all duration-700 ${
+            className={`relative w-full h-full max-w-full max-h-full sm:max-w-[85vw] sm:max-h-[85vh] transition-all duration-700 ${
               isAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
             }`}
           >
             {/* Glass morphism container - ASTRA Brand Colors */}
-            <div className="relative w-full h-full bg-[#F8F9FA]/95 backdrop-blur-3xl rounded-3xl shadow-2xl border border-[#2C7BE5]/30 overflow-hidden">
+            <div className="relative w-full h-full bg-[#F8F9FA]/95 backdrop-blur-3xl rounded-none sm:rounded-3xl shadow-2xl border border-[#2C7BE5]/30 overflow-hidden">
               {/* Header bar with close button */}
-              <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 bg-[#1A3B66]/90 backdrop-blur-xl border-b border-[#2C7BE5]/20">
+              <div className="absolute top-0 left-0 right-0 z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-4 sm:p-5 bg-[#1A3B66]/90 backdrop-blur-xl border-b border-[#2C7BE5]/20">
                 <div className="flex items-center gap-3">
                   <div className="text-3xl">{activeModuleData?.icon}</div>
                   <div>
@@ -229,7 +232,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={closeModule}
-                  className="group flex items-center justify-center w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full border border-white/20 transition-all duration-300"
+                  className="group flex items-center justify-center w-10 h-10 self-end sm:self-auto bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full border border-white/20 transition-all duration-300"
                   aria-label="Close module"
                 >
                   <svg className="w-5 h-5 text-white group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -244,16 +247,19 @@ export default function Home() {
                   src={activeModuleData?.href}
                   className="w-full h-full border-0"
                   title={activeModuleData?.name}
+                  onLoad={() => setModuleLoading(false)}
                 />
               </div>
             </div>
 
             {/* Loading indicator */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="bg-[#F8F9FA]/90 backdrop-blur-xl rounded-2xl p-6 border border-[#2C7BE5]/30">
-                <div className="animate-spin h-8 w-8 border-2 border-[#2C7BE5]/30 border-t-[#2C7BE5] rounded-full"></div>
+            {moduleLoading && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="bg-[#F8F9FA]/90 backdrop-blur-xl rounded-2xl p-6 border border-[#2C7BE5]/30">
+                  <div className="animate-spin h-8 w-8 border-2 border-[#2C7BE5]/30 border-t-[#2C7BE5] rounded-full"></div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}
