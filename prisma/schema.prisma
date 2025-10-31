@@ -172,6 +172,7 @@ model ReadingAnalytics {
   topSeverity  String?
   timeSpent   Int      @default(0) // Minutes
 
+  @@unique([userId, date])
   @@index([userId, date])
   @@index([date])
 }
