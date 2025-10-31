@@ -76,7 +76,7 @@ export default function SecurityPulse() {
   const [loadingSummary, setLoadingSummary] = useState(false);
 
   // Tab state
-  const [activeTab, setActiveTab] = useState<'browse' | 'saved' | 'reading-list' | 'analytics'>('browse');
+  const [activeTab, setActiveTab] = useState<'browse' | 'saved' | 'reading-list' | 'analytics' | 'generate'>('browse');
   const [savedArticles, setSavedArticles] = useState<any[]>([]);
   const [readingList, setReadingList] = useState<any[]>([]);
   const [loadingSaved, setLoadingSaved] = useState(false);
@@ -857,6 +857,16 @@ export default function SecurityPulse() {
                 >
                   METRICS
                 </button>
+                <button
+                  onClick={() => setActiveTab('generate')}
+                  className={`px-4 py-1 text-xs font-semibold transition-colors ${
+                    activeTab === 'generate'
+                      ? 'bg-slate-800 text-white'
+                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                  }`}
+                >
+                  GENERATE ({selectedItems.length})
+                </button>
               </div>
             </div>
           </div>
@@ -1302,6 +1312,126 @@ export default function SecurityPulse() {
               </div>
             )}
           </div>
+          </div>
+        )}
+
+        {/* Generate Tab */}
+        {activeTab === 'generate' && (
+          <div className="mx-auto max-w-7xl px-4 py-4">
+            <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Generate Content</h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  Create security awareness content from selected articles
+                </p>
+              </div>
+
+              {selectedItems.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  <div className="text-4xl mb-3">📝</div>
+                  <p className="text-lg mb-2">No articles selected</p>
+                  <p className="text-sm">Go to the FEED tab and select articles using the checkboxes</p>
+                </div>
+              ) : (
+                <>
+                  <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p className="text-sm text-blue-900">
+                      <strong>{selectedItems.length}</strong> article{selectedItems.length > 1 ? 's' : ''} selected for content generation
+                    </p>
+                  </div>
+
+                  <form onSubmit={handleGenerate} className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Content Type
+                      </label>
+                      <select
+                        value={contentType}
+                        onChange={(e) => setContentType(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option>Security Awareness Email</option>
+                        <option>Executive Summary</option>
+                        <option>Team Briefing</option>
+                        <option>Viva Engage Post</option>
+                        <option>Slide Bullets</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Focus Area (Optional)
+                      </label>
+                      <input
+                        type="text"
+                        value={focusArea}
+                        onChange={(e) => setFocusArea(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="e.g., vulnerabilities, best practices, ransomware"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Tone
+                      </label>
+                      <select
+                        value={tone}
+                        onChange={(e) => setTone(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option>Professional</option>
+                        <option>Urgent</option>
+                        <option>Educational</option>
+                        <option>Casual</option>
+                      </select>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={generating}
+                      className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium text-sm"
+                    >
+                      {generating ? 'Generating...' : 'Generate Content'}
+                    </button>
+                  </form>
+
+                  {/* Generated Content Display */}
+                  {generatedContent && (
+                    <div className="mt-6 p-4 bg-green-50 border-2 border-green-200 rounded-lg">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-semibold text-green-900">✓ Content Generated</h3>
+                        <button
+                          onClick={copyToClipboard}
+                          className="text-xs px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                        >
+                          Copy to Clipboard
+                        </button>
+                      </div>
+                      <div className="bg-white p-4 rounded border border-green-200 max-h-96 overflow-y-auto">
+                        <pre className="whitespace-pre-wrap text-sm text-gray-800 font-sans">
+                          {generatedContent}
+                        </pre>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Error Display */}
+                  {generationError && (
+                    <div className="mt-6 p-4 bg-red-50 border-2 border-red-200 rounded-lg">
+                      <h3 className="font-semibold text-red-900 mb-2">✗ Generation Failed</h3>
+                      <p className="text-sm text-red-700">{generationError}</p>
+                    </div>
+                  )}
+
+                  <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                    <p className="text-xs text-amber-900">
+                      <strong>⚠️ Note:</strong> Generated content should be reviewed before distribution.
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         )}
       </main>
