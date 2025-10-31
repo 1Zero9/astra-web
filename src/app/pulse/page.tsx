@@ -399,9 +399,10 @@ export default function SecurityPulse() {
     } catch (error) {
       console.error('Error generating content:', error);
       setGenerationError(error instanceof Error ? error.message : 'Failed to generate content');
-    } finally {
-      setGenerating(false);
     }
+
+    // Ensure generating state is cleared
+    setGenerating(false);
   };
 
   const copyToClipboard = () => {
@@ -660,8 +661,18 @@ export default function SecurityPulse() {
     <div className="min-h-screen bg-slate-100 flex flex-col">
       {/* Glass Loading Overlay */}
       {(generating || loadingSummary) && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20 text-center">
+        <div
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center"
+          onClick={() => {
+            // Emergency dismiss - click overlay to close if stuck
+            setGenerating(false);
+            setLoadingSummary(false);
+          }}
+        >
+          <div
+            className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20 text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mb-4"></div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
               {generating ? 'Generating Content' : 'Analyzing Article'}
@@ -669,6 +680,15 @@ export default function SecurityPulse() {
             <p className="text-gray-600 animate-pulse">
               {generating ? 'AI is crafting your security content...' : 'AI is analyzing the article...'}
             </p>
+            <button
+              onClick={() => {
+                setGenerating(false);
+                setLoadingSummary(false);
+              }}
+              className="mt-4 text-xs text-gray-500 hover:text-gray-700 underline"
+            >
+              Click to dismiss if stuck
+            </button>
           </div>
         </div>
       )}
