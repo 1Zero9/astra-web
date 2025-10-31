@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { VERSION, getFullVersionInfo } from "@/lib/version";
 
 export default function Home() {
   const [activeModule, setActiveModule] = useState<string | null>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const modules = [
     {
@@ -43,16 +44,40 @@ export default function Home() {
     }
   ];
 
+  const openModule = (moduleId: string) => {
+    setIsAnimating(true);
+    setActiveModule(moduleId);
+  };
+
+  const closeModule = () => {
+    setIsAnimating(false);
+    setTimeout(() => setActiveModule(null), 300);
+  };
+
+  const activeModuleData = modules.find(m => m.id === activeModule);
+
+  // ESC key handler
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && activeModule) {
+        closeModule();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [activeModule]);
+
   return (
     <div className="flex-1 relative overflow-hidden">
       {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+      <div className={`absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 transition-all duration-700 ${activeModule ? 'blur-2xl scale-110' : ''}`}>
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
       </div>
 
       {/* Content */}
-      <div className="relative mx-auto max-w-6xl px-4 pt-16 pb-12 space-y-16">
+      <div className={`relative mx-auto max-w-6xl px-4 pt-16 pb-12 space-y-16 transition-all duration-700 ${activeModule ? 'blur-xl opacity-30 scale-95' : ''}`}>
         {/* Hero Section */}
         <div className="flex flex-col items-center text-center space-y-6">
           <div className="relative">
@@ -95,13 +120,13 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {modules.map((module) => (
-              <a
+              <button
                 key={module.id}
-                href={module.href}
+                onClick={() => openModule(module.id)}
                 className="group relative h-64 cursor-pointer"
               >
                 {/* Glass card with gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${module.gradient} rounded-3xl shadow-2xl border border-white/30 backdrop-blur-lg transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-3xl`}>
+                <div className={`absolute inset-0 bg-gradient-to-br ${module.gradient} rounded-3xl shadow-2xl border border-white/30 backdrop-blur-lg transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-3xl group-active:scale-[0.98]`}>
                   {/* Multi-layer glass effect */}
                   <div className="absolute inset-0 bg-white/10 backdrop-blur-lg rounded-3xl"></div>
                   <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/10 rounded-3xl"></div>
@@ -112,7 +137,7 @@ export default function Home() {
                   </div>
 
                   {/* Content */}
-                  <div className="relative h-full flex flex-col justify-between p-8">
+                  <div className="relative h-full flex flex-col justify-between p-8 text-left">
                     <div className="flex items-start justify-between">
                       <div className="text-6xl filter drop-shadow-lg">
                         {module.icon}
@@ -137,7 +162,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </a>
+              </button>
             ))}
           </div>
         </section>
@@ -171,6 +196,67 @@ export default function Home() {
           </p>
         </div>
       </div>
+
+      {/* Modal Overlay for Modules */}
+      {activeModule && (
+        <div
+          className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-700 ${
+            isAnimating ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          {/* Backdrop blur overlay */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-2xl"
+            onClick={closeModule}
+          ></div>
+
+          {/* Modal Container */}
+          <div
+            className={`relative w-full h-full max-w-[95vw] max-h-[95vh] transition-all duration-700 ${
+              isAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+            }`}
+          >
+            {/* Glass morphism container */}
+            <div className="relative w-full h-full bg-white/10 backdrop-blur-3xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+              {/* Header bar with close button */}
+              <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 bg-black/30 backdrop-blur-xl border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="text-3xl">{activeModuleData?.icon}</div>
+                  <div>
+                    <h2 className="text-lg font-bold text-white">{activeModuleData?.name}</h2>
+                    <p className="text-xs text-white/60">Press ESC or click outside to close</p>
+                  </div>
+                </div>
+                <button
+                  onClick={closeModule}
+                  className="group flex items-center justify-center w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full border border-white/20 transition-all duration-300"
+                  aria-label="Close module"
+                >
+                  <svg className="w-5 h-5 text-white group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Module Content - iframe */}
+              <div className="w-full h-full pt-[72px]">
+                <iframe
+                  src={activeModuleData?.href}
+                  className="w-full h-full border-0"
+                  title={activeModuleData?.name}
+                />
+              </div>
+            </div>
+
+            {/* Loading indicator */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
+                <div className="animate-spin h-8 w-8 border-2 border-white/30 border-t-white rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
