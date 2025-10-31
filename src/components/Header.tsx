@@ -30,10 +30,10 @@ export default function Header() {
               className="object-contain"
               priority
             />
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col">
               <div className="text-2xl font-bold text-zinc-900">ASTRA</div>
-              <span className="text-sm text-zinc-500 hidden sm:inline">
-                Security Awareness Assistant
+              <span className="text-xs text-zinc-500 hidden sm:inline">
+                Awareness, Security & Threat Response Assistant
               </span>
             </div>
           </Link>

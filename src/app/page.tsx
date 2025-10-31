@@ -71,17 +71,9 @@ export default function Home() {
               priority
             />
           </div>
-          <div className="space-y-2">
-            <h1 className="text-4xl sm:text-5xl font-bold text-white">
-              ASTRA
-            </h1>
-            <p className="text-lg sm:text-xl text-white/90">
-              Awareness, Security & Threat Response Assistant
-            </p>
-            <p className="text-sm text-white/75 max-w-2xl mx-auto leading-relaxed pt-2">
-              Build security awareness campaigns, simulate phishing scenarios, and stay informed on cyber threats with an AI co-pilot.
-            </p>
-          </div>
+          <h1 className="text-4xl sm:text-5xl font-bold text-white">
+            ASTRA
+          </h1>
         </div>
 
         {/* Module Cards */}
