@@ -737,199 +737,165 @@ export default function SecurityPulse() {
         </div>
       )}
 
-      <main className="mx-auto max-w-7xl px-4 py-8">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-gray-900">Security Pulse</h1>
-            <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-mono font-bold rounded">
-              {getModuleVersion('pulse')}
-            </span>
-            {VERSION.features.pulseEnhancements && (
-              <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded animate-pulse">
-                NEW FEATURES
+      <main className="mx-auto max-w-7xl px-4 py-6">
+        {/* Header */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">SECURITY PULSE</h1>
+              <span className="px-2 py-0.5 bg-slate-800 text-slate-100 text-xs font-mono rounded">
+                {getModuleVersion('pulse')}
               </span>
+            </div>
+            {lastSync && (
+              <div className="flex items-center gap-3 text-xs text-slate-600">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                  <span className="font-mono">SYNC: {lastSync.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+                </span>
+                <button
+                  onClick={() => fetchNews()}
+                  className="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded text-xs font-medium transition-colors"
+                  disabled={loading}
+                >
+                  {loading ? 'SYNCING...' : 'REFRESH'}
+                </button>
+              </div>
             )}
           </div>
-          {lastSync && (
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-              <span>Last sync: {lastSync.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
-              <button
-                onClick={() => fetchNews()}
-                className="ml-2 text-blue-600 hover:text-blue-700 font-medium"
-                disabled={loading}
-              >
-                {loading ? 'Syncing...' : 'Refresh'}
-              </button>
-            </div>
-          )}
-        </div>
-        <p className="text-gray-600 mb-2">
-          Latest cybersecurity news and threat intelligence
-        </p>
-        <div className="flex items-center gap-2 mb-6 text-xs">
-          <span className="text-gray-500">✨ New:</span>
-          <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded">⭐ Bookmarks</span>
-          <span className="px-2 py-0.5 bg-purple-100 text-purple-700 rounded">📚 Reading List</span>
-          <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded">🤖 AI Summary</span>
-          <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded">CVE Badges</span>
+
+          <div className="text-xs text-slate-600 font-mono">
+            THREAT INTELLIGENCE FEED • {unreadCount} UNREAD • {newCount} NEW
+          </div>
         </div>
 
-        {/* Main Tabs */}
-        <div className="flex gap-2 mb-6 border-b-2 border-gray-200">
-          <button
-            onClick={() => {
-              setActiveTab('browse');
-            }}
-            className={`px-6 py-3 font-semibold transition-all ${
-              activeTab === 'browse'
-                ? 'text-blue-600 border-b-4 border-blue-600 -mb-0.5'
-                : 'text-gray-600 hover:text-gray-900 hover:border-b-4 hover:border-gray-300 -mb-0.5'
-            }`}
-          >
-            📰 Browse ({news.length})
-          </button>
-          <button
-            onClick={() => {
-              setActiveTab('saved');
-              if (savedArticles.length === 0) fetchSavedArticles();
-            }}
-            className={`px-6 py-3 font-semibold transition-all ${
-              activeTab === 'saved'
-                ? 'text-amber-600 border-b-4 border-amber-600 -mb-0.5'
-                : 'text-gray-600 hover:text-gray-900 hover:border-b-4 hover:border-gray-300 -mb-0.5'
-            }`}
-          >
-            ⭐ Saved ({savedArticles.length})
-          </button>
-          <button
-            onClick={() => {
-              setActiveTab('reading-list');
-              if (readingList.length === 0) fetchReadingList();
-            }}
-            className={`px-6 py-3 font-semibold transition-all ${
-              activeTab === 'reading-list'
-                ? 'text-purple-600 border-b-4 border-purple-600 -mb-0.5'
-                : 'text-gray-600 hover:text-gray-900 hover:border-b-4 hover:border-gray-300 -mb-0.5'
-            }`}
-          >
-            📚 Reading List ({readingList.length})
-          </button>
-          <button
-            onClick={() => {
-              setActiveTab('analytics');
-              if (!analytics) fetchAnalytics();
-            }}
-            className={`px-6 py-3 font-semibold transition-all ${
-              activeTab === 'analytics'
-                ? 'text-green-600 border-b-4 border-green-600 -mb-0.5'
-                : 'text-gray-600 hover:text-gray-900 hover:border-b-4 hover:border-gray-300 -mb-0.5'
-            }`}
-          >
-            📊 Analytics
-          </button>
+        {/* Command Bar */}
+        <div className="bg-slate-50 border-y border-slate-300 py-2 px-3 mb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={markAllAsRead}
+                className="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-300 rounded text-xs font-medium text-slate-700 transition-colors"
+              >
+                MARK ALL READ
+              </button>
+              <button
+                onClick={markSelectedAsUnread}
+                disabled={selectedItems.length === 0}
+                className="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-300 rounded text-xs font-medium text-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                MARK UNREAD ({selectedItems.length})
+              </button>
+              <div className="w-px h-6 bg-slate-300"></div>
+              <span className="text-xs text-slate-600 font-mono">
+                {filteredNews.length} ITEMS
+              </span>
+            </div>
+
+            {/* Tabs */}
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setActiveTab('browse')}
+                className={`px-4 py-1.5 text-xs font-semibold transition-colors ${
+                  activeTab === 'browse'
+                    ? 'bg-slate-800 text-white'
+                    : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                } rounded`}
+              >
+                FEED ({news.length})
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('saved');
+                  if (savedArticles.length === 0) fetchSavedArticles();
+                }}
+                className={`px-4 py-1.5 text-xs font-semibold transition-colors ${
+                  activeTab === 'saved'
+                    ? 'bg-slate-800 text-white'
+                    : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                } rounded`}
+              >
+                SAVED ({savedArticles.length})
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('reading-list');
+                  if (readingList.length === 0) fetchReadingList();
+                }}
+                className={`px-4 py-1.5 text-xs font-semibold transition-colors ${
+                  activeTab === 'reading-list'
+                    ? 'bg-slate-800 text-white'
+                    : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                } rounded`}
+              >
+                QUEUE ({readingList.length})
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('analytics');
+                  if (!analytics) fetchAnalytics();
+                }}
+                className={`px-4 py-1.5 text-xs font-semibold transition-colors ${
+                  activeTab === 'analytics'
+                    ? 'bg-slate-800 text-white'
+                    : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                } rounded`}
+              >
+                METRICS
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Browse Tab Content */}
         {activeTab === 'browse' && (
           <>
-        {/* Trending Topics */}
-        {trendingTopics.length > 0 && (
-          <div className="bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-200 rounded-lg p-4 mb-6">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <span className="text-2xl">🔥</span>
-                Trending Topics
-              </h2>
-              <span className="text-xs text-gray-600">Multiple sources reporting</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {trendingTopics.map((topic, index) => (
-                <button
-                  key={index}
-                  onClick={() => setFilterSeverity(topic.keyword)}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border-2 border-orange-300 rounded-full text-sm font-medium text-gray-900 hover:bg-orange-100 hover:border-orange-400 transition-all"
-                >
-                  <span className="capitalize">{topic.keyword}</span>
-                  <span className="px-1.5 py-0.5 bg-orange-200 text-orange-900 rounded-full text-xs font-bold">
-                    {topic.count}
-                  </span>
-                  {topic.isNew && (
-                    <span className="px-1.5 py-0.5 bg-red-500 text-white rounded-full text-xs font-bold animate-pulse">
-                      NEW
-                    </span>
-                  )}
-                </button>
+        {/* Filters */}
+        <div className="bg-white border border-slate-300 mb-3 p-3">
+          <div className="flex items-center gap-3">
+            <select
+              value={filterPublication}
+              onChange={(e) => setFilterPublication(e.target.value)}
+              className="px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+            >
+              <option value="">ALL SOURCES</option>
+              {publications.map((pub) => (
+                <option key={pub} value={pub}>
+                  {pub.toUpperCase()}
+                </option>
               ))}
-            </div>
+            </select>
+            <input
+              type="text"
+              value={filterVendor}
+              onChange={(e) => setFilterVendor(e.target.value)}
+              className="px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              placeholder="FILTER BY VENDOR..."
+            />
+            <input
+              type="text"
+              value={filterSeverity}
+              onChange={(e) => setFilterSeverity(e.target.value)}
+              className="px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              placeholder="FILTER BY KEYWORD..."
+            />
+            {(filterPublication || filterVendor || filterSeverity) && (
+              <button
+                onClick={() => {
+                  setFilterPublication("");
+                  setFilterVendor("");
+                  setFilterSeverity("");
+                }}
+                className="px-3 py-1.5 text-xs bg-slate-200 hover:bg-slate-300 border border-slate-300 rounded font-medium transition-colors"
+              >
+                CLEAR
+              </button>
+            )}
           </div>
-        )}
+        </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
           <div className="xl:col-span-7">
-            {/* Filters */}
-            <div className="bg-white p-4 rounded-lg border-2 border-gray-300 mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Filter News</h2>
-                {(filterPublication || filterVendor || filterSeverity) && (
-                  <button
-                    onClick={() => {
-                      setFilterPublication("");
-                      setFilterVendor("");
-                      setFilterSeverity("");
-                    }}
-                    className="px-3 py-1.5 text-sm bg-red-100 text-red-700 hover:bg-red-200 rounded-lg font-medium transition-colors"
-                  >
-                    Clear All Filters
-                  </button>
-                )}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label htmlFor="publication" className="block text-sm font-medium text-gray-700 mb-2">
-                    Publication
-                  </label>
-                  <select
-                    id="publication"
-                    value={filterPublication}
-                    onChange={(e) => setFilterPublication(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="">All Publications</option>
-                    {publications.map((pub) => (
-                      <option key={pub} value={pub}>
-                        {pub}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="vendor" className="block text-sm font-medium text-gray-700 mb-2">
-                    Vendor / Company
-                  </label>
-                  <input
-                    type="text"
-                    id="vendor"
-                    value={filterVendor}
-                    onChange={(e) => setFilterVendor(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., Oracle, Microsoft, Cisco"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="severity" className="block text-sm font-medium text-gray-700 mb-2">
-                    Severity / Type
-                  </label>
-                  <input
-                    type="text"
-                    id="severity"
-                    value={filterSeverity}
-                    onChange={(e) => setFilterSeverity(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., critical, ransomware, zero-day"
-                  />
-                </div>
-              </div>
               {(filterPublication || filterVendor || filterSeverity) && (
                 <div className="mt-4 flex items-center gap-2 flex-wrap">
                   <span className="text-sm text-gray-600">Active filters:</span>
@@ -999,22 +965,7 @@ export default function SecurityPulse() {
                   <p className="text-sm">Try adjusting your filters</p>
                 </div>
               ) : (
-                <div className="divide-y divide-gray-100 max-h-[700px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-500">
-                  <style jsx>{`
-                    .scrollbar-thin::-webkit-scrollbar {
-                      width: 8px;
-                    }
-                    .scrollbar-thin::-webkit-scrollbar-track {
-                      background: #f3f4f6;
-                    }
-                    .scrollbar-thin::-webkit-scrollbar-thumb {
-                      background: #9ca3af;
-                      border-radius: 4px;
-                    }
-                    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-                      background: #6b7280;
-                    }
-                  `}</style>
+                <div className="border border-slate-300">
                   {filteredNews.map((item) => {
                     const isUnread = !readItems.has(item.link);
                     const isNew = newItems.has(item.link);
@@ -1024,131 +975,104 @@ export default function SecurityPulse() {
                     return (
                       <div
                         key={item.link}
-                        className={`p-5 transition-all border-l-4 ${
-                          isSelected
-                            ? "bg-blue-50 border-l-blue-500"
-                            : severity.level === 'critical'
-                            ? `${severity.bgColor} ${severity.borderColor} hover:bg-red-100`
-                            : severity.level === 'high'
-                            ? `${severity.bgColor} ${severity.borderColor} hover:bg-orange-100`
-                            : isUnread
-                            ? "bg-white border-l-blue-400 hover:bg-blue-50/50"
-                            : "bg-gray-50/50 border-l-gray-200 hover:bg-gray-100"
-                        }`}
+                        className={`border-b border-slate-200 hover:bg-slate-50 transition-colors ${
+                          isSelected ? "bg-slate-100" : ""
+                        } ${isUnread ? 'bg-white' : 'bg-slate-50/50'}`}
                       >
-                        <div className="flex items-start gap-3">
-                          {isUnread && (
-                            <div className="mt-2 w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"></div>
-                          )}
+                        <div className="flex items-start gap-3 p-3">
                           <input
                             type="checkbox"
                             checked={isSelected}
                             onChange={() => toggleSelection(item.link)}
-                            className="mt-1.5 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer flex-shrink-0"
+                            className="mt-1 h-4 w-4 text-slate-700 border-slate-300 focus:ring-slate-500 cursor-pointer flex-shrink-0"
                           />
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-start gap-2 mb-2 flex-wrap">
-                              <h3 className={`font-semibold leading-tight flex-1 ${isUnread ? 'text-gray-900' : 'text-gray-600'}`}>
-                                <a
-                                  href={item.link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  onClick={() => markAsRead(item.link)}
-                                  className="hover:text-blue-600 transition-colors"
-                                >
-                                  {item.title}
-                                </a>
-                              </h3>
-                              <div className="flex items-center gap-2 flex-shrink-0">
-                                {(severity.level === 'critical' || severity.level === 'high') && (
-                                  <span className={`px-2 py-0.5 ${
-                                    severity.level === 'critical'
-                                      ? 'bg-red-600 animate-pulse'
-                                      : 'bg-orange-500'
-                                  } text-white rounded-full text-xs font-bold`}>
-                                    {severity.label}
-                                  </span>
-                                )}
-                                {isNew && (
-                                  <span className="px-2 py-0.5 bg-blue-500 text-white rounded-full text-xs font-bold animate-pulse">
-                                    NEW
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            {item.description && (
-                              <p className={`text-sm mb-3 leading-relaxed line-clamp-2 ${isUnread ? 'text-gray-600' : 'text-gray-500'}`}>
-                                {item.description}
-                              </p>
-                            )}
-
-                            {/* Action Buttons */}
-                            <div className="flex gap-2 mb-3">
-                              <button
-                                onClick={() => bookmarkArticle(item)}
-                                className="text-xs px-3 py-1 bg-amber-100 text-amber-700 hover:bg-amber-200 rounded-full font-medium transition-colors"
-                                title="Bookmark article"
-                              >
-                                ⭐ Save
-                              </button>
-                              <button
-                                onClick={() => addToReadingList(item)}
-                                className="text-xs px-3 py-1 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-full font-medium transition-colors"
-                                title="Add to reading list"
-                              >
-                                📚 Read Later
-                              </button>
-                              <button
-                                onClick={() => showAISummary(item)}
-                                className="text-xs px-3 py-1 bg-green-100 text-green-700 hover:bg-green-200 rounded-full font-medium transition-colors"
-                                title="AI Summary"
-                              >
-                                🤖 AI Summary
-                              </button>
-                            </div>
-
-                            <div className="flex items-center gap-3 text-xs flex-wrap">
-                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                {item.source}
-                              </span>
-                              {item.cves && item.cves.length > 0 && (
-                                <>
-                                  {item.cves.map(cve => (
+                            <div className="flex items-start justify-between gap-3 mb-2">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1">
+                                  {isUnread && <span className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"></span>}
+                                  <span className="text-xs font-mono text-slate-600">{item.source.toUpperCase()}</span>
+                                  {severity.level === 'critical' && (
+                                    <span className="px-2 py-0.5 bg-red-600 text-white text-xs font-bold">CRITICAL</span>
+                                  )}
+                                  {severity.level === 'high' && (
+                                    <span className="px-2 py-0.5 bg-orange-500 text-white text-xs font-bold">HIGH</span>
+                                  )}
+                                  {isNew && (
+                                    <span className="px-2 py-0.5 bg-blue-600 text-white text-xs font-bold">NEW</span>
+                                  )}
+                                  {item.cves && item.cves.map(cve => (
                                     <a
                                       key={cve}
                                       href={`https://nvd.nist.gov/vuln/detail/${cve}`}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono bg-red-100 text-red-800 hover:bg-red-200 transition-colors"
+                                      className="px-2 py-0.5 bg-red-100 text-red-900 text-xs font-mono hover:bg-red-200 transition-colors"
                                       onClick={(e) => e.stopPropagation()}
                                     >
                                       {cve}
                                     </a>
                                   ))}
-                                </>
-                              )}
-                              {severity.level !== 'low' && (
-                                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                                  severity.level === 'critical'
-                                    ? 'bg-red-100 text-red-800'
-                                    : severity.level === 'high'
-                                    ? 'bg-orange-100 text-orange-800'
-                                    : 'bg-yellow-100 text-yellow-800'
-                                }`}>
-                                  {severity.level === 'critical' ? '🔴' : severity.level === 'high' ? '🟠' : '🟡'} {severity.label}
-                                </span>
-                              )}
-                              <span className={`font-medium ${isUnread ? 'text-gray-600' : 'text-gray-400'}`}>
+                                </div>
+                                <h3 className={`text-sm leading-tight mb-1 ${isUnread ? 'font-semibold text-slate-900' : 'font-normal text-slate-600'}`}>
+                                  <a
+                                    href={item.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={() => markAsRead(item.link)}
+                                    className="hover:underline"
+                                  >
+                                    {item.title}
+                                  </a>
+                                </h3>
+                                {item.description && (
+                                  <p className="text-xs text-slate-600 line-clamp-1">
+                                    {item.description}
+                                  </p>
+                                )}
+                              </div>
+                              <span className="text-xs text-slate-500 whitespace-nowrap font-mono">
                                 {getTimeAgo(item.pubDate)}
                               </span>
-                              <span className="text-gray-400">•</span>
-                              <span className={isUnread ? 'text-gray-500' : 'text-gray-400'}>
-                                {new Date(item.pubDate).toLocaleDateString('en-GB', {
-                                  day: 'numeric',
-                                  month: 'short',
-                                  year: 'numeric'
-                                })}
-                              </span>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex gap-2 mt-2">
+                              <button
+                                onClick={() => bookmarkArticle(item)}
+                                className="text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
+                                title="Save for later"
+                              >
+                                SAVE
+                              </button>
+                              <button
+                                onClick={() => addToReadingList(item)}
+                                className="text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
+                                title="Add to queue"
+                              >
+                                QUEUE
+                              </button>
+                              <button
+                                onClick={() => showAISummary(item)}
+                                className="text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
+                                title="AI Analysis"
+                              >
+                                ANALYZE
+                              </button>
+                              {!isUnread && (
+                                <button
+                                  onClick={() => {
+                                    const newReadItems = new Set(readItems);
+                                    newReadItems.delete(item.link);
+                                    setReadItems(newReadItems);
+                                    localStorage.setItem('astra-read-items', JSON.stringify([...newReadItems]));
+                                  }}
+                                  className="text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
+                                  title="Mark as unread"
+                                >
+                                  UNREAD
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>

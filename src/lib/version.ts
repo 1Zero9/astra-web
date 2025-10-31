@@ -6,7 +6,7 @@ export const VERSION = {
   app: '1.2.0',
 
   // Module versions
-  pulse: '2.1.0',
+  pulse: '2.2.0',
   phishing: '1.0.0',
   awareness: '1.0.0',
   promptBuilder: '1.0.0',
@@ -27,6 +27,22 @@ export const VERSION = {
 };
 
 export const CHANGELOG = {
+  '2.2.0': {
+    module: 'Pulse',
+    date: '2025-10-31',
+    changes: [
+      'Complete UI redesign - professional NOC/SOC aesthetic',
+      'Outlook-style command bar with actions',
+      'Clean slate/gray color scheme (removed playful colors)',
+      'Sharp edges, no rounded corners',
+      'Professional text buttons (SAVE, QUEUE, ANALYZE, UNREAD)',
+      'Compact article cards with better information density',
+      'Removed emojis from UI elements',
+      'Monospace fonts for technical data',
+      'Uppercase labels for professional look',
+      'Streamlined filters bar',
+    ]
+  },
   '2.1.0': {
     module: 'Pulse',
     date: '2025-10-31',
