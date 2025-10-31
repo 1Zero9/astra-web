@@ -80,53 +80,61 @@ export default function Home() {
       </div>
 
       {/* Content */}
-      <div className={`relative mx-auto max-w-6xl px-4 pt-14 pb-10 space-y-12 sm:pt-16 sm:pb-12 sm:space-y-16 transition-all duration-700 ${activeModule ? 'blur-xl opacity-30 scale-95' : ''}`}>
-        {/* Hero Section */}
-        <div className="flex flex-col items-center text-center space-y-6">
+      <div className={`relative mx-auto max-w-6xl px-4 pt-8 pb-8 space-y-8 transition-all duration-700 ${activeModule ? 'blur-xl opacity-30 scale-95' : ''}`}>
+        {/* Hero Section - Consolidated */}
+        <div className="flex flex-col items-center text-center space-y-4">
           <div className="relative">
             <div className="absolute inset-0 bg-white/20 blur-3xl rounded-full"></div>
             <Image
               src="/images/ASTRA_logo.png"
               alt="ASTRA Logo"
-              width={200}
-              height={200}
+              width={300}
+              height={300}
               className="object-contain relative z-10"
               priority
             />
           </div>
-          <div className="space-y-3">
-            <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+          <div className="space-y-2">
+            <h1 className="text-6xl sm:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
               ASTRA
             </h1>
-            <p className="text-xl text-white/90 font-medium">
+            <p className="text-2xl sm:text-3xl text-white/90 font-semibold">
               Awareness, Security & Threat Response Assistant
             </p>
-            <p className="text-sm text-white/70 max-w-2xl mx-auto leading-relaxed">
-              Build security awareness campaigns, simulate phishing scenarios, and stay informed on
-              cyber threats with an AI co-pilot.
+            <p className="text-base text-white/80 max-w-3xl mx-auto leading-relaxed pt-2">
+              Build security awareness campaigns, simulate phishing scenarios, and stay informed on cyber threats with an AI co-pilot.
             </p>
+          </div>
+
+          {/* CTAs - Right After Hero */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
+            <button
+              onClick={() => openModule('pulse')}
+              className="inline-flex items-center justify-center px-8 py-3 bg-[#2C7BE5] hover:bg-[#2C7BE5]/90 text-white text-lg font-bold rounded-full shadow-xl transition-all duration-300 hover:scale-105"
+            >
+              Launch Security Pulse →
+            </button>
+            <a
+              href="#modules"
+              className="inline-flex items-center justify-center px-8 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border-2 border-white/30 text-white text-lg font-semibold rounded-full transition-all duration-300"
+            >
+              Explore All Modules
+            </a>
           </div>
         </div>
 
         {/* Glass Morphism Module Cards */}
-        <section id="modules" className="space-y-8">
-          <div className="text-center space-y-2">
-            <div className="inline-flex items-center bg-[#F8F9FA]/15 backdrop-blur-md border border-[#2C7BE5]/30 rounded-full px-4 py-1.5">
-              <span className="text-xs font-semibold uppercase tracking-wide text-white">
-                Core Modules
-              </span>
-            </div>
-            <p className="text-sm text-white/80">
-              Select a module to launch the application
-            </p>
-          </div>
+        <section id="modules" className="space-y-4">
+          <h2 className="text-center text-2xl font-bold text-white">
+            Choose Your Module
+          </h2>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {modules.map((module) => (
               <button
                 key={module.id}
                 onClick={() => openModule(module.id)}
-                className="group relative h-60 sm:h-64 cursor-pointer"
+                className="group relative h-48 sm:h-52 cursor-pointer"
               >
                 {/* Glass card with gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${module.gradient} rounded-3xl shadow-2xl border border-white/30 backdrop-blur-lg transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-3xl group-active:scale-[0.98]`}>
@@ -140,23 +148,23 @@ export default function Home() {
                   </div>
 
                   {/* Content */}
-                  <div className="relative h-full flex flex-col justify-between p-6 sm:p-8 text-left">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                      <div className="text-5xl sm:text-6xl filter drop-shadow-lg">
+                  <div className="relative h-full flex flex-col justify-between p-5 sm:p-6 text-left">
+                    <div className="flex items-start justify-between">
+                      <div className="text-4xl sm:text-5xl filter drop-shadow-lg">
                         {module.icon}
                       </div>
                       {module.badge && (
-                        <span className="px-3 py-1 bg-black/30 backdrop-blur-md border border-white/30 rounded-full text-xs font-bold text-white uppercase tracking-wide">
+                        <span className="px-2 py-1 bg-black/30 backdrop-blur-md border border-white/30 rounded-full text-xs font-bold text-white uppercase tracking-wide">
                           {module.badge}
                         </span>
                       )}
                     </div>
 
-                    <div className="space-y-3">
-                      <h3 className="text-2xl font-bold text-white drop-shadow-lg">
+                    <div className="space-y-2">
+                      <h3 className="text-xl sm:text-2xl font-bold text-white drop-shadow-lg">
                         {module.name}
                       </h3>
-                      <p className="text-sm text-white/80 leading-relaxed">
+                      <p className="text-sm text-white/80 leading-snug line-clamp-2">
                         {module.description}
                       </p>
                       <div className="flex items-center text-white/90 text-sm font-semibold group-hover:translate-x-2 transition-transform duration-300">
@@ -170,32 +178,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Stats/Info Glass Panel - Brand Colors */}
-        <section>
-          <div className="relative bg-[#F8F9FA]/10 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-[#2C7BE5]/30 shadow-2xl">
-            <div className="absolute inset-1 bg-[#1A3B66]/5 rounded-2xl backdrop-blur-sm"></div>
-            <div className="absolute inset-2 bg-gradient-to-br from-[#2C7BE5]/10 to-transparent"></div>
-
-            <div className="relative space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="text-3xl">⚠️</div>
-                <h3 className="text-lg font-bold text-white">POC Tool Notice</h3>
-              </div>
-              <p className="text-sm text-white/90 leading-relaxed">
-                ASTRA is a Proof of Concept tool. Review all generated content with your security team before distribution.
-                Not a replacement for certified security systems or professional threat monitoring platforms.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <div className="text-center space-y-2 pt-8">
-          <p className="font-mono text-sm text-white/60">
-            {getFullVersionInfo()}
-          </p>
+        {/* Minimized Footer */}
+        <div className="text-center pt-4 pb-2">
           <p className="text-xs text-white/50">
-            Built by <span className="font-semibold text-white/70">1Zero9</span> • © 2025
+            {getFullVersionInfo()} • Built by <span className="font-semibold text-white/60">1Zero9</span> • © 2025 • POC Tool
           </p>
         </div>
       </div>
