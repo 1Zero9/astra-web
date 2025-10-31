@@ -14,7 +14,7 @@ export default function Home() {
       name: 'Security Pulse',
       description: 'Curated AI briefings on the latest threat intelligence and security news.',
       icon: '⚡',
-      gradient: 'from-blue-500/90 to-indigo-600/90',
+      gradient: 'from-[#2C7BE5]/90 to-[#1A3B66]/90',
       href: '/pulse'
     },
     {
@@ -22,7 +22,7 @@ export default function Home() {
       name: 'Phishing Simulator',
       description: 'Generate realistic phishing emails with safe callouts for awareness training.',
       icon: '🪝',
-      gradient: 'from-purple-500/90 to-pink-600/90',
+      gradient: 'from-[#1A3B66]/90 to-[#2C7BE5]/90',
       href: '/phishing'
     },
     {
@@ -30,7 +30,7 @@ export default function Home() {
       name: 'Awareness Campaigns',
       description: 'Turn policies or articles into polished awareness content in minutes.',
       icon: '📣',
-      gradient: 'from-green-500/90 to-emerald-600/90',
+      gradient: 'from-[#2C7BE5]/90 to-[#1A3B66]/90',
       href: '/awareness'
     },
     {
@@ -38,7 +38,7 @@ export default function Home() {
       name: 'Prompt Builder',
       description: 'Rapidly prototype prompts with ready-to-use frameworks and guardrails.',
       icon: '🎯',
-      gradient: 'from-amber-500/90 to-orange-600/90',
+      gradient: 'from-[#1A3B66]/90 to-[#2C7BE5]/90',
       href: '/prompt-builder',
       badge: 'Beta'
     }
@@ -70,10 +70,10 @@ export default function Home() {
 
   return (
     <div className="flex-1 relative overflow-hidden">
-      {/* Animated gradient background */}
-      <div className={`absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 transition-all duration-700 ${activeModule ? 'blur-2xl scale-110' : ''}`}>
+      {/* Animated gradient background - ASTRA Brand Colors */}
+      <div className={`absolute inset-0 bg-gradient-to-br from-[#1A3B66] via-[#2C7BE5] to-[#1A3B66] transition-all duration-700 ${activeModule ? 'blur-2xl scale-110' : ''}`}>
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
       </div>
 
       {/* Content */}
@@ -108,12 +108,12 @@ export default function Home() {
         {/* Glass Morphism Module Cards */}
         <section id="modules" className="space-y-8">
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5">
-              <span className="text-xs font-semibold uppercase tracking-wide text-white/90">
+            <div className="inline-flex items-center bg-[#F8F9FA]/15 backdrop-blur-md border border-[#2C7BE5]/30 rounded-full px-4 py-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wide text-white">
                 Core Modules
               </span>
             </div>
-            <p className="text-sm text-white/60">
+            <p className="text-sm text-white/80">
               Select a module to launch the application
             </p>
           </div>
@@ -167,18 +167,18 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Stats/Info Glass Panel */}
+        {/* Stats/Info Glass Panel - Brand Colors */}
         <section>
-          <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-2xl">
-            <div className="absolute inset-1 bg-white/5 rounded-2xl backdrop-blur-sm"></div>
-            <div className="absolute inset-2 bg-gradient-to-br from-white/10 to-transparent"></div>
+          <div className="relative bg-[#F8F9FA]/10 backdrop-blur-xl rounded-3xl p-8 border border-[#2C7BE5]/30 shadow-2xl">
+            <div className="absolute inset-1 bg-[#1A3B66]/5 rounded-2xl backdrop-blur-sm"></div>
+            <div className="absolute inset-2 bg-gradient-to-br from-[#2C7BE5]/10 to-transparent"></div>
 
             <div className="relative space-y-4">
               <div className="flex items-center gap-3">
                 <div className="text-3xl">⚠️</div>
                 <h3 className="text-lg font-bold text-white">POC Tool Notice</h3>
               </div>
-              <p className="text-sm text-white/80 leading-relaxed">
+              <p className="text-sm text-white/90 leading-relaxed">
                 ASTRA is a Proof of Concept tool. Review all generated content with your security team before distribution.
                 Not a replacement for certified security systems or professional threat monitoring platforms.
               </p>
@@ -210,16 +210,16 @@ export default function Home() {
             onClick={closeModule}
           ></div>
 
-          {/* Modal Container */}
+          {/* Modal Container - Reduced Size */}
           <div
-            className={`relative w-full h-full max-w-[95vw] max-h-[95vh] transition-all duration-700 ${
+            className={`relative w-full h-full max-w-[85vw] max-h-[85vh] transition-all duration-700 ${
               isAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
             }`}
           >
-            {/* Glass morphism container */}
-            <div className="relative w-full h-full bg-white/10 backdrop-blur-3xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+            {/* Glass morphism container - ASTRA Brand Colors */}
+            <div className="relative w-full h-full bg-[#F8F9FA]/95 backdrop-blur-3xl rounded-3xl shadow-2xl border border-[#2C7BE5]/30 overflow-hidden">
               {/* Header bar with close button */}
-              <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 bg-black/30 backdrop-blur-xl border-b border-white/10">
+              <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-4 bg-[#1A3B66]/90 backdrop-blur-xl border-b border-[#2C7BE5]/20">
                 <div className="flex items-center gap-3">
                   <div className="text-3xl">{activeModuleData?.icon}</div>
                   <div>
@@ -250,8 +250,8 @@ export default function Home() {
 
             {/* Loading indicator */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
-                <div className="animate-spin h-8 w-8 border-2 border-white/30 border-t-white rounded-full"></div>
+              <div className="bg-[#F8F9FA]/90 backdrop-blur-xl rounded-2xl p-6 border border-[#2C7BE5]/30">
+                <div className="animate-spin h-8 w-8 border-2 border-[#2C7BE5]/30 border-t-[#2C7BE5] rounded-full"></div>
               </div>
             </div>
           </div>
