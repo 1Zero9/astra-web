@@ -8,6 +8,9 @@ interface NewsItem {
   pubDate: string;
   source: string;
   description?: string;
+  cves?: string[];
+  author?: string;
+  category?: string;
 }
 
 interface TrendingTopic {
@@ -64,6 +67,12 @@ export default function SecurityPulse() {
   const [loadingSources, setLoadingSources] = useState(false);
   const [newSource, setNewSource] = useState({ name: '', url: '', description: '' });
   const [addingSource, setAddingSource] = useState(false);
+
+  // New state for enhancements
+  const [showSummaryModal, setShowSummaryModal] = useState(false);
+  const [currentSummary, setCurrentSummary] = useState<any>(null);
+  const [summaryArticle, setSummaryArticle] = useState<NewsItem | null>(null);
+  const [loadingSummary, setLoadingSummary] = useState(false);
 
   useEffect(() => {
     // Load read items from localStorage
@@ -153,6 +162,93 @@ export default function SecurityPulse() {
     setSelectedItems((prev) =>
       prev.includes(link) ? prev.filter((l) => l !== link) : [...prev, link]
     );
+  };
+
+  // Bookmark article
+  const bookmarkArticle = async (article: NewsItem) => {
+    try {
+      const response = await fetch('/api/saved-articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: article.title,
+          link: article.link,
+          source: article.source,
+          pubDate: article.pubDate,
+          description: article.description,
+          tags: article.cves || [],
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert('✅ Article bookmarked!');
+      } else if (response.status === 409) {
+        alert('ℹ️ Article already bookmarked');
+      }
+    } catch (error) {
+      console.error('Error bookmarking:', error);
+      alert('❌ Failed to bookmark article');
+    }
+  };
+
+  // Add to reading list
+  const addToReadingList = async (article: NewsItem) => {
+    try {
+      const response = await fetch('/api/reading-list', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: article.title,
+          link: article.link,
+          source: article.source,
+          pubDate: article.pubDate,
+          description: article.description,
+          priority: 'medium',
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert('✅ Added to reading list!');
+      } else if (response.status === 409) {
+        alert('ℹ️ Already in reading list');
+      }
+    } catch (error) {
+      console.error('Error adding to reading list:', error);
+      alert('❌ Failed to add to reading list');
+    }
+  };
+
+  // Show AI summary
+  const showAISummary = async (article: NewsItem) => {
+    setLoadingSummary(true);
+    setSummaryArticle(article);
+    setShowSummaryModal(true);
+    setCurrentSummary(null);
+
+    try {
+      const response = await fetch('/api/article-summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          articleLink: article.link,
+          title: article.title,
+          description: article.description,
+          source: article.source,
+          type: 'summary',
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setCurrentSummary(data.summary);
+      }
+    } catch (error) {
+      console.error('Error generating summary:', error);
+    } finally {
+      setLoadingSummary(false);
+    }
   };
 
   const handleGenerate = async (e: React.FormEvent) => {
@@ -449,14 +545,94 @@ export default function SecurityPulse() {
   return (
     <div className="min-h-screen bg-zinc-50 relative">
       {/* Glass Loading Overlay */}
-      {generating && (
+      {(generating || loadingSummary) && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20 text-center">
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mb-4"></div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Generating Content</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              {generating ? 'Generating Content' : 'Analyzing Article'}
+            </h3>
             <p className="text-gray-600 animate-pulse">
-              AI is crafting your security content...
+              {generating ? 'AI is crafting your security content...' : 'AI is analyzing the article...'}
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* AI Summary Modal */}
+      {showSummaryModal && summaryArticle && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-center p-4" onClick={() => setShowSummaryModal(false)}>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">🤖 AI Analysis</h2>
+                  <h3 className="text-lg text-gray-700 mb-1">{summaryArticle.title}</h3>
+                  <p className="text-sm text-gray-500">{summaryArticle.source}</p>
+                </div>
+                <button
+                  onClick={() => setShowSummaryModal(false)}
+                  className="text-gray-400 hover:text-gray-600 text-3xl font-bold leading-none"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 overflow-y-auto max-h-[calc(85vh-140px)]">
+              {currentSummary ? (
+                <div className="space-y-4">
+                  <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <h4 className="font-semibold text-blue-900 mb-2">Summary</h4>
+                    <p className="text-gray-800 whitespace-pre-wrap">{currentSummary.summary}</p>
+                  </div>
+
+                  {currentSummary.cves && currentSummary.cves.length > 0 && (
+                    <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                      <h4 className="font-semibold text-red-900 mb-2">CVEs Mentioned</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {currentSummary.cves.map((cve: string) => (
+                          <a
+                            key={cve}
+                            href={`https://nvd.nist.gov/vuln/detail/${cve}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-1 bg-red-200 text-red-900 rounded-full text-sm font-mono hover:bg-red-300"
+                          >
+                            {cve}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(currentSummary.summary);
+                        alert('Summary copied to clipboard!');
+                      }}
+                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+                    >
+                      Copy Summary
+                    </button>
+                    <a
+                      href={summaryArticle.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 text-center font-medium"
+                    >
+                      Read Full Article
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-12 text-gray-500">
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600 mb-4"></div>
+                  <p>Generating summary...</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -730,10 +906,52 @@ export default function SecurityPulse() {
                                 {item.description}
                               </p>
                             )}
+
+                            {/* Action Buttons */}
+                            <div className="flex gap-2 mb-3">
+                              <button
+                                onClick={() => bookmarkArticle(item)}
+                                className="text-xs px-3 py-1 bg-amber-100 text-amber-700 hover:bg-amber-200 rounded-full font-medium transition-colors"
+                                title="Bookmark article"
+                              >
+                                ⭐ Save
+                              </button>
+                              <button
+                                onClick={() => addToReadingList(item)}
+                                className="text-xs px-3 py-1 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-full font-medium transition-colors"
+                                title="Add to reading list"
+                              >
+                                📚 Read Later
+                              </button>
+                              <button
+                                onClick={() => showAISummary(item)}
+                                className="text-xs px-3 py-1 bg-green-100 text-green-700 hover:bg-green-200 rounded-full font-medium transition-colors"
+                                title="AI Summary"
+                              >
+                                🤖 AI Summary
+                              </button>
+                            </div>
+
                             <div className="flex items-center gap-3 text-xs flex-wrap">
                               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                 {item.source}
                               </span>
+                              {item.cves && item.cves.length > 0 && (
+                                <>
+                                  {item.cves.map(cve => (
+                                    <a
+                                      key={cve}
+                                      href={`https://nvd.nist.gov/vuln/detail/${cve}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono bg-red-100 text-red-800 hover:bg-red-200 transition-colors"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      {cve}
+                                    </a>
+                                  ))}
+                                </>
+                              )}
                               {severity.level !== 'low' && (
                                 <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                                   severity.level === 'critical'
