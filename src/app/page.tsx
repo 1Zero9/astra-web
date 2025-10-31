@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { VERSION, getFullVersionInfo } from "@/lib/version";
 
 export default function Home() {
   return (
@@ -157,6 +158,15 @@ export default function Home() {
             <strong>⚠️ POC Tool:</strong> Review generated output with your security team before
             sharing.
           </div>
+        </div>
+
+        <div className="text-center text-sm text-zinc-500">
+          <p className="font-mono">
+            {getFullVersionInfo()}
+          </p>
+          <p className="text-xs mt-1">
+            Built by <span className="font-semibold">1Zero9</span> • © 2025
+          </p>
         </div>
       </div>
     </div>

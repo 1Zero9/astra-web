@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { VERSION, getModuleVersion } from "@/lib/version";
 
 interface NewsItem {
   title: string;
@@ -639,7 +640,17 @@ export default function SecurityPulse() {
 
       <main className="mx-auto max-w-7xl px-4 py-8">
         <div className="flex items-center justify-between mb-2">
-          <h1 className="text-3xl font-bold text-gray-900">Security Pulse</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-gray-900">Security Pulse</h1>
+            <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-mono font-bold rounded">
+              {getModuleVersion('pulse')}
+            </span>
+            {VERSION.features.pulseEnhancements && (
+              <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded animate-pulse">
+                NEW FEATURES
+              </span>
+            )}
+          </div>
           {lastSync && (
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -654,9 +665,16 @@ export default function SecurityPulse() {
             </div>
           )}
         </div>
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 mb-2">
           Latest cybersecurity news and threat intelligence
         </p>
+        <div className="flex items-center gap-2 mb-6 text-xs">
+          <span className="text-gray-500">✨ New:</span>
+          <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded">⭐ Bookmarks</span>
+          <span className="px-2 py-0.5 bg-purple-100 text-purple-700 rounded">📚 Reading List</span>
+          <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded">🤖 AI Summary</span>
+          <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded">CVE Badges</span>
+        </div>
 
         {/* Trending Topics */}
         {trendingTopics.length > 0 && (
