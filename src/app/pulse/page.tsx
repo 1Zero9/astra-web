@@ -115,6 +115,7 @@ function SecurityPulseContent() {
     }
 
     fetchNews();
+    fetchSources(); // Load RSS sources on mount
   }, []);
 
   const fetchNews = async () => {
@@ -281,35 +282,13 @@ function SecurityPulseContent() {
     }
   };
 
-  // Show AI summary
-  const showAISummary = async (article: NewsItem) => {
-    setLoadingSummary(true);
+  // Show article preview
+  const showAISummary = (article: NewsItem) => {
     setSummaryArticle(article);
     setShowSummaryModal(true);
+    // Just show the article preview - AI summary API not yet configured
     setCurrentSummary(null);
-
-    try {
-      const response = await fetch('/api/article-summary', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          articleLink: article.link,
-          title: article.title,
-          description: article.description,
-          source: article.source,
-          type: 'summary',
-        }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setCurrentSummary(data.summary);
-      }
-    } catch (error) {
-      console.error('Error generating summary:', error);
-    } finally {
-      setLoadingSummary(false);
-    }
+    setLoadingSummary(false);
   };
 
   // Fetch saved articles
@@ -737,7 +716,7 @@ function SecurityPulseContent() {
             <div className="p-6 border-b border-gray-200">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">🤖 AI Analysis</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">📰 Article Preview</h2>
                   <h3 className="text-lg text-gray-700 mb-1">{summaryArticle.title}</h3>
                   <p className="text-sm text-gray-500">{summaryArticle.source}</p>
                 </div>
@@ -751,58 +730,48 @@ function SecurityPulseContent() {
             </div>
 
             <div className="p-6 overflow-y-auto max-h-[calc(85vh-140px)]">
-              {currentSummary ? (
-                <div className="space-y-4">
-                  <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-                    <h4 className="font-semibold text-blue-900 mb-2">Summary</h4>
-                    <p className="text-gray-800 whitespace-pre-wrap">{currentSummary.summary}</p>
-                  </div>
+              <div className="space-y-4">
+                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                  <h4 className="font-semibold text-blue-900 mb-2">Article Preview</h4>
+                  <p className="text-gray-800">{summaryArticle.description || 'No description available.'}</p>
+                </div>
 
-                  {currentSummary.cves && currentSummary.cves.length > 0 && (
-                    <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
-                      <h4 className="font-semibold text-red-900 mb-2">CVEs Mentioned</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {currentSummary.cves.map((cve: string) => (
-                          <a
-                            key={cve}
-                            href={`https://nvd.nist.gov/vuln/detail/${cve}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-3 py-1 bg-red-200 text-red-900 rounded-full text-sm font-mono hover:bg-red-300"
-                          >
-                            {cve}
-                          </a>
-                        ))}
-                      </div>
+                {summaryArticle.cves && summaryArticle.cves.length > 0 && (
+                  <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                    <h4 className="font-semibold text-red-900 mb-2">CVEs Mentioned</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {summaryArticle.cves.map((cve: string) => (
+                        <a
+                          key={cve}
+                          href={`https://nvd.nist.gov/vuln/detail/${cve}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-1 bg-red-200 text-red-900 rounded-full text-sm font-mono hover:bg-red-300"
+                        >
+                          {cve}
+                        </a>
+                      ))}
                     </div>
-                  )}
-
-                  <div className="flex flex-col gap-2 sm:flex-row">
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(currentSummary.summary);
-                        alert('Summary copied to clipboard!');
-                      }}
-                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-center"
-                    >
-                      Copy Summary
-                    </button>
-                    <a
-                      href={summaryArticle.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 text-center font-medium"
-                    >
-                      Read Full Article
-                    </a>
                   </div>
+                )}
+
+                <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded">
+                  <p className="text-sm text-purple-900">
+                    <strong>✨ AI Summary Coming Soon:</strong> AI-powered analysis will be available in a future update.
+                  </p>
                 </div>
-              ) : (
-                <div className="text-center py-12 text-gray-500">
-                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600 mb-4"></div>
-                  <p>Generating summary...</p>
+
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <a
+                    href={summaryArticle.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center font-medium"
+                  >
+                    Read Full Article →
+                  </a>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
