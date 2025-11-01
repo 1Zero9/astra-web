@@ -949,7 +949,7 @@ export default function SecurityPulse() {
                 <button
                   onClick={() => {
                     setActiveTab('sources');
-                    if (rssSources.length === 0) fetchRssSources();
+                    if (rssSources.length === 0) fetchSources();
                   }}
                   className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
                     activeTab === 'sources'
