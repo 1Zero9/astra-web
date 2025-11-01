@@ -27,7 +27,7 @@ model User {
   notificationPrefs   NotificationPreference?
 }
 
-// Saved articles from Security Pulse
+// Saved articles from Pulse
 model SavedArticle {
   id          String   @id @default(cuid())
   userId      String
@@ -36,6 +36,7 @@ model SavedArticle {
   source      String
   pubDate     String
   description String?
+  category    String   @default("security") // security, ai, tech, f1
   savedAt     DateTime @default(now())
   tags        String[] // For categorization
   notes       String?  // User notes
@@ -44,6 +45,7 @@ model SavedArticle {
 
   @@index([userId])
   @@index([savedAt])
+  @@index([category])
 }
 
 // Generated content (emails, summaries, etc.)
@@ -84,12 +86,15 @@ model RSSSource {
   name        String   @unique
   url         String   @unique
   description String?  // Optional description for the RSS source
+  category    String   @default("security") // security, ai, tech, f1
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   lastFetched DateTime? // Last successful fetch timestamp
   fetchErrors Int      @default(0) // Count of consecutive fetch errors
   articleCount Int     @default(0) // Total articles fetched from this source
+
+  @@index([category])
 }
 
 // Track which articles a user has read
@@ -118,6 +123,7 @@ model ReadingListItem {
   source      String
   pubDate     String
   description String?
+  category    String   @default("security") // security, ai, tech, f1
   priority    String   @default("medium") // high, medium, low
   addedAt     DateTime @default(now())
   notes       String?
@@ -127,23 +133,26 @@ model ReadingListItem {
   @@index([userId])
   @@index([priority])
   @@index([addedAt])
+  @@index([category])
 }
 
-// Cached AI summaries for articles
+// Cached AI summaries for articles (security, ai, tech only - no F1)
 model ArticleSummary {
   id          String   @id @default(cuid())
   articleLink String   @unique
   title       String
+  category    String   @default("security") // security, ai, tech (NOT f1)
   summary     String   @db.Text
   eli5        String?  @db.Text // Explain like I'm 5 version
   impact      String?  @db.Text // Business impact analysis
   actions     String?  @db.Text // Recommended actions
-  cves        String[] // Extracted CVE numbers
-  iocs        String[] // Indicators of Compromise
+  cves        String[] // Extracted CVE numbers (security only)
+  iocs        String[] // Indicators of Compromise (security only)
   createdAt   DateTime @default(now())
 
   @@index([articleLink])
   @@index([createdAt])
+  @@index([category])
 }
 
 // Notification preferences for critical threats
