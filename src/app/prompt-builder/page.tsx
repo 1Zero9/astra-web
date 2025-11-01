@@ -8,6 +8,7 @@ import {
   ReflectionCard,
 } from "@/lib/ilm/reflection";
 import { runGovernanceScan } from "@/lib/governance/aegf";
+import { getFullVersionInfo } from "@/lib/version";
 
 type FrameworkId = "CLEAR" | "RISEN" | "COAST" | "ILM" | "LeadershipTrack";
 
