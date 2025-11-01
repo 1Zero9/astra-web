@@ -16,43 +16,78 @@ const templates: PromptTemplate[] = [
     id: 'eli5',
     name: 'ELI5 (Explain Like I\'m 5)',
     description: 'Get simple explanations of complex topics',
-    template: 'Explain [TOPIC] in simple terms that a 5-year-old could understand. Use analogies and avoid jargon.',
+    template: 'Context: I need to understand [TOPIC] but I\'m completely new to this subject. My background is [YOUR BACKGROUND/EXPERIENCE LEVEL].\n\nRole: Act as a patient teacher who excels at breaking down complex ideas into simple, relatable concepts.\n\nTask: Explain [TOPIC] in simple terms that a 5-year-old could understand. Use everyday analogies, avoid jargon, and check my understanding by asking me a simple question at the end.',
     category: 'learning'
   },
   {
     id: 'deep-dive',
     name: 'Deep Dive Analysis',
     description: 'Comprehensive exploration of a topic',
-    template: 'Provide a comprehensive analysis of [TOPIC], covering:\n1. Overview and context\n2. Key concepts and principles\n3. Current trends and developments\n4. Practical applications\n5. Future implications',
+    template: 'Context: I need a comprehensive understanding of [TOPIC]. My goal is to [WHAT YOU WANT TO DO - e.g., make a decision, write a report, understand for a project].\n\nRole: Act as a subject matter expert with deep knowledge of [TOPIC]. Your job is to provide thorough analysis while highlighting what matters most.\n\nInterview: Before diving deep, ask me 1-2 questions to understand what aspects of [TOPIC] are most relevant to my goal.\n\nTask: Provide a comprehensive analysis covering:\n1. Overview and context\n2. Key concepts and principles\n3. Current trends and developments\n4. Practical applications for my situation\n5. Future implications and what to watch',
+    category: 'learning'
+  },
+  {
+    id: 'learning-path',
+    name: 'Custom Learning Path',
+    description: 'Create a personalized learning roadmap',
+    template: 'Context: I want to learn [TOPIC/SKILL]. My current level is [BEGINNER/INTERMEDIATE/ADVANCED]. I have [TIME AVAILABLE] per week to dedicate to learning.\n\nRole: Act as a learning strategist and curriculum designer who creates personalized learning paths.\n\nInterview: Ask me 2-3 questions about my learning style, goals, and what success looks like for me.\n\nTask: Design a custom learning path including:\n1. Learning objectives and milestones\n2. Recommended resources (ordered by priority)\n3. Weekly practice exercises\n4. Progress checkpoints\n5. Common pitfalls to avoid',
+    category: 'learning'
+  },
+  {
+    id: 'concept-compare',
+    name: 'Concept Comparison',
+    description: 'Understand differences between similar concepts',
+    template: 'Context: I\'m confused about the difference between [CONCEPT A] and [CONCEPT B]. I need to understand when to use each one in [YOUR CONTEXT].\n\nRole: Act as an expert educator who specializes in clarifying confusing concepts.\n\nTask: Compare and contrast these concepts:\n1. Clear definitions of each\n2. Key differences and similarities\n3. When to use each one\n4. Real-world examples\n5. A decision tree or framework to help me choose',
     category: 'learning'
   },
   {
     id: 'step-by-step',
     name: 'Step-by-Step Guide',
     description: 'Break down complex processes',
-    template: 'Create a detailed step-by-step guide for [TASK]. Include:\n- Prerequisites needed\n- Clear numbered steps\n- Expected outcomes\n- Common pitfalls to avoid\n- Tips for success',
+    template: 'Context: I need to accomplish [TASK]. My experience level is [BEGINNER/INTERMEDIATE/ADVANCED]. I have access to [TOOLS/RESOURCES].\n\nRole: Act as an expert instructor who creates clear, actionable guides.\n\nInterview: Ask me 1-2 questions about my constraints or what I\'m most worried about.\n\nTask: Create a detailed step-by-step guide including:\n- Prerequisites and preparation\n- Clear numbered steps with success criteria\n- Expected outcomes at each stage\n- Common pitfalls specific to my experience level\n- Troubleshooting tips',
     category: 'task'
   },
   {
     id: 'meta-prompt',
     name: 'Meta Prompt Generator',
     description: 'Create prompts that generate better prompts',
-    template: 'You are a prompt engineering expert. Create an optimized prompt for: [GOAL]\n\nThe prompt should:\n1. Be clear and specific\n2. Provide context and constraints\n3. Define the desired output format\n4. Include examples if helpful\n5. Specify the tone and style',
+    template: 'Context: I want to create a prompt for: [GOAL]. The audience is [WHO WILL USE IT]. The desired outcome is [SPECIFIC RESULT].\n\nRole: You are a prompt engineering expert who understands the CRIT framework (Context, Role, Interview, Task) and how to structure prompts for maximum effectiveness.\n\nInterview: Ask me 2-3 questions to understand:\n- What makes this prompt challenging\n- What the AI needs to know\n- How the output will be used\n\nTask: Generate an optimized prompt that:\n1. Provides rich context\n2. Assigns a clear expert role\n3. Uses Interview mode if helpful\n4. Defines specific deliverables\n5. Includes success criteria\n\nAfter generating the prompt, explain WHY each element makes it more effective.',
+    category: 'meta'
+  },
+  {
+    id: 'prompt-improver',
+    name: 'Prompt Improver',
+    description: 'Transform weak prompts into expert-level prompts',
+    template: 'Context: I have a prompt that isn\'t giving me good results. Here\'s my current prompt:\n[PASTE YOUR WEAK PROMPT HERE]\n\nRole: Act as a prompt engineering coach who transforms "Google search" style prompts into expert prompts using the CRIT framework.\n\nTask: \n1. Analyze what\'s missing from my prompt\n2. Ask me clarifying questions to add context\n3. Rewrite the prompt with Context, Role, Interview, and Task\n4. Explain the before/after improvement\n5. Show me the pattern so I can do this myself next time',
     category: 'meta'
   },
   {
     id: 'chain-of-thought',
     name: 'Chain of Thought',
     description: 'Encourage step-by-step reasoning',
-    template: 'Solve [PROBLEM] using chain-of-thought reasoning. Show your work step by step:\n1. First, analyze what we know\n2. Then, identify what we need to find\n3. Next, apply relevant concepts\n4. Finally, verify the solution',
+    template: 'Context: I need to solve [PROBLEM]. This is important because [WHY IT MATTERS]. I\'ve tried [WHAT YOU\'VE TRIED] but need a systematic approach.\n\nRole: Act as a strategic problem solver who uses chain-of-thought reasoning to work through complex challenges.\n\nTask: Solve this problem using step-by-step reasoning:\n1. First, analyze what we know and what assumptions we\'re making\n2. Then, identify what we need to find and any constraints\n3. Next, explore different approaches and their trade-offs\n4. Apply the best approach with clear logic\n5. Verify the solution and identify potential weaknesses\n\nShow your thinking at each step - don\'t jump to conclusions.',
     category: 'task'
   },
   {
     id: 'role-based',
-    name: 'Role-Based Prompt',
-    description: 'Get expert perspective on topics',
-    template: 'You are a [ROLE/EXPERT]. Provide your expert perspective on [TOPIC]. Consider:\n- Your specialized knowledge in this field\n- Industry best practices\n- Real-world applications\n- Potential challenges and solutions',
+    name: 'Expert Perspective',
+    description: 'Get specialized viewpoints on topics',
+    template: 'Context: I\'m working on [SITUATION/PROJECT]. I need expert insight on [SPECIFIC ASPECT]. My background is [YOUR EXPERIENCE].\n\nRole: You are a [SPECIFIC EXPERT - e.g., Senior Security Architect, UX Researcher, etc.] with 15+ years of experience. Share your expert perspective drawing on your specialized knowledge.\n\nInterview: Ask me 1-2 questions to understand the nuances of my situation.\n\nTask: Provide your expert perspective including:\n- How you would approach this based on your experience\n- Industry best practices and why they matter\n- Real-world examples or case studies\n- Potential challenges I might not see\n- Your recommended next steps',
     category: 'task'
+  },
+  {
+    id: 'creative-ideation',
+    name: 'Creative Ideation',
+    description: 'Generate innovative ideas and solutions',
+    template: 'Context: I\'m trying to [GOAL/CHALLENGE]. Current constraints are [CONSTRAINTS]. The audience/users are [WHO].\n\nRole: Act as a creative strategist who generates innovative yet practical ideas.\n\nInterview: Ask me 2-3 questions about what "success" looks like and what we absolutely cannot change.\n\nTask: Generate 10 diverse ideas that:\n1. Range from safe bets to wild experiments\n2. Address different aspects of the challenge\n3. Include rationale for each idea\n4. Highlight which ideas could combine\n5. Rank by feasibility vs. impact',
+    category: 'creative'
+  },
+  {
+    id: 'perspective-shift',
+    name: 'Perspective Shift',
+    description: 'View challenges through different lenses',
+    template: 'Context: I\'m stuck on [CHALLENGE]. I keep approaching it the same way and need fresh perspectives.\n\nRole: Act as a creative provocateur who challenges assumptions and offers radically different viewpoints.\n\nTask: Help me see this challenge through 5 different lenses:\n1. If we had unlimited resources, what would we do?\n2. If we had to solve this in 24 hours with $100, what would we do?\n3. How would [ADMIRED COMPANY/PERSON] approach this?\n4. What would we do if we had to 10x the impact?\n5. What are we assuming that might not be true?\n\nFor each lens, suggest a concrete next action.',
+    category: 'creative'
   },
   // Strategic Leadership Prompts
   {
@@ -146,6 +181,15 @@ export default function PromptBuilder() {
   const [selectedTemplate, setSelectedTemplate] = useState<PromptTemplate | null>(null);
   const [activeCategory, setActiveCategory] = useState<'all' | 'learning' | 'meta' | 'task' | 'creative' | 'leadership'>('all');
   const [showPreview, setShowPreview] = useState(false);
+  const [activeMode, setActiveMode] = useState<'templates' | 'ai-assistant'>('templates');
+
+  // AI Assistant state
+  const [userPrompt, setUserPrompt] = useState('');
+  const [analysis, setAnalysis] = useState('');
+  const [improvedPrompt, setImprovedPrompt] = useState('');
+  const [explanation, setExplanation] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'input' | 'analysis' | 'improved' | 'explanation'>('input');
 
   const applyTemplate = (template: PromptTemplate) => {
     setSelectedTemplate(template);
@@ -161,25 +205,91 @@ export default function PromptBuilder() {
     alert('Prompt copied to clipboard!');
   };
 
+  const callPromptAssistant = async (action: 'analyze' | 'improve' | 'explain') => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/prompt-assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userPrompt, action }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (action === 'analyze') {
+          setAnalysis(data.result);
+          setCurrentStep('analysis');
+        } else if (action === 'improve') {
+          setImprovedPrompt(data.result);
+          setCurrentStep('improved');
+        } else if (action === 'explain') {
+          setExplanation(data.result);
+          setCurrentStep('explanation');
+        }
+      } else {
+        alert('Error: ' + (data.error || 'Failed to process'));
+      }
+    } catch (error) {
+      alert('Failed to connect to AI assistant');
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetAssistant = () => {
+    setUserPrompt('');
+    setAnalysis('');
+    setImprovedPrompt('');
+    setExplanation('');
+    setCurrentStep('input');
+  };
+
+  const copyImprovedPrompt = () => {
+    navigator.clipboard.writeText(improvedPrompt);
+    alert('Improved prompt copied to clipboard!');
+  };
+
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">
       {/* Header */}
       <header className="bg-gradient-to-r from-purple-600 to-blue-600 text-white border-b-2 border-purple-700">
         <div className="mx-auto max-w-7xl px-4 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
               <h1 className="text-xl sm:text-2xl font-semibold tracking-tight">📝 PROMPT BUILDER</h1>
               <p className="text-[10px] text-white/80 mt-1 uppercase tracking-wider">Create effective prompts for AI models</p>
             </div>
-            <span className="px-3 py-1 bg-white/20 backdrop-blur-md border-2 border-white/30 rounded-full text-[10px] font-semibold uppercase tracking-wider">
-              PRACTICAL TOOLS
-            </span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setActiveMode('templates')}
+                className={`px-4 py-2 text-[10px] font-semibold uppercase tracking-wider rounded-lg transition-all ${
+                  activeMode === 'templates'
+                    ? 'bg-white text-purple-600'
+                    : 'bg-white/20 hover:bg-white/30 text-white'
+                }`}
+              >
+                📚 Templates
+              </button>
+              <button
+                onClick={() => setActiveMode('ai-assistant')}
+                className={`px-4 py-2 text-[10px] font-semibold uppercase tracking-wider rounded-lg transition-all ${
+                  activeMode === 'ai-assistant'
+                    ? 'bg-white text-purple-600'
+                    : 'bg-white/20 hover:bg-white/30 text-white'
+                }`}
+              >
+                ✨ AI Assistant
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       <div className="flex-1 overflow-auto">
         <div className="mx-auto max-w-7xl px-4 py-6">
+          {activeMode === 'templates' ? (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Template Library */}
             <div className="lg:col-span-1">
@@ -336,6 +446,194 @@ export default function PromptBuilder() {
               </div>
             </div>
           </div>
+          ) : (
+            // AI Assistant Mode
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-white rounded-lg border-2 border-slate-300 p-6 mb-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-3xl">✨</span>
+                  <div>
+                    <h2 className="text-xl font-semibold text-slate-900 uppercase tracking-tight">AI Prompt Assistant</h2>
+                    <p className="text-[10px] text-slate-600 uppercase tracking-wider mt-1">Transform "Google search" prompts into expert prompts using CRIT</p>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mb-6">
+                  <h3 className="text-sm font-semibold text-blue-900 mb-2">How it works:</h3>
+                  <ol className="text-xs text-blue-800 space-y-1">
+                    <li>1. Paste your weak prompt below</li>
+                    <li>2. Get AI analysis of what's missing</li>
+                    <li>3. Receive an improved CRIT-based prompt</li>
+                    <li>4. Learn the pattern to do it yourself</li>
+                  </ol>
+                </div>
+
+                {/* Input Step */}
+                {currentStep === 'input' && (
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-900 mb-2 uppercase tracking-wider">
+                      Your Current Prompt
+                    </label>
+                    <textarea
+                      value={userPrompt}
+                      onChange={(e) => setUserPrompt(e.target.value)}
+                      placeholder='Example: "Explain machine learning"'
+                      className="w-full h-40 p-4 border-2 border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none"
+                    />
+                    <div className="mt-4 flex gap-3">
+                      <button
+                        onClick={() => callPromptAssistant('analyze')}
+                        disabled={!userPrompt || loading}
+                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-slate-300 disabled:cursor-not-allowed font-semibold text-[10px] uppercase tracking-wider transition-colors"
+                      >
+                        {loading ? 'ANALYZING...' : '🔍 ANALYZE MY PROMPT'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Analysis Step */}
+                {currentStep === 'analysis' && (
+                  <div>
+                    <div className="mb-4">
+                      <h3 className="text-sm font-semibold text-slate-900 mb-2 uppercase tracking-wider">Your Prompt:</h3>
+                      <div className="p-3 bg-slate-50 border-2 border-slate-300 rounded-lg text-sm text-slate-700">
+                        {userPrompt}
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <h3 className="text-sm font-semibold text-slate-900 mb-2 uppercase tracking-wider">📊 Analysis:</h3>
+                      <div className="p-4 bg-amber-50 border-l-4 border-amber-500 rounded text-sm text-slate-700 whitespace-pre-wrap">
+                        {analysis}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => callPromptAssistant('improve')}
+                        disabled={loading}
+                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-slate-300 disabled:cursor-not-allowed font-semibold text-[10px] uppercase tracking-wider transition-colors"
+                      >
+                        {loading ? 'IMPROVING...' : '✨ IMPROVE MY PROMPT'}
+                      </button>
+                      <button
+                        onClick={resetAssistant}
+                        className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 font-semibold text-[10px] uppercase tracking-wider transition-colors"
+                      >
+                        🔄 START OVER
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Improved Prompt Step */}
+                {currentStep === 'improved' && (
+                  <div>
+                    <div className="mb-4">
+                      <h3 className="text-sm font-semibold text-slate-900 mb-2 uppercase tracking-wider">Before (Your Prompt):</h3>
+                      <div className="p-3 bg-red-50 border-2 border-red-200 rounded-lg text-sm text-slate-700">
+                        {userPrompt}
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <h3 className="text-sm font-semibold text-slate-900 mb-2 uppercase tracking-wider">✨ After (Improved Prompt):</h3>
+                      <div className="p-4 bg-green-50 border-2 border-green-300 rounded-lg text-sm text-slate-700 whitespace-pre-wrap">
+                        {improvedPrompt}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <button
+                        onClick={copyImprovedPrompt}
+                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold text-[10px] uppercase tracking-wider transition-colors"
+                      >
+                        📋 COPY IMPROVED PROMPT
+                      </button>
+                      <button
+                        onClick={() => callPromptAssistant('explain')}
+                        disabled={loading}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed font-semibold text-[10px] uppercase tracking-wider transition-colors"
+                      >
+                        {loading ? 'GENERATING...' : '📚 EXPLAIN THE CHANGES'}
+                      </button>
+                      <button
+                        onClick={resetAssistant}
+                        className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 font-semibold text-[10px] uppercase tracking-wider transition-colors"
+                      >
+                        🔄 START OVER
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Explanation Step */}
+                {currentStep === 'explanation' && (
+                  <div>
+                    <div className="mb-4">
+                      <h3 className="text-sm font-semibold text-slate-900 mb-2 uppercase tracking-wider">Before:</h3>
+                      <div className="p-3 bg-red-50 border-2 border-red-200 rounded-lg text-sm text-slate-700">
+                        {userPrompt}
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <h3 className="text-sm font-semibold text-slate-900 mb-2 uppercase tracking-wider">After:</h3>
+                      <div className="p-3 bg-green-50 border-2 border-green-300 rounded-lg text-sm text-slate-700 whitespace-pre-wrap">
+                        {improvedPrompt}
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <h3 className="text-sm font-semibold text-slate-900 mb-2 uppercase tracking-wider">📖 What Changed & Why:</h3>
+                      <div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded text-sm text-slate-700 whitespace-pre-wrap">
+                        {explanation}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <button
+                        onClick={copyImprovedPrompt}
+                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold text-[10px] uppercase tracking-wider transition-colors"
+                      >
+                        📋 COPY IMPROVED PROMPT
+                      </button>
+                      <button
+                        onClick={resetAssistant}
+                        className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 font-semibold text-[10px] uppercase tracking-wider transition-colors"
+                      >
+                        🔄 TRY ANOTHER PROMPT
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* CRIT Framework Reference */}
+              <div className="bg-white rounded-lg border-2 border-slate-300 p-6">
+                <h3 className="text-lg font-semibold text-slate-900 uppercase tracking-tight mb-4">📚 CRIT Framework Reference</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-purple-50 border-l-4 border-purple-500 rounded">
+                    <h4 className="font-semibold text-purple-900 mb-2">C - Context</h4>
+                    <p className="text-xs text-purple-800">Provide rich background about your situation, goals, and constraints. The more strategic context, the better the output.</p>
+                  </div>
+                  <div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                    <h4 className="font-semibold text-blue-900 mb-2">R - Role</h4>
+                    <p className="text-xs text-blue-800">Assign AI a specific expert identity. Simulate any expert at your fingertips.</p>
+                  </div>
+                  <div className="p-4 bg-green-50 border-l-4 border-green-500 rounded">
+                    <h4 className="font-semibold text-green-900 mb-2">I - Interview</h4>
+                    <p className="text-xs text-green-800">Let AI ask YOU clarifying questions. This is the secret weapon that transforms results.</p>
+                  </div>
+                  <div className="p-4 bg-amber-50 border-l-4 border-amber-500 rounded">
+                    <h4 className="font-semibold text-amber-900 mb-2">T - Task</h4>
+                    <p className="text-xs text-amber-800">Define the specific output you need - decision framework, analysis, action plan.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
