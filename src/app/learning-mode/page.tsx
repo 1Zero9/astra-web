@@ -10,7 +10,7 @@ import {
 import { runGovernanceScan } from "@/lib/governance/aegf";
 import { getFullVersionInfo } from "@/lib/version";
 
-type FrameworkId = "CLEAR" | "RISEN" | "COAST" | "ILM" | "LeadershipTrack";
+type FrameworkId = "CLEAR" | "RISEN" | "COAST" | "ILM" | "LeadershipTrack" | "CRIT";
 
 type LayerMeta = {
   id: LayerId;
@@ -83,6 +83,12 @@ const FRAMEWORKS: Record<FrameworkId, FrameworkDefinition> = {
     name: "Leadership Track",
     summary: "Intent → Lens → Mindset → Method → Measure. Pair with ILM for Module 3.",
     cues: ["Intent", "Lens", "Mindset", "Method", "Measure"],
+  },
+  CRIT: {
+    id: "CRIT",
+    name: "CRIT Framework",
+    summary: "Transform AI into your Strategic Thought Partner through Context, Role, Interview, and Task.",
+    cues: ["Context", "Role", "Interview", "Task"],
   },
 };
 
@@ -341,6 +347,71 @@ const MODULES: ModuleDefinition[] = [
       "Which stakeholder signs off on this workflow?",
       "How often will you revisit the checklist for new risks?",
       "Where will you store artefacts for audit readiness?",
+    ],
+  },
+  {
+    id: "module-5",
+    title: "Module 5 · CRIT Framework for Strategic Leadership",
+    theme: "Transform AI into your Strategic Thought Partner for leadership challenges.",
+    objective:
+      "Master the CRIT Framework (Context, Role, Interview, Task) to escape operational overwhelm and think strategically with AI as your thought partner.",
+    output: "A strategic leadership prompt library using CRIT to drive faster, smarter decisions.",
+    frameworks: ["ILM", "CRIT", "LeadershipTrack"],
+    layers: {
+      spark: {
+        headline: "The leadership challenge: Think strategically, not operationally.",
+        instructions:
+          "Hook the leader with the tension between operational firefighting and strategic thinking. Position CRIT as the solution.",
+        prompt: "Describe the before/after transformation you want leaders to experience.",
+        placeholder:
+          "Example: \"Leaders are 3x more likely to drive AI adoption when they model it themselves. But most are drowning in operational tasks. CRIT helps you escape the overwhelm and become the Strategic Thought Partner your team needs.\"",
+      },
+      frame: {
+        headline: "Understanding the CRIT Framework.",
+        instructions:
+          "Introduce the four elements of CRIT: Context (rich background), Role (expert identity), Interview (AI asks YOU questions), Task (specific output needed).",
+        prompt: "Explain how CRIT transforms AI from response generator to thought partner.",
+        placeholder:
+          "Context: The more strategic context you provide, the more strategic the output.\nRole: Simulate any expert at your fingertips.\nInterview: Let AI ask YOU clarifying questions - the secret weapon.\nTask: Define the specific output you need - decision framework, strategic analysis, action plan.",
+      },
+      roleplay: {
+        headline: "Apply CRIT to a real leadership challenge.",
+        instructions:
+          "Choose a strategic challenge from the 7 Steps for AI Native Leadership (Set Vision, Model Curiosity, Coach Capability, Make it Safe, Connect to Purpose, Reward Progress, Review & Reflect).",
+        prompt: "Select one of the 7 Steps and write a CRIT prompt for it.",
+        placeholder:
+          "Example: Step 2 - Model Curiosity\n\nContext: I'm a senior leader at [company]. My team is hesitant to try AI. I want to model curiosity and learning.\n\nRole: Act as my personal AI leadership coach.\n\nInterview: Ask me 1-3 questions about my current AI use and what visible progress would look like.\n\nTask: Create a 90-day plan with weekly experiments I can share with my team.",
+      },
+      simulation: {
+        headline: "Practice CRIT with strategic scenarios.",
+        instructions:
+          "Design exercises for common leadership challenges: Future-Back Planning, Escaping Overwhelm, Strategic Decisions, 10x Thinking. Use Interview mode to let AI challenge assumptions.",
+        prompt: "Create a step-by-step CRIT refinement exercise.",
+        placeholder:
+          "Step 1: Write a weak prompt without CRIT.\nStep 2: Add Context - what's at stake?\nStep 3: Assign Role - who's the expert?\nStep 4: Enable Interview - let AI ask questions.\nStep 5: Define Task - what specific output?\nStep 6: Compare outputs and note strategic depth gains.",
+      },
+      reflection: {
+        headline: "Measure your strategic thinking shift.",
+        instructions:
+          "Help leaders assess how CRIT changed their thinking. Focus on time saved, decisions improved, and team impact.",
+        prompt: "What reflective questions should leaders ask themselves?",
+        placeholder:
+          "Example: \"How did the Interview mode expose blind spots? What percentage of your week is now strategic vs. operational? Which CRIT prompt had the biggest team impact? Rate your confidence in using AI as a thought partner (1-10).\"",
+      },
+      synthesis: {
+        headline: "Build your strategic leadership prompt library.",
+        instructions:
+          "Combine the CRIT framework with the 7 Steps into a reusable library. Include templates for Future-Back Planning, Pre-Mortem Analysis, 10x Thinking, and Psychological Safety.",
+        prompt: "Draft the final library structure with usage notes.",
+        placeholder:
+          "Library Structure:\n\n1. Future-Back Scenario Planning (CRIT)\n2. Horizon Scanning (CRIT)\n3. Escape Operational Overwhelm (CRIT)\n4. Strategic Decision Framework (CRIT)\n5. Pre-Mortem Analysis (CRIT)\n6. 10x Strategic Thinking (CRIT)\n7. AI Native Leadership Development (CRIT)\n8. Creating Psychological Safety (CRIT)\n\nUsage: Copy prompt → Paste into Claude/Copilot → Customize [bracketed sections] → Let AI become your Strategic Thought Partner.\n\nCredit: Generated with ASTRA Strategic Leadership Coach using CRIT Framework.",
+      },
+    },
+    reflectionPrompts: [
+      "Which CRIT element (Context, Role, Interview, Task) created the biggest breakthrough?",
+      "How will you share your CRIT learning journey with your team?",
+      "What's the one strategic challenge you'll tackle this week using CRIT?",
+      "Which of the 7 Steps for AI Native Leadership needs your focus next?",
     ],
   },
 ];

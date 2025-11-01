@@ -8,7 +8,7 @@ type PromptTemplate = {
   name: string;
   description: string;
   template: string;
-  category: 'learning' | 'meta' | 'task' | 'creative';
+  category: 'learning' | 'meta' | 'task' | 'creative' | 'leadership';
 };
 
 const templates: PromptTemplate[] = [
@@ -53,13 +53,98 @@ const templates: PromptTemplate[] = [
     description: 'Get expert perspective on topics',
     template: 'You are a [ROLE/EXPERT]. Provide your expert perspective on [TOPIC]. Consider:\n- Your specialized knowledge in this field\n- Industry best practices\n- Real-world applications\n- Potential challenges and solutions',
     category: 'task'
+  },
+  // Strategic Leadership Prompts
+  {
+    id: 'future-back',
+    name: 'Future-Back Scenario Planning',
+    description: 'Think beyond quarterly targets and develop 3-year strategic vision',
+    template: 'Context: I lead [team/practice area]. We\'re navigating [specific challenge/opportunity]. Our current approach is [brief description]. The stakes are [what matters most].\n\nRole: Act as my strategic thought partner and scenario planning expert. Help me think future-back and challenge my assumptions.\n\nInterview: Ask me one question at a time, up to 3 questions, to understand what success truly means and what constraints matter most.\n\nTask: After your questions, help me:\n1. Paint a vivid picture of wild success 3 years from now\n2. Work backwards to identify 3-5 pivotal decisions that made it possible\n3. Identify weak signals we should track today\n4. Define capabilities we must build now\n5. Name the biggest risk of our current trajectory',
+    category: 'leadership'
+  },
+  {
+    id: 'horizon-scanning',
+    name: 'Horizon Scanning',
+    description: 'Ensure you\'re not blindsided by market shifts and changes',
+    template: 'Context: I\'m responsible for [area/practice]. We\'re currently [brief status]. I need to ensure we\'re not blindsided by changes.\n\nRole: Act as my horizon scanning expert and strategic foresight advisor.\n\nInterview: Ask me one question at a time, up to 3 questions, to understand what specific areas or threats keep me up at night.\n\nTask: Help me identify and prioritise:\n\nNear Horizon (0-12 months): What developments will impact us in the next year? What should we start experimenting with now?\n\nMid Horizon (1-3 years): What shifts could reshape our business model? What conversations should we start having?\n\nFar Horizon (3-5 years): What discontinuous changes could fundamentally alter our industry? What capabilities should we be building?\n\nFor each horizon: What we should DO this quarter, WHO to talk to, and what METRICS would tell us we\'re on track.',
+    category: 'leadership'
+  },
+  {
+    id: 'operational-to-strategic',
+    name: 'Escape Operational Overwhelm',
+    description: 'Shift from tactical firefighting to strategic leadership',
+    template: 'Context: I\'m spending most of my time on [list top 3-5 time consumers]. I know I should be focusing on [strategic priorities] but can\'t create the space.\n\nRole: Act as my executive coach and strategic thinking partner. You\'ve helped countless leaders escape operational overwhelm.\n\nInterview: Ask me one question at a time, up to 3 questions, to understand what I\'m actually responsible for versus what I\'ve taken on by default.\n\nTask: Help me:\n1. Distinguish what only I can do (strategic) vs. what others should do (tactical)\n2. Identify 1-3 strategic initiatives that would create 10x more value\n3. Design a plan to delegate, automate, or eliminate 50% of my operational load\n4. Create a "strategic thinking time" practice that sticks\n5. Define success if I successfully shift from operational to strategic\n\nChallenge my assumptions about what "only I can do." Be tough on me.',
+    category: 'leadership'
+  },
+  {
+    id: '80-20-focus',
+    name: '80/20 Strategic Focus',
+    description: 'Apply ruthless prioritisation to your workload',
+    template: 'Context: My role is [job title and scope]. Here are all my current priorities: [list everything on your plate].\n\nRole: Act as a ruthless strategic advisor and efficiency expert.\n\nInterview: Ask me one question at a time, up to 3 questions, to understand what I\'m optimising for - growth, profitability, innovation, team development, etc.\n\nTask: Apply 80/20 thinking to identify:\n1. Which 20% of activities will drive 80% of strategic outcomes?\n2. What should I STOP doing immediately?\n3. What should I delegate or automate?\n4. What should I do less of but still maintain?\n5. What should I double-down on with focused intensity?\n\nFor each recommendation, explain WHY strategically this creates leverage.',
+    category: 'leadership'
+  },
+  {
+    id: 'strategic-decision',
+    name: 'Strategic Decision Framework',
+    description: 'Pressure-test significant decisions before committing',
+    template: 'Context: I\'m facing a significant decision about [describe decision]. Here\'s what\'s at stake: [impact, constraints, timeline]. Here\'s my current thinking: [if you have one].\n\nRole: Act as my strategic decision advisor and devil\'s advocate. Help me make a faster, smarter decision by challenging assumptions and exposing blind spots.\n\nInterview: Ask me one question at a time, up to 3 questions, to understand what I\'m really optimising for and what I might be missing.\n\nTask: Pressure-test this decision:\n1. Frame: Am I solving the right problem? Alternative framings?\n2. Alternatives: Generate 3-5 genuinely different options\n3. Information: What critical information am I missing? What assumptions need validation?\n4. Values & Trade-offs: What does "success" really look like? What am I willing to sacrifice?\n5. Reasoning: What must be true for this to be right? What would prove me wrong?\n6. Commitment Test: 1-10 confidence? What would increase it to 9+?\n\nBe intellectually honest and challenge weak thinking.',
+    category: 'leadership'
+  },
+  {
+    id: 'pre-mortem',
+    name: 'Pre-Mortem Analysis',
+    description: 'Identify potential failure points before execution begins',
+    template: 'Context: I\'m about to make a decision to [describe decision/initiative]. Timeline: [when]. Success would mean [specific outcomes]. Current team/resources: [brief description].\n\nRole: Act as my strategic risk advisor. You\'ve seen hundreds of initiatives fail. Be brutally honest about what could go wrong.\n\nInterview: Ask me one question at a time, up to 3 questions, about what I\'m most worried about or where I have least clarity.\n\nTask: Pre-mortem exercise:\n1. The Failure Memo: It\'s 12 months from now. This failed significantly. Write the memo explaining what went wrong.\n2. Early Warning Signs: What signals did we miss or ignore in months 1-3?\n3. False Assumptions: Which assumptions turned out dangerously wrong?\n4. External Shocks: What external factors did we underestimate?\n5. Mitigation Plan: Design early detection systems, risk mitigation tactics, reversibility mechanisms.\n\nDon\'t hold back. Prevent this failure before it happens.',
+    category: 'leadership'
+  },
+  {
+    id: '10x-thinking',
+    name: '10x Strategic Thinking',
+    description: 'Break through incremental thinking to achieve breakthroughs',
+    template: 'Context: Our current approach to [specific challenge/opportunity] is [describe current state]. We\'re trying to improve by [incremental improvements].\n\nRole: Act as a provocative strategic advisor who challenges incremental thinking. Help leaders think 10x, not 10%.\n\nInterview: Ask me one question at a time, up to 3 questions, to understand what constraints I\'m accepting that I shouldn\'t be.\n\nTask: Challenge me to think 10x bigger:\n1. Reframe: If we had to achieve 10x the result with same resources, what completely different approach would we need?\n2. Constraint Breaking: What constraints am I treating as fixed that are actually just assumptions?\n3. Second-Order Effects: What becomes possible if we achieve 10x that\'s impossible with incremental gains?\n4. Adjacent Impossible: What seems impossible now but would become obvious once we solve this?\n5. Forcing Function: What experiment could we run in 30 days to test if 10x thinking is viable?\n\nPush me out of incremental thinking. Create breakthroughs, not improvements.',
+    category: 'leadership'
+  },
+  {
+    id: 'ai-native-leadership',
+    name: 'AI Native Leadership Development',
+    description: 'Develop your own AI capabilities and model the behaviour',
+    template: 'Context: My role is [describe role and scope]. Currently, I use AI for [what you do now, if anything]. I want to demonstrate AI Native leadership to my team. Time I can commit: [realistic time per week].\n\nRole: Act as my personal AI leadership coach and strategic development advisor.\n\nInterview: Ask me one question at a time, up to 3 questions, to understand my current mindset about AI, where I feel stuck, and what would constitute visible progress.\n\nTask: Create a 90-day AI Native leadership development plan:\n1. Strategic Use Cases: 3-5 specific ways I can use AI as a Strategic Thought Partner\n2. Weekly Experiments: Design weekly practice using AI for strategic thinking, sharing learning visibly\n3. Visible Learning Journey: Make my AI learning visible without seeming performative\n4. Strategic Conversations: What conversations should I have with my team about AI as thought partner vs. automation?\n5. Success Metrics: Define 3-5 observable behaviours showing progress\n6. Common Pitfalls: What mistakes do leaders make? How do I avoid them?\n\nFocus on strategic leadership, not technical skills.',
+    category: 'leadership'
+  },
+  {
+    id: 'psychological-safety',
+    name: 'Creating Psychological Safety',
+    description: 'Make it safe for your team to experiment and try new things',
+    template: 'Context: My team is [describe team]. Currently, when it comes to trying new things/AI/innovation, I observe [describe behaviours - hesitancy, fear of failure, etc.]. Our transformation depends on experimentation.\n\nRole: Act as an organisational psychologist and culture change expert specialising in psychological safety.\n\nInterview: Ask me one question at a time, up to 3 questions, to understand what\'s driving the hesitancy and what I\'m already doing well.\n\nTask: Design approach to make experimentation safe:\n1. Role Modelling: What specific experiments should I visibly try, including sharing failures? Give 3 concrete examples.\n2. Language Patterns: Provide 5 specific phrases to normalise learning from failure.\n3. Recognition Systems: How can I celebrate attempts and learning, not just successes? Design practical mechanisms.\n4. Structural Signals: What team rituals would signal "it\'s safe to experiment here"?\n5. Personal Story: Help me craft a 2-minute story about when I tried something that didn\'t work and why that was valuable.\n6. Failure Resume: Should I create and share one? If yes, help me draft it.\n\nRemember: People do what leaders do, not what leaders say.',
+    category: 'leadership'
+  },
+  {
+    id: 'quick-strategic-checkin',
+    name: '10-Minute Strategic Check-In',
+    description: 'Rapid strategic clarity for busy leaders',
+    template: 'Context: [Specific challenge/opportunity in 2-3 sentences]\n\nRole: Act as my strategic advisor for a rapid assessment.\n\nTask: In 10 minutes or less, tell me:\n1. The 3 most important questions I should be asking right now?\n2. The one decision I can make this week that will have the biggest strategic impact?\n3. The one thing I should stop doing immediately to create space for what matters most?\n\nBe direct. No fluff.',
+    category: 'leadership'
+  },
+  {
+    id: 'tactical-filter',
+    name: 'Strategic vs Tactical Filter',
+    description: 'Triage your to-do list into clear categories',
+    template: 'Context: Here\'s my to-do list for this week: [list everything]\n\nRole: Act as my ruthless prioritisation coach.\n\nTask: Categorise each item:\n- STRATEGIC (only I can do this, drives growth/transformation)\n- TACTICAL (someone else should do this)\n- ELIMINATE (shouldn\'t be done at all)\n\nFor STRATEGIC items, force-rank them. For TACTICAL items, tell me who should own them. Be brutal about what to eliminate.',
+    category: 'leadership'
+  },
+  {
+    id: 'meeting-prep',
+    name: 'Meeting Prep Accelerator',
+    description: 'Prepare strategically for critical meetings in under 10 minutes',
+    template: 'Context: Meeting about [topic] with [stakeholders] in [timeframe]. Current situation: [1-2 sentences].\n\nRole: Act as my meeting strategist.\n\nInterview: Ask me 1 question to clarify the real goal of this meeting.\n\nTask: Help me prepare:\n1. What\'s the ONE key message I need to land?\n2. What 3 questions should I be ready to answer?\n3. What decision or commitment should we walk out with?\n4. What\'s the biggest risk of this meeting being unproductive, and how do I prevent it?\n\nGive me a crisp 3-minute opening that frames the discussion for success.',
+    category: 'leadership'
   }
 ];
 
 export default function PromptBuilder() {
   const [prompt, setPrompt] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState<PromptTemplate | null>(null);
-  const [activeCategory, setActiveCategory] = useState<'all' | 'learning' | 'meta' | 'task' | 'creative'>('all');
+  const [activeCategory, setActiveCategory] = useState<'all' | 'learning' | 'meta' | 'task' | 'creative' | 'leadership'>('all');
   const [showPreview, setShowPreview] = useState(false);
 
   const applyTemplate = (template: PromptTemplate) => {
@@ -103,7 +188,7 @@ export default function PromptBuilder() {
 
                 {/* Category Filter */}
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {(['all', 'learning', 'meta', 'task'] as const).map(cat => (
+                  {(['all', 'learning', 'meta', 'task', 'leadership'] as const).map(cat => (
                     <button
                       key={cat}
                       onClick={() => setActiveCategory(cat)}
@@ -137,6 +222,7 @@ export default function PromptBuilder() {
                           template.category === 'learning' ? 'bg-blue-100 text-blue-700' :
                           template.category === 'meta' ? 'bg-purple-100 text-purple-700' :
                           template.category === 'task' ? 'bg-green-100 text-green-700' :
+                          template.category === 'leadership' ? 'bg-teal-100 text-teal-700' :
                           'bg-amber-100 text-amber-700'
                         }`}>
                           {template.category.toUpperCase()}

@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Innovative Leader - Version 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .hero-header {
+            background: linear-gradient(135deg, #0a2e3e 0%, #0d3a4d 100%);
+            padding: 80px 40px 60px;
+            text-align: center;
+            color: white;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            font-size: 2.2rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: #17BBB4;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 2rem;
+            color: #17BBB4;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .section-spacing {
+            margin-bottom: 80px;
+        }
+
+        .quick-links-section {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 60px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border-left: 6px solid #17BBB4;
+        }
+
+        .quick-links-section h3 {
+            color: #0a2e3e;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-links-grid a {
+            background: linear-gradient(135deg, rgba(23, 187, 180, 0.1), rgba(23, 187, 180, 0.05));
+            color: #0a2e3e;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .quick-links-grid a:hover {
+            background: #17BBB4;
+            color: white;
+            border-color: #17BBB4;
+            transform: translateY(-2px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 0 0 16px 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+        }
+
+        .stat-card-top {
+            background: #17BBB4;
+            height: 10px;
+            border-radius: 50px 50px 0 0;
+        }
+
+        .stat-card-content {
+            padding: 50px 40px;
+        }
+
+        .stat-number {
+            font-size: 5rem;
+            font-weight: 800;
+            color: #17BBB4;
+            margin-bottom: 24px;
+            line-height: 1;
+        }
+
+        .stat-text {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: #444;
+        }
+
+        .stat-source {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 12px;
+            font-style: italic;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #0a2e3e 0%, #0d3a4d 100%);
+            color: white;
+            padding: 50px 40px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            font-size: 1.4rem;
+            color: #17BBB4;
+            font-weight: 300;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 0 0 16px 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .step-card-top {
+            background: #17BBB4;
+            height: 8px;
+        }
+
+        .step-card-content {
+            padding: 35px 30px;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #17BBB4;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 44px;
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0a2e3e;
+            margin-bottom: 12px;
+        }
+
+        .step-description {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .prompt-card {
+            background: white;
+            border-radius: 0 0 16px 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            margin-bottom: 35px;
+            transition: all 0.3s ease;
+        }
+
+        .prompt-card:hover {
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+        }
+
+        .prompt-card-top {
+            background: #17BBB4;
+            height: 10px;
+            border-radius: 50px 50px 0 0;
+        }
+
+        .prompt-card-header {
+            background: #0a2e3e;
+            color: white;
+            padding: 32px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .prompt-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .copy-btn {
+            background: #17BBB4;
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(23, 187, 180, 0.3);
+        }
+
+        .copy-btn:hover {
+            background: #15a8a1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(23, 187, 180, 0.4);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .copy-btn.copied {
+            background: #28a745;
+        }
+
+        .prompt-description {
+            padding: 40px;
+            color: #333;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .prompt-description strong {
+            color: #0a2e3e;
+            font-weight: 700;
+        }
+
+        .crit-section {
+            background: white;
+            border-radius: 0 0 16px 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            margin-bottom: 80px;
+        }
+
+        .crit-section-top {
+            background: #17BBB4;
+            height: 10px;
+            border-radius: 50px 50px 0 0;
+        }
+
+        .crit-content {
+            padding: 60px 50px;
+        }
+
+        .crit-intro {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .crit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .crit-item {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .crit-letter {
+            display: inline-block;
+            background: #17BBB4;
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 80px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(23, 187, 180, 0.3);
+        }
+
+        .crit-item h3 {
+            font-size: 1.5rem;
+            color: #0a2e3e;
+            margin-bottom: 14px;
+            font-weight: 700;
+        }
+
+        .crit-item p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .why-section {
+            background: white;
+            border-radius: 0 0 16px 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            margin-bottom: 80px;
+        }
+
+        .why-section-top {
+            background: #17BBB4;
+            height: 10px;
+            border-radius: 50px 50px 0 0;
+        }
+
+        .why-content {
+            padding: 60px 50px;
+        }
+
+        .why-content h2 {
+            font-size: 2.5rem;
+            color: #0a2e3e;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        .why-content p {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(23, 187, 180, 0.12), rgba(23, 187, 180, 0.06));
+            border-left: 6px solid #17BBB4;
+            padding: 32px;
+            margin: 40px 0;
+            border-radius: 12px;
+        }
+
+        .highlight-box h3 {
+            color: #0a2e3e;
+            margin-bottom: 18px;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .highlight-box p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: #28a745;
+            color: white;
+            padding: 20px 32px;
+            border-radius: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #0a2e3e 0%, #0d3a4d 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 40px;
+            margin-top: 80px;
+        }
+
+        .footer-logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: #17BBB4;
+            margin-bottom: 24px;
+        }
+
+        .footer p {
+            opacity: 0.85;
+            font-size: 1.1rem;
+            margin: 8px 0;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding: 50px 30px;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.6rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                position: static;
+                margin-bottom: 30px;
+                font-size: 1.8rem;
+            }
+
+            .hero-header {
+                padding: 50px 20px 40px;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.3rem;
+            }
+
+            .container {
+                padding: 40px 20px;
+            }
+
+            .stat-number {
+                font-size: 3.5rem;
+            }
+
+            .section-header {
+                padding: 40px 30px;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .section-header p {
+                font-size: 1.1rem;
+            }
+
+            .prompt-card-header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 28px 30px;
+            }
+
+            .prompt-title {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            .copy-btn {
+                width: 100%;
+            }
+
+            .crit-content {
+                padding: 40px 30px;
+            }
+
+            .crit-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .why-content {
+                padding: 40px 30px;
+            }
+
+            .section-spacing {
+                margin-bottom: 60px;
+            }
+
+            .quick-links-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-links-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-header">
+        <div class="logo">VERSION 1</div>
+        <h1 class="hero-title">The Innovative Leader</h1>
+        <p class="hero-subtitle">It's in Our Hands to Become AI Native Exemplars</p>
+    </div>
+
+    <div class="container">
+        <!-- Quick Links Navigation -->
+        <div class="quick-links-section">
+            <h3>Quick Links</h3>
+            <div class="quick-links-grid">
+                <a href="#why-matters">Why This Matters</a>
+                <a href="#seven-steps">The 7 Steps</a>
+                <a href="#crit-framework">CRIT Framework</a>
+                <a href="#strategic-thinking">Strategic Thinking</a>
+                <a href="#operational-overwhelm">Escaping Overwhelm</a>
+                <a href="#decisions">Faster Decisions</a>
+                <a href="#role-modelling">Role Modelling</a>
+                <a href="#quick-start">Quick-Start Prompts</a>
+            </div>
+        </div>
+
+        <div class="stats-grid section-spacing">
+            <div class="stat-card">
+                <div class="stat-card-top"></div>
+                <div class="stat-card-content">
+                    <div class="stat-number">3x</div>
+                    <p class="stat-text">Employees are 3x more likely to feel prepared for AI when leaders communicate a clear plan</p>
+                    <p class="stat-source">Source: Microsoft Work Trend Index, 2024</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-top"></div>
+                <div class="stat-card-content">
+                    <div class="stat-number">70%</div>
+                    <p class="stat-text">Of team engagement variance is determined solely by the manager</p>
+                    <p class="stat-source">Source: Gallup State of the Global Workplace, 2023</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-top"></div>
+                <div class="stat-card-content">
+                    <div class="stat-number">2x</div>
+                    <p class="stat-text">Leaders who model AI use are twice as likely to drive adoption than those who don't</p>
+                    <p class="stat-source">Source: McKinsey Global Survey on AI, 2024</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="why-section section-spacing">
+            <div class="why-section-top"></div>
+            <div class="why-content" id="why-matters">
+                <h2>Why This Playbook Matters</h2>
+                <p><strong>The Challenge:</strong> The difference between growing your business and going out of business is your ability to think strategically. But most leaders are drowning in operational tasks whilst competitors gain advantage with AI.</p>
+                
+                <p><strong>The Opportunity:</strong> AI isn't just a productivity tool - it's your Strategic Thought Partner. This playbook provides battle-tested prompts that help you escape operational overwhelm, make faster and smarter decisions, and galvanise innovation across your teams.</p>
+
+                <div class="highlight-box">
+                    <h3>How to Use This Playbook</h3>
+                    <p>Click the <strong>"Copy Prompt"</strong> button on any prompt below, then paste it into Claude or Microsoft Copilot. Customise the [bracketed sections] with your context and let AI become your strategic thinking partner.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 id="seven-steps">The 7 Steps - How Leaders Make AI Native Real</h2>
+            <p>Your actions, curiosity, and openness set the standard for what's possible</p>
+        </div>
+
+        <div class="steps-grid section-spacing">
+            <div class="step-card">
+                <div class="step-card-top"></div>
+                <div class="step-card-content">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Set the Vision</h3>
+                    <p class="step-description">Articulate the "why" from the top - connect AI Native to our purpose and customer promise.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-card-top"></div>
+                <div class="step-card-content">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Model Curiosity</h3>
+                    <p class="step-description">Demonstrate your own learning and experimentation. When you explore, others follow.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-card-top"></div>
+                <div class="step-card-content">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Coach Capability</h3>
+                    <p class="step-description">Employees look to you for guidance on their role and growth. Make capability conversations regular and personal.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-card-top"></div>
+                <div class="step-card-content">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Make it Safe to Try</h3>
+                    <p class="step-description">Celebrate experiments, not just successes. "Progress comes from learning - every attempt counts."</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-card-top"></div>
+                <div class="step-card-content">
+                    <div class="step-number">5</div>
+                    <h3 class="step-title">Connect to Purpose</h3>
+                    <p class="step-description">Show teams how their work matters to our customers and our future.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-card-top"></div>
+                <div class="step-card-content">
+                    <div class="step-number">6</div>
+                    <h3 class="step-title">Reward Progress</h3>
+                    <p class="step-description">Publicly recognise curiosity, learning, and AI adoption - emails, all-hands, and team meetings.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-card-top"></div>
+                <div class="step-card-content">
+                    <div class="step-number">7</div>
+                    <h3 class="step-title">Review and Reflect</h3>
+                    <p class="step-description">Regularly check in - what's working, where are we stuck, what can we do differently?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 id="crit-framework">The CRIT Framework</h2>
+            <p>Your Foundation for Strategic Prompting</p>
+        </div>
+
+        <div class="crit-section section-spacing">
+            <div class="crit-section-top"></div>
+            <div class="crit-content">
+                <p class="crit-intro">The most effective prompts follow a proven structure. Master CRIT, and you'll transform AI from a simple tool into your Strategic Thought Partner.</p>
+                
+                <div class="crit-grid">
+                    <div class="crit-item">
+                        <div class="crit-letter">C</div>
+                        <h3>Context</h3>
+                        <p>Give rich background - what's the situation, constraints, stakeholders? The more strategic context you provide, the more strategic the output.</p>
+                    </div>
+
+                    <div class="crit-item">
+                        <div class="crit-letter">R</div>
+                        <h3>Role</h3>
+                        <p>Assign AI a specific expert identity - "Act as my strategic advisor." You can simulate any expert at your fingertips.</p>
+                    </div>
+
+                    <div class="crit-item">
+                        <div class="crit-letter">I</div>
+                        <h3>Interview</h3>
+                        <p>Let AI ask YOU clarifying questions - "Ask me 1-3 questions to gain deeper context." This is the secret weapon.</p>
+                    </div>
+
+                    <div class="crit-item">
+                        <div class="crit-letter">T</div>
+                        <h3>Task</h3>
+                        <p>Define the specific output you need - decision framework, strategic analysis, action plan.</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h3>Why CRIT Works</h3>
+                    <p>It transforms AI from a response generator into a Strategic Thought Partner that challenges your thinking, surfaces blind spots, and helps you escape operational overwhelm to focus on strategy.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 id="strategic-thinking">Strategic Thinking & Future-Back Planning</h2>
+            <p>Think from the future backwards</p>
+        </div>
+
+        <div class="section-spacing">
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">Future-Back Scenario Planning</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt1')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> You need to think beyond quarterly targets and develop a 3-year strategic vision that identifies the pivotal decisions required today.
+                    <br><br>
+                    <strong>What you'll get:</strong> A vivid picture of future success, the critical path to achieve it, weak signals to watch, and capabilities to build now.
+                </div>
+            </div>
+
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">Horizon Scanning for Strategic Foresight</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt2')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> You need to ensure your team isn't blindsided by market shifts, technological changes, or competitive moves.
+                    <br><br>
+                    <strong>What you'll get:</strong> Near, mid, and far horizon analysis with specific actions, key conversations, and metrics for each timeframe.
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 id="operational-overwhelm">Escaping Operational Overwhelm</h2>
+            <p>Shift from tactical execution to strategic leadership</p>
+        </div>
+
+        <div class="section-spacing">
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">From Operational to Strategic Thinking</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt3')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> You're drowning in day-to-day firefighting and can't find time for strategic thinking.
+                    <br><br>
+                    <strong>What you'll get:</strong> Clear distinction between strategic vs tactical work, a plan to delegate/eliminate 50% of your operational load, and a sustainable strategic thinking practice.
+                </div>
+            </div>
+
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">The 80/20 Strategic Focus</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt4')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> Your to-do list is overwhelming and you need ruthless prioritisation.
+                    <br><br>
+                    <strong>What you'll get:</strong> Clear categorisation of what's strategic vs tactical vs should be eliminated, with reasoning for why each creates leverage.
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 id="decisions">Making Faster, Smarter Decisions</h2>
+            <p>Collapse the time from data to decision</p>
+        </div>
+
+        <div class="section-spacing">
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">Strategic Decision Framework</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt5')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> You're facing a significant decision and need to pressure-test your thinking before committing.
+                    <br><br>
+                    <strong>What you'll get:</strong> Alternative framings, genuinely different options, blind spot analysis, and confidence assessment.
+                </div>
+            </div>
+
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">Pre-Mortem Analysis</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt6')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> You've made a decision and want to identify potential failure points before execution begins.
+                    <br><br>
+                    <strong>What you'll get:</strong> Detailed failure scenario, early warning signs, false assumptions exposed, and complete mitigation plan.
+                </div>
+            </div>
+
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">10x Strategic Thinking</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt7')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> Your team is stuck in incremental thinking and you need breakthrough ideas.
+                    <br><br>
+                    <strong>What you'll get:</strong> Reframed challenge requiring 10x results, constraint-breaking analysis, and 30-day experiment.
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 id="role-modelling">Role Modelling AI Native Leadership</h2>
+            <p>Your team watches everything you do</p>
+        </div>
+
+        <div class="section-spacing">
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">Personal AI Native Leadership Development</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt8')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> You want to develop your own AI capabilities and visibly model the behaviour for your team.
+                    <br><br>
+                    <strong>What you'll get:</strong> 90-day plan with strategic use cases, weekly experiments, visible learning journey design, and success metrics.
+                </div>
+            </div>
+
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">Creating Psychological Safety</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt9')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> Your team is hesitant to experiment with AI and you need to create an environment where it's safe to try.
+                    <br><br>
+                    <strong>What you'll get:</strong> Specific experiments to role model, language patterns to normalise failure, and recognition systems.
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 id="quick-start">Quick-Start Prompts for Busy Leaders</h2>
+            <p>Strategic clarity in minutes</p>
+        </div>
+
+        <div class="section-spacing">
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">10-Minute Strategic Check-In</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt10')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> You have 10 minutes and need rapid strategic clarity.
+                    <br><br>
+                    <strong>What you'll get:</strong> The 3 most important questions, one highest-impact decision, and what to stop immediately.
+                </div>
+            </div>
+
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">Strategic vs Tactical Filter</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt11')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> You need to triage your to-do list into categories.
+                    <br><br>
+                    <strong>What you'll get:</strong> Every item categorised with force-ranked priorities and delegation recommendations.
+                </div>
+            </div>
+
+            <div class="prompt-card">
+                <div class="prompt-card-top"></div>
+                <div class="prompt-card-header">
+                    <span class="prompt-title">Meeting Prep Accelerator</span>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'prompt12')">Copy Prompt</button>
+                </div>
+                <div class="prompt-description">
+                    <strong>Use this when:</strong> You have a critical meeting and need to prepare strategically in under 10 minutes.
+                    <br><br>
+                    <strong>What you'll get:</strong> Key message to land, 3 questions to prepare for, desired outcome, and 3-minute opening script.
+                </div>
+            </div>
+        </div>
+
+        <div class="why-section">
+            <div class="why-section-top"></div>
+            <div class="why-content">
+                <h2>You Are the Catalyst for Innovation at Version 1</h2>
+                <p>The difference between growing your business and going out of business is your ability to think strategically. These prompts help you:</p>
+                
+                <div class="highlight-box">
+                    <p style="line-height: 2;">
+                    ✓ Escape operational overwhelm and focus on high-leverage strategic work<br>
+                    ✓ Make faster, smarter decisions with AI as your thought partner<br>
+                    ✓ Model AI Native leadership that galvanises your entire team<br>
+                    ✓ Think 10x, not 10% - create breakthroughs, not just improvements
+                    </p>
+                </div>
+
+                <p style="font-size: 1.4rem; font-weight: 700; text-align: center; margin-top: 40px; color: #0a2e3e;">Your Next Step: Choose ONE prompt above and use it today. Share what you learn.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-logo">VERSION 1</div>
+        <p>AI Native Leadership: Every Team Member AI-Empowered</p>
+        <p style="margin-top: 12px; opacity: 0.7;">Framework inspired by "The AI-Driven Leader" by Geoff Woods</p>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        const prompts = {
+            prompt1: `Context: I lead [team/practice area] at Version 1. We're navigating [specific challenge/opportunity]. Our current approach is [brief description]. The stakes are [what matters most - revenue, client retention, competitive position, etc.].
+
+Role: Act as my strategic thought partner and scenario planning expert. Your job is to help me think future-back and challenge my assumptions about what's possible.
+
+Interview: Before we begin scenario planning, ask me one question at a time, up to 3 questions, to understand what success truly means for us and what constraints matter most.
+
+Task: After your questions, help me:
+1. Paint a vivid picture of what wild success looks like 3 years from now
+2. Work backwards to identify the 3-5 pivotal decisions that made it possible  
+3. Identify weak signals we should be tracking today
+4. Define capabilities we must build now
+5. Name the biggest risk of our current trajectory`,
+
+            prompt2: `Context: I'm responsible for [area/practice] at Version 1. We're currently [brief status]. I need to ensure we're not blindsided by changes in our market/technology/client needs.
+
+Role: Act as my horizon scanning expert and strategic foresight advisor.
+
+Interview: Ask me one question at a time, up to 3 questions, to understand what specific areas or threats keep me up at night.
+
+Task: Help me identify and prioritise:
+
+Near Horizon (0-12 months): What AI/tech developments will impact how we deliver services to clients in the next year? What should we start experimenting with now?
+
+Mid Horizon (1-3 years): What shifts in client expectations, competitive landscape, or technology could reshape our business model? What conversations should we start having?
+
+Far Horizon (3-5 years): What discontinuous changes (regulatory, technological, economic) could fundamentally alter our industry? What capabilities should we be building?
+
+For each horizon, be specific about: What we should DO this quarter, WHO we should be talking to, and what METRICS would tell us we're on track.`,
+
+            prompt3: `Context: I'm spending most of my time on [list your top 3-5 time consumers - meetings, firefighting, reporting, etc.]. I know I should be focusing on [strategic priorities] but I can't seem to create the space.
+
+Role: Act as my executive coach and strategic thinking partner. You've helped countless leaders escape operational overwhelm and focus on what truly drives growth.
+
+Interview: Ask me one question at a time, up to 3 questions, to understand what I'm actually responsible for versus what I've taken on by default.
+
+Task: Help me:
+1. Distinguish between what only I can do (strategic) vs. what others should do (tactical)
+2. Identify the 1-3 strategic initiatives that would create 10x more value than my current activities
+3. Design a plan to delegate, automate, or eliminate 50% of my current operational load
+4. Create a "strategic thinking time" practice that actually sticks
+5. Define what success looks like if I successfully shift from operational to strategic
+
+Challenge my assumptions about what "only I can do." Be tough on me.`,
+
+            prompt4: `Context: My role is [job title and scope]. Here are all my current priorities and initiatives: [list everything on your plate].
+
+Role: Act as a ruthless strategic advisor and efficiency expert.
+
+Interview: Ask me one question at a time, up to 3 questions, to understand what I'm optimising for - growth, profitability, innovation, team development, etc.
+
+Task: Apply 80/20 thinking to help me identify:
+1. Which 20% of these activities will drive 80% of our strategic outcomes?
+2. What should I STOP doing immediately?
+3. What should I delegate or automate?
+4. What should I do less of but still maintain?  
+5. What should I double-down on with focused intensity?
+
+For each recommendation, explain WHY strategically this creates leverage for Version 1's AI Native transformation.`,
+
+            prompt5: `Context: I'm facing a significant decision about [describe decision]. Here's what's at stake: [impact, constraints, timeline]. Here's what I think the answer is: [your current thinking, if you have one].
+
+Role: Act as my strategic decision advisor and devil's advocate. Your job is to help me make a faster, smarter decision by challenging my assumptions and exposing blind spots.
+
+Interview: Ask me one question at a time, up to 3 questions, to understand what I'm really optimising for and what I might be missing.
+
+Task: After your questions, pressure-test this decision through these lenses:
+
+1. Frame: Am I solving the right problem? What alternative ways could I frame this?
+2. Alternatives: Generate 3-5 genuinely different options (not variations)
+3. Information: What critical information am I missing? What assumptions need validation?
+4. Values & Trade-offs: What does "success" really look like? What am I willing to sacrifice?
+5. Reasoning: For my preferred option, what must be true for this to be right? What would prove me wrong?
+6. Commitment Test: On a scale of 1-10, how confident am I? What would increase that confidence to 9+?
+
+Be intellectually honest and challenge me where my thinking is weak.`,
+
+            prompt6: `Context: I'm about to make a decision to [describe the decision/initiative]. Timeline is [when]. Success would mean [specific outcomes]. Current team/resources: [brief description].
+
+Role: Act as my strategic risk advisor. You've seen hundreds of initiatives fail and know the patterns. Be brutally honest about what could go wrong.
+
+Interview: Ask me one question at a time, up to 3 questions, about what I'm most worried about or where I have the least clarity.
+
+Task: Let's do a pre-mortem exercise:
+
+1. The Failure Memo: It's 12 months from now. This initiative has failed significantly. Write the memo explaining what went wrong.
+2. Early Warning Signs: What signals did we miss or ignore in months 1-3?
+3. False Assumptions: Which of our assumptions turned out to be dangerously wrong?
+4. External Shocks: What external factors did we underestimate?
+5. Mitigation Plan: Based on this pre-mortem, design:
+   - Early detection systems (what metrics/signals to watch)
+   - Risk mitigation tactics (what to build in now)
+   - Reversibility mechanisms (how to pivot if needed)
+
+Don't hold back. The goal is to prevent this failure before it happens.`,
+
+            prompt7: `Context: Our current approach to [specific challenge/opportunity] is [describe current state]. We're trying to improve by [incremental improvements you're planning].
+
+Role: Act as a provocative strategic advisor who challenges incremental thinking. You help leaders think 10x, not 10%.
+
+Interview: Ask me one question at a time, up to 3 questions, to understand what constraints I'm accepting that I shouldn't be.
+
+Task: Challenge me to think 10x bigger:
+
+1. Reframe the Question: If we had to achieve 10x the result with the same resources, what completely different approach would we need?
+2. Constraint Breaking: What constraints am I treating as fixed that are actually just assumptions?
+3. Second-Order Effects: What would become possible if we achieved this 10x goal that's impossible with incremental gains?
+4. Adjacent Impossible: What's the thing that seems impossible now but would become obvious once we solve this?
+5. The Forcing Function: What specific experiment could we run in the next 30 days to test if 10x thinking is viable?
+
+Push me out of incremental thinking. Strategic leaders create breakthroughs, not improvements.`,
+
+            prompt8: `Context: My role is [describe role and scope]. Currently, I use AI for [what you do now, if anything]. I want to demonstrate AI Native leadership to my team and shift from operational to strategic thinking. Time I can commit: [realistic time commitment per week].
+
+Role: Act as my personal AI leadership coach and strategic development advisor.
+
+Interview: Ask me one question at a time, up to 3 questions, to understand my current mindset about AI, where I feel stuck, and what would constitute visible progress for my team.
+
+Task: Create a practical 90-day AI Native leadership development plan:
+
+1. Strategic Use Cases: Identify 3-5 specific ways I can use AI as a Strategic Thought Partner to enhance my leadership. Focus on strategic thinking, decision-making, and escaping operational overwhelm.
+2. Weekly Experiments: Design a weekly practice where I use AI for one strategic thinking task, share my learning visibly with my team, and document what worked.
+3. Visible Learning Journey: How can I make my AI learning journey visible without seeming like I'm performing?
+4. Strategic Conversations: What strategic conversations should I be having with my team about AI as a thought partner vs. automation tool?
+5. Success Metrics: Define 3-5 observable behaviours or outcomes that show progress.
+6. Common Pitfalls: What mistakes do leaders make when role modelling AI adoption? How do I avoid them?
+
+Make this about strategic leadership, not technical skills.`,
+
+            prompt9: `Context: My team is [describe team]. Currently, when it comes to trying new things/AI/innovation, I observe [describe current behaviours - hesitancy, fear of failure, etc.]. Our transformation depends on people experimenting.
+
+Role: Act as an organisational psychologist and culture change expert specialising in psychological safety.
+
+Interview: Ask me one question at a time, up to 3 questions, to understand what's really driving the hesitancy and what I'm already doing well.
+
+Task: Design a comprehensive approach to make experimentation safe:
+
+1. Role Modelling: What specific experiments should I visibly try myself, including sharing failures? Give me 3 concrete examples.
+2. Language Patterns: Provide 5 specific phrases I can use regularly to normalise learning from failure.
+3. Recognition Systems: How can I celebrate attempts and learning, not just successes? Design practical mechanisms.
+4. Structural Signals: What team rituals or practices would signal "it's safe to experiment here"?
+5. Personal Story: Help me craft a 2-minute story about a time I tried something that didn't work and why that was valuable.
+6. Failure Resume: Should I create and share a "failure resume" with my team? If yes, help me draft one.
+
+Remember: People do what leaders do, not what leaders say. Focus on visible actions.`,
+
+            prompt10: `Context: [Specific challenge/opportunity in 2-3 sentences]
+
+Role: Act as my strategic advisor for a rapid assessment.
+
+Task: In 10 minutes or less, tell me:
+1. The 3 most important questions I should be asking right now?
+2. The one decision I can make this week that will have the biggest strategic impact?
+3. The one thing I should stop doing immediately to create space for what matters most?
+
+Be direct. No fluff.`,
+
+            prompt11: `Context: Here's my to-do list for this week: [list everything]
+
+Role: Act as my ruthless prioritisation coach.
+
+Task: Categorise each item:
+- STRATEGIC (only I can do this, drives growth/transformation)
+- TACTICAL (someone else should do this)
+- ELIMINATE (shouldn't be done at all)
+
+For STRATEGIC items, force-rank them. For TACTICAL items, tell me who should own them. Be brutal about what to eliminate.`,
+
+            prompt12: `Context: Meeting about [topic] with [stakeholders] in [timeframe]. Current situation: [1-2 sentences].
+
+Role: Act as my meeting strategist.
+
+Interview: Ask me 1 question to clarify the real goal of this meeting.
+
+Task: Help me prepare:
+1. What's the ONE key message I need to land?
+2. What 3 questions should I be ready to answer?
+3. What decision or commitment should we walk out with?
+4. What's the biggest risk of this meeting being unproductive, and how do I prevent it?
+
+Give me a crisp 3-minute opening that frames the discussion for success.`
+        };
+
+        function copyPrompt(button, promptId) {
+            const promptText = prompts[promptId];
+            
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(promptText).then(() => {
+                    showCopySuccess(button);
+                }).catch(err => {
+                    console.error('Clipboard API failed:', err);
+                    fallbackCopy(promptText, button);
+                });
+            } else {
+                // Use fallback method
+                fallbackCopy(promptText, button);
+            }
+        }
+
+        function fallbackCopy(text, button) {
+            // Create a temporary textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            
+            // Select and copy
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // For mobile
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopySuccess(button);
+                } else {
+                    showCopyError(button);
+                }
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+                showCopyError(button);
+            }
+            
+            document.body.removeChild(textarea);
+        }
+
+        function showCopySuccess(button) {
+            const originalText = button.innerText;
+            button.innerText = '✓ Copied!';
+            button.classList.add('copied');
+            
+            showToast('Prompt copied! Paste it into Claude or Copilot.');
+            
+            setTimeout(() => {
+                button.innerText = originalText;
+                button.classList.remove('copied');
+            }, 2500);
+        }
+
+        function showCopyError(button) {
+            const originalText = button.innerText;
+            button.innerText = 'Copy Failed';
+            button.style.background = '#dc3545';
+            
+            showToast('Copy failed. Please try selecting and copying the prompt manually.');
+            
+            setTimeout(() => {
+                button.innerText = originalText;
+                button.style.background = '';
+            }, 2500);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const target = document.getElementById(targetId);
+                if (target) {
+                    const offset = 20; // Small offset for better visual
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
