@@ -7,6 +7,7 @@
 - Made the module launcher modal mobile-friendly by allowing full-viewport layouts and hiding the loading spinner once the embedded module finishes loading.
 - Cleaned up the primary navigation (`src/components/Header.tsx`) by removing the redundant Home link and aligning labels with the updated modules, including a beta badge for Prompt Builder.
 - Improved Security Pulse mobile usability (`src/app/pulse/page.tsx`) by stacking header controls, wrapping filters and action buttons, and adjusting saved/reading list panels and the AI summary modal for narrow viewports.
+- Rebuilt Prompt Builder (`src/app/prompt-builder/page.tsx`) around ILM micro-learning modules with layered inputs, framework cues, reflection deck, progress snapshot, synthesis previews, and governance risk cues for export readiness.
 
 ## 2025-10-30
 
