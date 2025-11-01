@@ -36,20 +36,34 @@ const apps: AppModule[] = [
   {
     id: 'prompt-builder',
     name: 'Prompt Builder',
-    description: 'Build and refine AI prompts for better results.',
+    description: 'Create effective prompts with templates, meta prompts, and learning guides.',
     icon: '📝',
     gradient: 'from-[#A855F7] to-[#7C3AED]',
     href: '/prompt-builder',
-    badge: 'COMING SOON'
+    features: [
+      '📝 Template Library',
+      '🎯 Meta Prompts',
+      '📚 Learning Prompts',
+      '🧠 Chain of Thought',
+      '👁️ Live Preview',
+      '📋 Quick Copy'
+    ]
   },
   {
     id: 'learning-mode',
-    name: 'Learning Mode',
-    description: 'Interactive learning and knowledge testing.',
+    name: 'Learning Journey',
+    description: 'ILM-based reflection and framework-guided learning experience.',
     icon: '📚',
     gradient: 'from-[#14B8A6] to-[#0D9488]',
     href: '/learning-mode',
-    badge: 'COMING SOON'
+    features: [
+      '🎯 ILM Modules',
+      '🧭 Framework Cues',
+      '💭 Reflection Deck',
+      '📊 Progress Tracking',
+      '✅ Governance Scan',
+      '📈 Synthesis View'
+    ]
   }
 ];
 
