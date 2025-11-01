@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { VERSION, getModuleVersion } from "@/lib/version";
 import { type CategoryType, getCategoryConfig, getAllCategories } from "@/lib/categories";
 
@@ -45,8 +46,12 @@ interface SeverityInfo {
 }
 
 export default function SecurityPulse() {
+  // Read category from URL params
+  const searchParams = useSearchParams();
+  const urlCategory = (searchParams.get('category') as CategoryType) || 'security';
+
   // Category state
-  const [activeCategory, setActiveCategory] = useState<CategoryType>('security');
+  const [activeCategory, setActiveCategory] = useState<CategoryType>(urlCategory);
   const categoryConfig = getCategoryConfig(activeCategory);
 
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -65,6 +70,7 @@ export default function SecurityPulse() {
   const [readItems, setReadItems] = useState<Set<string>>(new Set());
   const [newItems, setNewItems] = useState<Set<string>>(new Set());
   const [previousLinks, setPreviousLinks] = useState<Set<string>>(new Set());
+  const [flaggedItems, setFlaggedItems] = useState<Set<string>>(new Set());
   const [showHistory, setShowHistory] = useState(false);
   const [contentHistory, setContentHistory] = useState<ContentHistory[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
@@ -100,6 +106,12 @@ export default function SecurityPulse() {
     const storedLinks = localStorage.getItem('astra-previous-links');
     if (storedLinks) {
       setPreviousLinks(new Set(JSON.parse(storedLinks)));
+    }
+
+    // Load flagged items from localStorage
+    const storedFlagged = localStorage.getItem('astra-flagged-items');
+    if (storedFlagged) {
+      setFlaggedItems(new Set(JSON.parse(storedFlagged)));
     }
 
     fetchNews();
@@ -154,6 +166,24 @@ export default function SecurityPulse() {
     selectedItems.forEach(link => newReadItems.delete(link));
     setReadItems(newReadItems);
     localStorage.setItem('astra-read-items', JSON.stringify([...newReadItems]));
+  };
+
+  const markAsUnread = (link: string) => {
+    const newReadItems = new Set(readItems);
+    newReadItems.delete(link);
+    setReadItems(newReadItems);
+    localStorage.setItem('astra-read-items', JSON.stringify([...newReadItems]));
+  };
+
+  const toggleFlag = (link: string) => {
+    const newFlaggedItems = new Set(flaggedItems);
+    if (newFlaggedItems.has(link)) {
+      newFlaggedItems.delete(link);
+    } else {
+      newFlaggedItems.add(link);
+    }
+    setFlaggedItems(newFlaggedItems);
+    localStorage.setItem('astra-flagged-items', JSON.stringify([...newFlaggedItems]));
   };
 
   const getTimeAgo = (dateString: string) => {
@@ -1089,6 +1119,34 @@ export default function SecurityPulse() {
 
                             {/* Action Buttons */}
                             <div className="flex flex-wrap gap-2 mt-2">
+                              {isUnread ? (
+                                <button
+                                  onClick={() => markAsRead(item.link)}
+                                  className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
+                                  title="Mark as read"
+                                >
+                                  READ
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => markAsUnread(item.link)}
+                                  className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
+                                  title="Mark as unread"
+                                >
+                                  UNREAD
+                                </button>
+                              )}
+                              <button
+                                onClick={() => toggleFlag(item.link)}
+                                className={`w-full sm:w-auto text-xs px-2 py-1 border font-medium transition-colors text-center ${
+                                  flaggedItems.has(item.link)
+                                    ? 'bg-amber-200 hover:bg-amber-300 border-amber-400 text-amber-900'
+                                    : 'bg-slate-200 hover:bg-slate-300 border-slate-300'
+                                }`}
+                                title={flaggedItems.has(item.link) ? "Unflag" : "Flag for follow-up"}
+                              >
+                                {flaggedItems.has(item.link) ? '🚩 FLAGGED' : 'FLAG'}
+                              </button>
                               <button
                                 onClick={() => bookmarkArticle(item)}
                                 className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
@@ -1110,20 +1168,6 @@ export default function SecurityPulse() {
                                   title="AI Analysis"
                                 >
                                   ANALYZE
-                                </button>
-                              )}
-                              {!isUnread && (
-                                <button
-                                  onClick={() => {
-                                    const newReadItems = new Set(readItems);
-                                    newReadItems.delete(item.link);
-                                    setReadItems(newReadItems);
-                                    localStorage.setItem('astra-read-items', JSON.stringify([...newReadItems]));
-                                  }}
-                                  className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
-                                  title="Mark as unread"
-                                >
-                                  UNREAD
                                 </button>
                               )}
                             </div>

@@ -16,37 +16,36 @@ type ModuleConfig = {
 
 const modules: ModuleConfig[] = [
   {
-    id: 'pulse',
+    id: 'security-pulse',
     name: 'Security Pulse',
-    description: 'Curated AI briefings on the latest threat intelligence and security news.',
-    icon: '⚡',
+    description: 'Threat intelligence, vulnerabilities, and security news with AI analysis.',
+    icon: '🛡️',
     gradient: 'from-[#2C7BE5]/90 to-[#1A3B66]/90',
-    href: '/pulse'
+    href: '/pulse?category=security'
   },
   {
-    id: 'phishing',
-    name: 'Phishing Simulator',
-    description: 'Generate realistic phishing emails with safe callouts for awareness training.',
-    icon: '🪝',
-    gradient: 'from-[#1A3B66]/90 to-[#2C7BE5]/90',
-    href: '/phishing'
+    id: 'ai-pulse',
+    name: 'AI Pulse',
+    description: 'AI research, model releases, and machine learning news with AI summaries.',
+    icon: '🤖',
+    gradient: 'from-[#A855F7]/90 to-[#7C3AED]/90',
+    href: '/pulse?category=ai'
   },
   {
-    id: 'awareness',
-    name: 'Awareness Campaigns',
-    description: 'Turn policies or articles into polished awareness content in minutes.',
-    icon: '📣',
-    gradient: 'from-[#2C7BE5]/90 to-[#1A3B66]/90',
-    href: '/awareness'
+    id: 'tech-pulse',
+    name: 'Tech Pulse',
+    description: 'Product launches, startups, and technology news with AI analysis.',
+    icon: '💻',
+    gradient: 'from-[#14B8A6]/90 to-[#0D9488]/90',
+    href: '/pulse?category=tech'
   },
   {
-    id: 'prompt-builder',
-    name: 'Prompt Builder',
-    description: 'Rapidly prototype prompts with ready-to-use frameworks and guardrails.',
-    icon: '🎯',
-    gradient: 'from-[#1A3B66]/90 to-[#2C7BE5]/90',
-    href: '/prompt-builder',
-    badge: 'Beta'
+    id: 'f1-pulse',
+    name: 'F1 Pulse',
+    description: 'Formula 1 news, race results, and team updates (just for fun!).',
+    icon: '🏎️',
+    gradient: 'from-[#EF4444]/90 to-[#DC2626]/90',
+    href: '/pulse?category=f1'
   }
 ];
 
