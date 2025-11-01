@@ -932,13 +932,13 @@ function SecurityPulseContent() {
                 </button>
                 <button
                   onClick={() => setActiveTab('generate')}
-                  className={`hidden sm:flex flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
+                  className={`flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-bold transition-all whitespace-nowrap ${
                     activeTab === 'generate'
-                      ? 'bg-slate-800 text-white'
-                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                      ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg'
+                      : 'bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600 shadow-md'
                   }`}
                 >
-                  GENERATE ({selectedItems.length})
+                  ✨ AI GENERATE <span className="hidden sm:inline">({selectedItems.length})</span>
                 </button>
                 <button
                   onClick={() => {
@@ -1171,10 +1171,10 @@ function SecurityPulseContent() {
                               {categoryConfig.aiSummaryEnabled && (
                                 <button
                                   onClick={() => showAISummary(item)}
-                                  className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
+                                  className="w-full sm:w-auto text-xs px-2 py-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold transition-all shadow-md hover:shadow-lg text-center"
                                   title="AI Analysis"
                                 >
-                                  ANALYZE
+                                  ✨ AI ANALYZE
                                 </button>
                               )}
                             </div>
