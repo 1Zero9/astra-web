@@ -2,12 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { ensureGuestUser, GUEST_USER_ID } from '@/lib/guest-user';
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic';
+
 // GET - Search across saved articles and reading list
 export async function GET(request: NextRequest) {
   try {
     await ensureGuestUser();
 
-    const { searchParams } = new URL(request.url);
+    const searchParams = request.nextUrl.searchParams;
     const query = searchParams.get('q');
     const type = searchParams.get('type') || 'all'; // 'all', 'saved', 'reading-list'
     const limit = parseInt(searchParams.get('limit') || '50');

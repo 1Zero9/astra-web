@@ -87,7 +87,7 @@ export default function SecurityPulse() {
   const [loadingSummary, setLoadingSummary] = useState(false);
 
   // Tab state
-  const [activeTab, setActiveTab] = useState<'browse' | 'saved' | 'reading-list' | 'analytics' | 'generate'>('browse');
+  const [activeTab, setActiveTab] = useState<'browse' | 'saved' | 'reading-list' | 'analytics' | 'generate' | 'sources'>('browse');
   const [savedArticles, setSavedArticles] = useState<any[]>([]);
   const [readingList, setReadingList] = useState<any[]>([]);
   const [loadingSaved, setLoadingSaved] = useState(false);
@@ -946,6 +946,19 @@ export default function SecurityPulse() {
                 >
                   GENERATE ({selectedItems.length})
                 </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('sources');
+                    if (rssSources.length === 0) fetchRssSources();
+                  }}
+                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
+                    activeTab === 'sources'
+                      ? 'bg-slate-800 text-white'
+                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                  }`}
+                >
+                  SOURCES ({rssSources.length})
+                </button>
               </div>
             </div>
           </div>
@@ -1526,6 +1539,190 @@ export default function SecurityPulse() {
                   </div>
                 </>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Sources Tab Content */}
+        {activeTab === 'sources' && (
+          <div className="space-y-6">
+            {/* Add New Source Form */}
+            <div className="bg-white rounded-lg border-2 border-slate-300 p-6">
+              <h2 className="text-xl font-bold text-slate-900 mb-4">Add RSS Source</h2>
+              <form onSubmit={addRssSource} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Source Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={newSource.name}
+                    onChange={(e) => setNewSource({...newSource, name: e.target.value})}
+                    className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-slate-400 focus:border-slate-400"
+                    placeholder="e.g., CISA Alerts"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    RSS Feed URL *
+                  </label>
+                  <input
+                    type="url"
+                    value={newSource.url}
+                    onChange={(e) => setNewSource({...newSource, url: e.target.value})}
+                    className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-slate-400 focus:border-slate-400"
+                    placeholder="https://example.com/feed.xml"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Category *
+                  </label>
+                  <select
+                    value={newSource.category}
+                    onChange={(e) => setNewSource({...newSource, category: e.target.value as CategoryType})}
+                    className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-slate-400 focus:border-slate-400"
+                  >
+                    {getAllCategories().map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.icon} {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Description (Optional)
+                  </label>
+                  <textarea
+                    value={newSource.description}
+                    onChange={(e) => setNewSource({...newSource, description: e.target.value})}
+                    className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-slate-400 focus:border-slate-400"
+                    placeholder="Brief description of this source"
+                    rows={2}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={addingSource}
+                  className="w-full px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium rounded transition-colors disabled:bg-slate-400 disabled:cursor-not-allowed"
+                >
+                  {addingSource ? 'ADDING...' : 'ADD SOURCE'}
+                </button>
+              </form>
+            </div>
+
+            {/* Existing Sources List */}
+            <div className="bg-white rounded-lg border-2 border-slate-300 p-6">
+              <h2 className="text-xl font-bold text-slate-900 mb-4">
+                RSS Sources ({rssSources.length})
+              </h2>
+
+              {loadingSources ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin h-8 w-8 border-2 border-slate-300 border-t-slate-800 rounded-full mx-auto"></div>
+                  <p className="text-sm text-slate-600 mt-2">Loading sources...</p>
+                </div>
+              ) : rssSources.length === 0 ? (
+                <div className="text-center py-12 text-slate-500">
+                  <div className="text-4xl mb-3">📡</div>
+                  <p className="text-lg mb-2">No RSS sources added yet</p>
+                  <p className="text-sm">Add your first RSS source using the form above</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {rssSources
+                    .sort((a, b) => {
+                      // Sort by category first, then by name
+                      if (a.category !== b.category) {
+                        return a.category.localeCompare(b.category);
+                      }
+                      return a.name.localeCompare(b.name);
+                    })
+                    .map((source) => {
+                      const sourceCategoryConfig = getCategoryConfig(source.category || 'security');
+                      return (
+                        <div
+                          key={source.id}
+                          className={`border-2 rounded-lg p-4 transition-all ${
+                            source.isActive
+                              ? 'border-slate-300 bg-white'
+                              : 'border-slate-200 bg-slate-50 opacity-60'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-2">
+                                <h3 className="font-bold text-slate-900 text-sm truncate">
+                                  {source.name}
+                                </h3>
+                                <span
+                                  className="px-2 py-0.5 text-xs font-bold rounded-full text-white whitespace-nowrap"
+                                  style={{
+                                    background: `linear-gradient(to right, ${sourceCategoryConfig.primary}, ${sourceCategoryConfig.secondary})`
+                                  }}
+                                >
+                                  {sourceCategoryConfig.icon} {sourceCategoryConfig.name.toUpperCase()}
+                                </span>
+                                {!source.isActive && (
+                                  <span className="px-2 py-0.5 bg-slate-300 text-slate-700 text-xs font-bold rounded-full">
+                                    INACTIVE
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-xs text-slate-600 mb-1 break-all">{source.url}</p>
+                              {source.description && (
+                                <p className="text-xs text-slate-500 mt-1">{source.description}</p>
+                              )}
+                              {source.lastFetch && (
+                                <p className="text-xs text-slate-400 mt-1">
+                                  Last fetched: {new Date(source.lastFetch).toLocaleString()}
+                                </p>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => toggleSourceStatus(source.id, source.isActive)}
+                                className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+                                  source.isActive
+                                    ? 'bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300'
+                                    : 'bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300'
+                                }`}
+                              >
+                                {source.isActive ? 'DISABLE' : 'ENABLE'}
+                              </button>
+                              <button
+                                onClick={() => deleteSource(source.id)}
+                                className="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-900 border border-red-300 text-xs font-medium rounded transition-colors"
+                              >
+                                DELETE
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+
+            {/* Tips */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="text-sm font-bold text-blue-900 mb-2">💡 Tips</h3>
+              <ul className="text-xs text-blue-800 space-y-1">
+                <li>• RSS sources are fetched automatically when you refresh the feed</li>
+                <li>• Only active sources will be fetched</li>
+                <li>• Choose the correct category to ensure proper AI feature availability</li>
+                <li>• AI summaries are available for Security, AI, and Tech categories</li>
+                <li>• CVE extraction is only available for Security category</li>
+              </ul>
             </div>
           </div>
         )}
