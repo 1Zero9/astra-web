@@ -92,14 +92,14 @@ export default function Home() {
               priority
             />
           </div>
-          <h1 className="text-3xl font-bold text-white mt-3 tracking-tight">ASTRA</h1>
-          <p className="text-white/60 text-xs mt-1">Awareness, Security & Threat Response Assistant</p>
+          <h1 className="text-3xl font-semibold text-white mt-3 tracking-tight">ASTRA</h1>
+          <p className="text-white/60 text-[10px] mt-1 uppercase tracking-wider">Awareness, Security & Threat Response Assistant</p>
         </div>
 
         {/* App Launcher */}
         <div className="flex-1 mx-auto max-w-5xl px-4 pb-8">
           <div className="mb-4">
-            <h2 className="text-white/80 text-xs font-bold uppercase tracking-wider mb-3">App Launcher</h2>
+            <h2 className="text-white/80 text-[10px] font-semibold uppercase tracking-[0.3em] mb-3">App Launcher</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -119,16 +119,16 @@ export default function Home() {
                     <div className="flex items-start justify-between mb-3">
                       <div className="text-4xl filter drop-shadow-lg">{app.icon}</div>
                       {app.badge && (
-                        <span className="px-2 py-0.5 bg-black/40 backdrop-blur-md border border-white/30 rounded-full text-[9px] font-bold text-white uppercase tracking-wide">
+                        <span className="px-2 py-0.5 bg-black/40 backdrop-blur-md border border-white/30 rounded-full text-[9px] font-semibold text-white uppercase tracking-[0.15em]">
                           {app.badge}
                         </span>
                       )}
                     </div>
 
-                    <h3 className="text-xl font-bold text-white mb-1 drop-shadow-lg">
+                    <h3 className="text-xl font-semibold text-white mb-1 drop-shadow-lg uppercase tracking-tight">
                       {app.name}
                     </h3>
-                    <p className="text-white/80 text-xs leading-snug mb-3">
+                    <p className="text-white/80 text-[10px] leading-snug mb-3 uppercase tracking-wider">
                       {app.description}
                     </p>
 
@@ -137,7 +137,7 @@ export default function Home() {
                         {app.features.map((feature, idx) => (
                           <div
                             key={idx}
-                            className="flex items-center gap-1 text-white/90 text-[10px] font-medium"
+                            className="flex items-center gap-1 text-white/90 text-[10px] font-semibold uppercase tracking-wider"
                           >
                             <span>{feature}</span>
                           </div>
@@ -145,8 +145,8 @@ export default function Home() {
                       </div>
                     )}
 
-                    <div className="flex items-center text-white text-xs font-bold mt-4 group-hover:translate-x-2 transition-transform duration-300">
-                      <span>Launch App →</span>
+                    <div className="flex items-center text-white text-[10px] font-semibold uppercase tracking-wider mt-4 group-hover:translate-x-2 transition-transform duration-300">
+                      <span>LAUNCH APP →</span>
                     </div>
                   </div>
                 </div>

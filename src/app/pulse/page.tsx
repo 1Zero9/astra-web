@@ -778,27 +778,27 @@ function SecurityPulseContent() {
       )}
 
       {/* Sticky Header */}
-      <header className="sticky top-0 z-30 bg-white border-b border-slate-300">
-        <div className="mx-auto max-w-7xl px-4 py-2">
-          <div className="flex items-center justify-between gap-2 mb-2">
-            <div className="flex items-center gap-2">
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{categoryConfig.icon} <span className="hidden sm:inline">{categoryConfig.name.toUpperCase()} </span>PULSE</h1>
-              <span className="hidden sm:inline px-2 py-0.5 bg-slate-800 text-slate-100 text-xs font-mono">
+      <header className="sticky top-0 z-30 bg-white border-b-2 border-slate-200">
+        <div className="mx-auto max-w-7xl px-4 py-3">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-semibold text-slate-900 tracking-tight">{categoryConfig.icon} <span className="hidden sm:inline">{categoryConfig.name.toUpperCase()} </span>PULSE</h1>
+              <span className="hidden sm:inline px-2 py-0.5 bg-slate-900 text-slate-100 text-[10px] font-semibold uppercase tracking-[0.2em]">
                 {getModuleVersion('pulse')}
               </span>
             </div>
             {lastSync && (
               <button
                 onClick={() => fetchNews()}
-                className="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-medium transition-colors"
+                className="px-4 py-1.5 bg-white hover:bg-slate-50 border-2 border-slate-300 hover:border-slate-400 text-xs font-semibold uppercase tracking-wider transition-all"
                 disabled={loading}
               >
                 {loading ? '⟳' : 'REFRESH'}
               </button>
             )}
           </div>
-          <div className="text-xs text-slate-600 font-mono">
-            <span className="hidden sm:inline">FEED • </span>{unreadCount} UNREAD • {newCount} NEW
+          <div className="text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-500">
+            <span className="hidden sm:inline">INTELLIGENCE FEED • </span>{unreadCount} UNREAD • {newCount} NEW
           </div>
         </div>
 
@@ -825,37 +825,37 @@ function SecurityPulseContent() {
         </div>
 
         {/* Command Bar */}
-        <div className="bg-slate-50 border-t border-slate-300 py-2">
+        <div className="bg-slate-100 border-t-2 border-slate-200 py-3">
           <div className="mx-auto max-w-7xl px-4">
             <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-center gap-2 w-full lg:w-auto overflow-x-auto scrollbar-hide">
                 <button
                   onClick={markAllAsRead}
-                  className="px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors whitespace-nowrap"
+                  className="px-4 py-1.5 bg-white hover:bg-slate-50 border-2 border-slate-300 hover:border-slate-400 text-[10px] font-semibold uppercase tracking-wider text-slate-700 transition-all whitespace-nowrap"
                 >
                   MARK ALL READ
                 </button>
                 <button
                   onClick={markSelectedAsUnread}
                   disabled={selectedItems.length === 0}
-                  className="hidden sm:inline-block px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+                  className="hidden sm:inline-block px-4 py-1.5 bg-white hover:bg-slate-50 border-2 border-slate-300 hover:border-slate-400 text-[10px] font-semibold uppercase tracking-wider text-slate-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
                 >
                   MARK UNREAD ({selectedItems.length})
                 </button>
                 <div className="hidden sm:block w-px h-5 bg-slate-300 mx-2"></div>
-                <span className="text-xs text-slate-600 font-mono whitespace-nowrap">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">
                   {filteredNews.length} ITEMS
                 </span>
               </div>
 
               {/* Tabs */}
-              <div className="flex items-center gap-1 sm:gap-2 w-full lg:w-auto overflow-x-auto scrollbar-hide">
+              <div className="flex items-center gap-2 w-full lg:w-auto overflow-x-auto scrollbar-hide">
                 <button
                   onClick={() => setActiveTab('browse')}
-                  className={`flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
+                  className={`flex-1 lg:flex-none px-3 sm:px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
                     activeTab === 'browse'
-                      ? 'bg-slate-800 text-white'
-                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                      ? 'bg-slate-900 text-white'
+                      : 'bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-300 hover:border-slate-400'
                   }`}
                 >
                   FEED <span className="hidden sm:inline">({news.length})</span>
@@ -865,10 +865,10 @@ function SecurityPulseContent() {
                     setActiveTab('saved');
                     if (savedArticles.length === 0) fetchSavedArticles();
                   }}
-                  className={`flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
+                  className={`flex-1 lg:flex-none px-3 sm:px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
                     activeTab === 'saved'
-                      ? 'bg-slate-800 text-white'
-                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                      ? 'bg-slate-900 text-white'
+                      : 'bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-300 hover:border-slate-400'
                   }`}
                 >
                   SAVED <span className="hidden sm:inline">({savedArticles.length})</span>
@@ -878,10 +878,10 @@ function SecurityPulseContent() {
                     setActiveTab('reading-list');
                     if (readingList.length === 0) fetchReadingList();
                   }}
-                  className={`flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
+                  className={`flex-1 lg:flex-none px-3 sm:px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
                     activeTab === 'reading-list'
-                      ? 'bg-slate-800 text-white'
-                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                      ? 'bg-slate-900 text-white'
+                      : 'bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-300 hover:border-slate-400'
                   }`}
                 >
                   QUEUE <span className="hidden sm:inline">({readingList.length})</span>
@@ -891,33 +891,33 @@ function SecurityPulseContent() {
                     setActiveTab('analytics');
                     if (!analytics) fetchAnalytics();
                   }}
-                  className={`hidden sm:flex flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
+                  className={`hidden sm:flex flex-1 lg:flex-none px-3 sm:px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
                     activeTab === 'analytics'
-                      ? 'bg-slate-800 text-white'
-                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                      ? 'bg-slate-900 text-white'
+                      : 'bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-300 hover:border-slate-400'
                   }`}
                 >
                   METRICS
                 </button>
                 <button
                   onClick={() => setActiveTab('generate')}
-                  className={`flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-bold transition-all whitespace-nowrap ${
+                  className={`flex-1 lg:flex-none px-3 sm:px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap ${
                     activeTab === 'generate'
                       ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg'
                       : 'bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600 shadow-md'
                   }`}
                 >
-                  ✨ AI GENERATE <span className="hidden sm:inline">({selectedItems.length})</span>
+                  ✨ GENERATE <span className="hidden sm:inline">({selectedItems.length})</span>
                 </button>
                 <button
                   onClick={() => {
                     setActiveTab('sources');
                     if (rssSources.length === 0) fetchSources();
                   }}
-                  className={`flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
+                  className={`flex-1 lg:flex-none px-3 sm:px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
                     activeTab === 'sources'
-                      ? 'bg-slate-800 text-white'
-                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
+                      ? 'bg-slate-900 text-white'
+                      : 'bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-300 hover:border-slate-400'
                   }`}
                 >
                   SOURCES <span className="hidden sm:inline">({rssSources.length})</span>
@@ -935,12 +935,12 @@ function SecurityPulseContent() {
         {activeTab === 'browse' && (
           <>
         {/* Filters */}
-        <div className="bg-white border border-slate-300 mb-3 p-3">
+        <div className="bg-white border-2 border-slate-300 mb-3 p-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <select
               value={filterPublication}
               onChange={(e) => setFilterPublication(e.target.value)}
-              className="w-full sm:w-auto px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              className="w-full sm:w-auto px-3 py-1.5 border-2 border-slate-300 rounded text-[10px] font-semibold uppercase tracking-wider focus:ring-2 focus:ring-slate-400 focus:border-slate-400"
             >
               <option value="">ALL SOURCES</option>
               {publications.map((pub) => (
@@ -953,14 +953,14 @@ function SecurityPulseContent() {
               type="text"
               value={filterVendor}
               onChange={(e) => setFilterVendor(e.target.value)}
-              className="w-full sm:w-auto px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              className="w-full sm:w-auto px-3 py-1.5 border-2 border-slate-300 rounded text-[10px] font-semibold uppercase tracking-wider focus:ring-2 focus:ring-slate-400 focus:border-slate-400"
               placeholder="FILTER BY VENDOR..."
             />
             <input
               type="text"
               value={filterSeverity}
               onChange={(e) => setFilterSeverity(e.target.value)}
-              className="w-full sm:w-auto px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              className="w-full sm:w-auto px-3 py-1.5 border-2 border-slate-300 rounded text-[10px] font-semibold uppercase tracking-wider focus:ring-2 focus:ring-slate-400 focus:border-slate-400"
               placeholder="FILTER BY KEYWORD..."
             />
             {(filterPublication || filterVendor || filterSeverity) && (
@@ -970,7 +970,7 @@ function SecurityPulseContent() {
                   setFilterVendor("");
                   setFilterSeverity("");
                 }}
-                className="w-full sm:w-auto px-3 py-1.5 text-xs bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors"
+                className="w-full sm:w-auto px-3 py-1.5 text-[10px] bg-slate-200 hover:bg-slate-300 border-2 border-slate-300 font-semibold uppercase tracking-wider transition-colors"
               >
                 CLEAR FILTERS
               </button>
@@ -979,20 +979,20 @@ function SecurityPulseContent() {
 
           {/* Active Filters Indicator */}
           {(filterPublication || filterVendor || filterSeverity) && (
-            <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+            <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-wider mt-3">
               <span className="text-slate-600">ACTIVE:</span>
               {filterPublication && (
-                <span className="px-2 py-1 bg-slate-700 text-slate-100 border border-slate-800">
+                <span className="px-2 py-1 bg-slate-900 text-slate-100 border-2 border-slate-900 rounded">
                   PUB: {filterPublication.toUpperCase()}
                 </span>
               )}
               {filterVendor && (
-                <span className="px-2 py-1 bg-slate-700 text-slate-100 border border-slate-800">
+                <span className="px-2 py-1 bg-slate-900 text-slate-100 border-2 border-slate-900 rounded">
                   VENDOR: {filterVendor.toUpperCase()}
                 </span>
               )}
               {filterSeverity && (
-                <span className="px-2 py-1 bg-slate-700 text-slate-100 border border-slate-800">
+                <span className="px-2 py-1 bg-slate-900 text-slate-100 border-2 border-slate-900 rounded">
                   KEYWORD: {filterSeverity.toUpperCase()}
                 </span>
               )}
@@ -1001,20 +1001,20 @@ function SecurityPulseContent() {
         </div>
 
         {/* News List */}
-        <div className="bg-white border border-slate-300 mt-4">
+        <div className="bg-white border-2 border-slate-300 mt-4">
 
               {loading ? (
                 <div className="p-12 text-center text-slate-600">
-                  <div className="inline-block animate-spin h-8 w-8 border-2 border-slate-300 border-t-slate-700 mb-3"></div>
-                  <p className="text-xs font-mono uppercase tracking-wide">LOADING FEED...</p>
+                  <div className="inline-block animate-spin h-8 w-8 border-2 border-slate-300 border-t-slate-900 mb-3"></div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em]">LOADING FEED...</p>
                 </div>
               ) : filteredNews.length === 0 ? (
                 <div className="p-12 text-center text-slate-600">
-                  <p className="text-sm font-mono uppercase mb-2">NO ARTICLES FOUND</p>
-                  <p className="text-xs text-slate-500">Adjust filters or refresh feed</p>
+                  <p className="text-sm font-semibold uppercase tracking-wider mb-2">NO ARTICLES FOUND</p>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-wider">Adjust filters or refresh feed</p>
                 </div>
               ) : (
-                <div className="border border-slate-300">
+                <div className="border-2 border-slate-300">
                   {filteredNews.map((item) => {
                     const isUnread = !readItems.has(item.link);
                     const isNew = newItems.has(item.link);
@@ -1098,7 +1098,7 @@ function SecurityPulseContent() {
                               {isUnread ? (
                                 <button
                                   onClick={() => markAsRead(item.link)}
-                                  className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
+                                  className="w-full sm:w-auto text-[10px] px-2 py-1 bg-slate-200 hover:bg-slate-300 border-2 border-slate-300 font-semibold uppercase tracking-wider transition-colors text-center"
                                   title="Mark as read"
                                 >
                                   READ
@@ -1106,7 +1106,7 @@ function SecurityPulseContent() {
                               ) : (
                                 <button
                                   onClick={() => markAsUnread(item.link)}
-                                  className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
+                                  className="w-full sm:w-auto text-[10px] px-2 py-1 bg-slate-200 hover:bg-slate-300 border-2 border-slate-300 font-semibold uppercase tracking-wider transition-colors text-center"
                                   title="Mark as unread"
                                 >
                                   UNREAD
@@ -1114,7 +1114,7 @@ function SecurityPulseContent() {
                               )}
                               <button
                                 onClick={() => toggleFlag(item.link)}
-                                className={`w-full sm:w-auto text-xs px-2 py-1 border font-medium transition-colors text-center ${
+                                className={`w-full sm:w-auto text-[10px] px-2 py-1 border-2 font-semibold uppercase tracking-wider transition-colors text-center ${
                                   flaggedItems.has(item.link)
                                     ? 'bg-amber-200 hover:bg-amber-300 border-amber-400 text-amber-900'
                                     : 'bg-slate-200 hover:bg-slate-300 border-slate-300'
@@ -1125,14 +1125,14 @@ function SecurityPulseContent() {
                               </button>
                               <button
                                 onClick={() => bookmarkArticle(item)}
-                                className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
+                                className="w-full sm:w-auto text-[10px] px-2 py-1 bg-slate-200 hover:bg-slate-300 border-2 border-slate-300 font-semibold uppercase tracking-wider transition-colors text-center"
                                 title="Save for later"
                               >
                                 SAVE
                               </button>
                               <button
                                 onClick={() => addToReadingList(item)}
-                                className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
+                                className="w-full sm:w-auto text-[10px] px-2 py-1 bg-slate-200 hover:bg-slate-300 border-2 border-slate-300 font-semibold uppercase tracking-wider transition-colors text-center"
                                 title="Add to queue"
                               >
                                 QUEUE
@@ -1140,10 +1140,10 @@ function SecurityPulseContent() {
                               {categoryConfig.aiSummaryEnabled && (
                                 <button
                                   onClick={() => showAISummary(item)}
-                                  className="w-full sm:w-auto text-xs px-2 py-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold transition-all shadow-md hover:shadow-lg text-center"
+                                  className="w-full sm:w-auto text-[10px] px-2 py-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-lg text-center"
                                   title="AI Analysis"
                                 >
-                                  ✨ AI ANALYZE
+                                  ✨ ANALYZE
                                 </button>
                               )}
                             </div>
@@ -1162,14 +1162,14 @@ function SecurityPulseContent() {
         {/* Saved Articles Tab */}
         {activeTab === 'saved' && (
           <div className="mx-auto max-w-7xl px-4 py-4">
-          <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
+          <div className="bg-white rounded-lg border-2 border-slate-300 p-6">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">⭐ Saved Articles</h2>
+              <h2 className="text-xl font-semibold text-slate-900 uppercase tracking-tight">⭐ Saved Articles</h2>
               <button
                 onClick={fetchSavedArticles}
-                className="w-full md:w-auto px-4 py-2 bg-amber-100 text-amber-700 hover:bg-amber-200 rounded-lg font-medium transition-colors"
+                className="w-full md:w-auto px-4 py-2 bg-amber-100 text-amber-900 hover:bg-amber-200 border-2 border-amber-300 rounded-lg font-semibold text-[10px] uppercase tracking-wider transition-colors"
               >
-                Refresh
+                REFRESH
               </button>
             </div>
 
@@ -1230,14 +1230,14 @@ function SecurityPulseContent() {
         {/* Reading List Tab */}
         {activeTab === 'reading-list' && (
           <div className="mx-auto max-w-7xl px-4 py-4">
-          <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
+          <div className="bg-white rounded-lg border-2 border-slate-300 p-6">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">📚 Reading List</h2>
+              <h2 className="text-xl font-semibold text-slate-900 uppercase tracking-tight">📚 Reading List</h2>
               <button
                 onClick={fetchReadingList}
-                className="w-full md:w-auto px-4 py-2 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-lg font-medium transition-colors"
+                className="w-full md:w-auto px-4 py-2 bg-purple-100 text-purple-900 hover:bg-purple-200 border-2 border-purple-300 rounded-lg font-semibold text-[10px] uppercase tracking-wider transition-colors"
               >
-                Refresh
+                REFRESH
               </button>
             </div>
 
@@ -1310,14 +1310,14 @@ function SecurityPulseContent() {
         {/* Analytics Tab */}
         {activeTab === 'analytics' && (
           <div className="mx-auto max-w-7xl px-4 py-4">
-          <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
+          <div className="bg-white rounded-lg border-2 border-slate-300 p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">📊 Analytics</h2>
+              <h2 className="text-xl font-semibold text-slate-900 uppercase tracking-tight">📊 Analytics</h2>
               <button
                 onClick={fetchAnalytics}
-                className="px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 rounded-lg font-medium transition-colors"
+                className="px-4 py-2 bg-green-100 text-green-900 hover:bg-green-200 border-2 border-green-300 rounded-lg font-semibold text-[10px] uppercase tracking-wider transition-colors"
               >
-                Refresh
+                REFRESH
               </button>
             </div>
 
@@ -1389,10 +1389,10 @@ function SecurityPulseContent() {
         {/* Generate Tab */}
         {activeTab === 'generate' && (
           <div className="mx-auto max-w-7xl px-4 py-4">
-            <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
+            <div className="bg-white rounded-lg border-2 border-slate-300 p-6">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Generate Content</h2>
-                <p className="text-sm text-gray-600 mt-1">
+                <h2 className="text-xl font-semibold text-slate-900 uppercase tracking-tight">✨ Generate Content</h2>
+                <p className="text-[10px] text-slate-600 mt-1 uppercase tracking-wider">
                   Create security awareness content from selected articles
                 </p>
               </div>
@@ -1511,7 +1511,7 @@ function SecurityPulseContent() {
           <div className="space-y-6">
             {/* Add New Source Form */}
             <div className="bg-white rounded-lg border-2 border-slate-300 p-6">
-              <h2 className="text-xl font-bold text-slate-900 mb-4">Add RSS Source</h2>
+              <h2 className="text-xl font-semibold text-slate-900 uppercase tracking-tight mb-4">📡 Add RSS Source</h2>
               <form onSubmit={addRssSource} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -1583,8 +1583,8 @@ function SecurityPulseContent() {
 
             {/* Existing Sources List */}
             <div className="bg-white rounded-lg border-2 border-slate-300 p-6">
-              <h2 className="text-xl font-bold text-slate-900 mb-4">
-                RSS Sources ({rssSources.length})
+              <h2 className="text-xl font-semibold text-slate-900 uppercase tracking-tight mb-4">
+                📡 RSS Sources ({rssSources.length})
               </h2>
 
               {loadingSources ? (

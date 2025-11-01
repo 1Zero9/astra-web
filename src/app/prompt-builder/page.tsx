@@ -79,14 +79,14 @@ export default function PromptBuilder() {
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col">
       {/* Header */}
-      <header className="bg-gradient-to-r from-purple-600 to-blue-600 text-white border-b border-purple-700">
+      <header className="bg-gradient-to-r from-purple-600 to-blue-600 text-white border-b-2 border-purple-700">
         <div className="mx-auto max-w-7xl px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold">📝 Prompt Builder</h1>
-              <p className="text-sm text-white/80 mt-1">Create effective prompts for AI models</p>
+              <h1 className="text-xl sm:text-2xl font-semibold tracking-tight">📝 PROMPT BUILDER</h1>
+              <p className="text-[10px] text-white/80 mt-1 uppercase tracking-wider">Create effective prompts for AI models</p>
             </div>
-            <span className="px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-xs font-bold">
+            <span className="px-3 py-1 bg-white/20 backdrop-blur-md border-2 border-white/30 rounded-full text-[10px] font-semibold uppercase tracking-wider">
               PRACTICAL TOOLS
             </span>
           </div>
@@ -99,7 +99,7 @@ export default function PromptBuilder() {
             {/* Template Library */}
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg border-2 border-slate-300 p-4 sticky top-6">
-                <h2 className="text-lg font-bold text-slate-900 mb-3">Template Library</h2>
+                <h2 className="text-lg font-semibold text-slate-900 uppercase tracking-tight mb-3">Template Library</h2>
 
                 {/* Category Filter */}
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -107,7 +107,7 @@ export default function PromptBuilder() {
                     <button
                       key={cat}
                       onClick={() => setActiveCategory(cat)}
-                      className={`px-3 py-1 text-xs font-bold rounded transition-colors ${
+                      className={`px-3 py-1 text-[10px] font-semibold uppercase tracking-wider rounded transition-colors ${
                         activeCategory === cat
                           ? 'bg-purple-600 text-white'
                           : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
@@ -152,9 +152,9 @@ export default function PromptBuilder() {
             <div className="lg:col-span-2">
               <div className="bg-white rounded-lg border-2 border-slate-300 p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-bold text-slate-900">Prompt Editor</h2>
+                  <h2 className="text-lg font-semibold text-slate-900 uppercase tracking-tight">Prompt Editor</h2>
                   {selectedTemplate && (
-                    <span className="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">
+                    <span className="px-3 py-1 bg-purple-100 text-purple-900 text-[10px] font-semibold uppercase tracking-wider rounded-full">
                       {selectedTemplate.name}
                     </span>
                   )}
@@ -171,22 +171,22 @@ export default function PromptBuilder() {
                   <button
                     onClick={copyToClipboard}
                     disabled={!prompt}
-                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-slate-300 disabled:cursor-not-allowed font-medium text-sm transition-colors"
+                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-slate-300 disabled:cursor-not-allowed font-semibold text-[10px] uppercase tracking-wider transition-colors"
                   >
-                    📋 Copy Prompt
+                    📋 COPY
                   </button>
                   <button
                     onClick={() => setShowPreview(!showPreview)}
                     disabled={!prompt}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed font-medium text-sm transition-colors"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed font-semibold text-[10px] uppercase tracking-wider transition-colors"
                   >
-                    👁️ {showPreview ? 'Hide' : 'Show'} Preview
+                    👁️ {showPreview ? 'HIDE' : 'SHOW'} PREVIEW
                   </button>
                   <button
                     onClick={() => setPrompt('')}
-                    className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 font-medium text-sm transition-colors"
+                    className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 font-semibold text-[10px] uppercase tracking-wider transition-colors"
                   >
-                    🗑️ Clear
+                    🗑️ CLEAR
                   </button>
                 </div>
 
@@ -219,31 +219,31 @@ export default function PromptBuilder() {
 
                 {/* Quick Actions */}
                 <div className="mt-6 p-4 bg-purple-50 border-l-4 border-purple-500 rounded">
-                  <h3 className="text-sm font-bold text-purple-900 mb-2">🚀 Quick Actions</h3>
+                  <h3 className="text-sm font-semibold text-purple-900 uppercase tracking-wider mb-2">🚀 Quick Actions</h3>
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={() => applyTemplate(templates.find(t => t.id === 'meta-prompt')!)}
-                      className="px-3 py-2 bg-purple-200 hover:bg-purple-300 text-purple-900 text-xs font-bold rounded transition-colors"
+                      className="px-3 py-2 bg-purple-200 hover:bg-purple-300 text-purple-900 text-[10px] font-semibold uppercase tracking-wider rounded transition-colors"
                     >
-                      Create Meta Prompt
+                      META PROMPT
                     </button>
                     <button
                       onClick={() => applyTemplate(templates.find(t => t.id === 'eli5')!)}
-                      className="px-3 py-2 bg-blue-200 hover:bg-blue-300 text-blue-900 text-xs font-bold rounded transition-colors"
+                      className="px-3 py-2 bg-blue-200 hover:bg-blue-300 text-blue-900 text-[10px] font-semibold uppercase tracking-wider rounded transition-colors"
                     >
-                      Learning Prompt
+                      LEARNING
                     </button>
                     <button
                       onClick={() => applyTemplate(templates.find(t => t.id === 'chain-of-thought')!)}
-                      className="px-3 py-2 bg-green-200 hover:bg-green-300 text-green-900 text-xs font-bold rounded transition-colors"
+                      className="px-3 py-2 bg-green-200 hover:bg-green-300 text-green-900 text-[10px] font-semibold uppercase tracking-wider rounded transition-colors"
                     >
-                      Reasoning Prompt
+                      REASONING
                     </button>
                     <button
                       onClick={() => applyTemplate(templates.find(t => t.id === 'step-by-step')!)}
-                      className="px-3 py-2 bg-amber-200 hover:bg-amber-300 text-amber-900 text-xs font-bold rounded transition-colors"
+                      className="px-3 py-2 bg-amber-200 hover:bg-amber-300 text-amber-900 text-[10px] font-semibold uppercase tracking-wider rounded transition-colors"
                     >
-                      Task Guide
+                      TASK GUIDE
                     </button>
                   </div>
                 </div>
