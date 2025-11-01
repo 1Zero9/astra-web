@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { VERSION, getModuleVersion } from "@/lib/version";
 import { type CategoryType, getCategoryConfig, getAllCategories } from "@/lib/categories";
@@ -45,7 +45,7 @@ interface SeverityInfo {
   textColor: string;
 }
 
-export default function SecurityPulse() {
+function SecurityPulseContent() {
   // Read category from URL params
   const searchParams = useSearchParams();
   const urlCategory = (searchParams.get('category') as CategoryType) || 'security';
@@ -1728,5 +1728,21 @@ export default function SecurityPulse() {
         )}
       </main>
     </div>
+  );
+}
+
+// Wrapper component with Suspense boundary
+export default function SecurityPulse() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin h-12 w-12 border-4 border-slate-300 border-t-slate-800 rounded-full mx-auto mb-4"></div>
+          <p className="text-slate-600 font-medium">Loading Pulse...</p>
+        </div>
+      </div>
+    }>
+      <SecurityPulseContent />
+    </Suspense>
   );
 }
