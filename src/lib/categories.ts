@@ -1,7 +1,7 @@
 // Pulse category configuration
-// Categories: Security, AI, Tech, F1
+// Categories: Security, AI, Tech
 
-export type CategoryType = 'security' | 'ai' | 'tech' | 'f1';
+export type CategoryType = 'security' | 'ai' | 'tech';
 
 export interface CategoryConfig {
   id: CategoryType;
@@ -49,17 +49,6 @@ export const CATEGORIES: Record<CategoryType, CategoryConfig> = {
     secondary: '#0D9488',
     gradient: 'from-[#14B8A6] to-[#0D9488]',
     aiSummaryEnabled: true,
-    cveExtractionEnabled: false,
-  },
-  f1: {
-    id: 'f1',
-    name: 'F1',
-    description: 'Formula 1 news, race results, and team updates',
-    icon: '🏎️',
-    primary: '#EF4444',
-    secondary: '#DC2626',
-    gradient: 'from-[#EF4444] to-[#DC2626]',
-    aiSummaryEnabled: false,
     cveExtractionEnabled: false,
   },
 };

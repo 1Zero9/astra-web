@@ -810,51 +810,45 @@ function SecurityPulseContent() {
 
       {/* Sticky Header */}
       <header className="sticky top-0 z-30 bg-white border-b border-slate-300">
-        <div className="mx-auto max-w-7xl px-4 py-3">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-2">
-            <div className="flex items-center gap-3">
-              <h1 className="text-xl font-bold text-slate-900 tracking-tight">{categoryConfig.icon} {categoryConfig.name.toUpperCase()} PULSE</h1>
-              <span className="px-2 py-0.5 bg-slate-800 text-slate-100 text-xs font-mono">
+        <div className="mx-auto max-w-7xl px-4 py-2">
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <div className="flex items-center gap-2">
+              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{categoryConfig.icon} <span className="hidden sm:inline">{categoryConfig.name.toUpperCase()} </span>PULSE</h1>
+              <span className="hidden sm:inline px-2 py-0.5 bg-slate-800 text-slate-100 text-xs font-mono">
                 {getModuleVersion('pulse')}
               </span>
             </div>
             {lastSync && (
-              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-                  <span className="font-mono">SYNC: {lastSync.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
-                </span>
-                <button
-                  onClick={() => fetchNews()}
-                  className="w-full sm:w-auto px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-medium transition-colors"
-                  disabled={loading}
-                >
-                  {loading ? 'SYNCING...' : 'REFRESH'}
-                </button>
-              </div>
+              <button
+                onClick={() => fetchNews()}
+                className="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-medium transition-colors"
+                disabled={loading}
+              >
+                {loading ? '⟳' : 'REFRESH'}
+              </button>
             )}
           </div>
           <div className="text-xs text-slate-600 font-mono">
-            THREAT INTELLIGENCE FEED • {unreadCount} UNREAD • {newCount} NEW
+            <span className="hidden sm:inline">FEED • </span>{unreadCount} UNREAD • {newCount} NEW
           </div>
         </div>
 
         {/* Category Tabs */}
         <div className="bg-gradient-to-r" style={{backgroundImage: `linear-gradient(to right, ${categoryConfig.primary}, ${categoryConfig.secondary})`}}>
-          <div className="mx-auto max-w-7xl px-4 py-2">
-            <div className="flex gap-1 overflow-x-auto">
+          <div className="mx-auto max-w-7xl px-2 sm:px-4 py-2">
+            <div className="flex gap-1 overflow-x-auto scrollbar-hide -mx-2 px-2">
               {getAllCategories().map((category) => (
                 <button
                   key={category.id}
                   onClick={() => setActiveCategory(category.id)}
-                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold whitespace-nowrap transition-all ${
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 text-xs font-bold whitespace-nowrap transition-all rounded ${
                     activeCategory === category.id
                       ? 'bg-white text-slate-900 shadow-md'
-                      : 'bg-white/20 text-white hover:bg-white/30'
+                      : 'bg-white/20 text-white active:bg-white/40'
                   }`}
                 >
                   <span className="text-base">{category.icon}</span>
-                  <span>{category.name.toUpperCase()}</span>
+                  <span className="hidden sm:inline">{category.name.toUpperCase()}</span>
                 </button>
               ))}
             </div>
@@ -864,71 +858,71 @@ function SecurityPulseContent() {
         {/* Command Bar */}
         <div className="bg-slate-50 border-t border-slate-300 py-2">
           <div className="mx-auto max-w-7xl px-4">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+            <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex items-center gap-2 w-full lg:w-auto overflow-x-auto scrollbar-hide">
                 <button
                   onClick={markAllAsRead}
-                  className="w-full sm:w-auto px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors"
+                  className="px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors whitespace-nowrap"
                 >
                   MARK ALL READ
                 </button>
                 <button
                   onClick={markSelectedAsUnread}
                   disabled={selectedItems.length === 0}
-                  className="w-full sm:w-auto px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="hidden sm:inline-block px-3 py-1 bg-white hover:bg-slate-100 border border-slate-300 text-xs font-medium text-slate-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
                 >
                   MARK UNREAD ({selectedItems.length})
                 </button>
-                <div className="w-px h-5 bg-slate-300 mx-2"></div>
-                <span className="text-xs text-slate-600 font-mono">
+                <div className="hidden sm:block w-px h-5 bg-slate-300 mx-2"></div>
+                <span className="text-xs text-slate-600 font-mono whitespace-nowrap">
                   {filteredNews.length} ITEMS
                 </span>
               </div>
 
               {/* Tabs */}
-              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+              <div className="flex items-center gap-1 sm:gap-2 w-full lg:w-auto overflow-x-auto scrollbar-hide">
                 <button
                   onClick={() => setActiveTab('browse')}
-                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
+                  className={`flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
                     activeTab === 'browse'
                       ? 'bg-slate-800 text-white'
                       : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
                   }`}
                 >
-                  FEED ({news.length})
+                  FEED <span className="hidden sm:inline">({news.length})</span>
                 </button>
                 <button
                   onClick={() => {
                     setActiveTab('saved');
                     if (savedArticles.length === 0) fetchSavedArticles();
                   }}
-                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
+                  className={`flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
                     activeTab === 'saved'
                       ? 'bg-slate-800 text-white'
                       : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
                   }`}
                 >
-                  SAVED ({savedArticles.length})
+                  SAVED <span className="hidden sm:inline">({savedArticles.length})</span>
                 </button>
                 <button
                   onClick={() => {
                     setActiveTab('reading-list');
                     if (readingList.length === 0) fetchReadingList();
                   }}
-                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
+                  className={`flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
                     activeTab === 'reading-list'
                       ? 'bg-slate-800 text-white'
                       : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
                   }`}
                 >
-                  QUEUE ({readingList.length})
+                  QUEUE <span className="hidden sm:inline">({readingList.length})</span>
                 </button>
                 <button
                   onClick={() => {
                     setActiveTab('analytics');
                     if (!analytics) fetchAnalytics();
                   }}
-                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
+                  className={`hidden sm:flex flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
                     activeTab === 'analytics'
                       ? 'bg-slate-800 text-white'
                       : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
@@ -938,7 +932,7 @@ function SecurityPulseContent() {
                 </button>
                 <button
                   onClick={() => setActiveTab('generate')}
-                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
+                  className={`hidden sm:flex flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
                     activeTab === 'generate'
                       ? 'bg-slate-800 text-white'
                       : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
@@ -951,13 +945,13 @@ function SecurityPulseContent() {
                     setActiveTab('sources');
                     if (rssSources.length === 0) fetchSources();
                   }}
-                  className={`flex-1 lg:flex-none min-w-[120px] px-4 py-1 text-xs font-semibold transition-colors ${
+                  className={`flex-1 lg:flex-none px-2 sm:px-4 py-1 text-xs font-semibold transition-colors whitespace-nowrap ${
                     activeTab === 'sources'
                       ? 'bg-slate-800 text-white'
                       : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300'
                   }`}
                 >
-                  SOURCES ({rssSources.length})
+                  SOURCES <span className="hidden sm:inline">({rssSources.length})</span>
                 </button>
               </div>
             </div>
