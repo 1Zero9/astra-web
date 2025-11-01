@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { VERSION, getModuleVersion } from "@/lib/version";
+import { type CategoryType, getCategoryConfig, getAllCategories } from "@/lib/categories";
 
 interface NewsItem {
   title: string;
@@ -44,6 +45,10 @@ interface SeverityInfo {
 }
 
 export default function SecurityPulse() {
+  // Category state
+  const [activeCategory, setActiveCategory] = useState<CategoryType>('security');
+  const categoryConfig = getCategoryConfig(activeCategory);
+
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterPublication, setFilterPublication] = useState("");
@@ -66,7 +71,7 @@ export default function SecurityPulse() {
   const [showSources, setShowSources] = useState(false);
   const [rssSources, setRssSources] = useState<any[]>([]);
   const [loadingSources, setLoadingSources] = useState(false);
-  const [newSource, setNewSource] = useState({ name: '', url: '', description: '' });
+  const [newSource, setNewSource] = useState({ name: '', url: '', description: '', category: 'security' as CategoryType });
   const [addingSource, setAddingSource] = useState(false);
 
   // New state for enhancements
@@ -200,6 +205,7 @@ export default function SecurityPulse() {
           source: article.source,
           pubDate: article.pubDate,
           description: article.description,
+          category: activeCategory,
           tags: article.cves || [],
         }),
       });
@@ -228,6 +234,7 @@ export default function SecurityPulse() {
           source: article.source,
           pubDate: article.pubDate,
           description: article.description,
+          category: activeCategory,
           priority: 'medium',
         }),
       });
@@ -471,7 +478,7 @@ export default function SecurityPulse() {
       const data = await response.json();
       if (data.success) {
         setRssSources(prev => [...prev, data.source].sort((a, b) => a.name.localeCompare(b.name)));
-        setNewSource({ name: '', url: '', description: '' });
+        setNewSource({ name: '', url: '', description: '', category: 'security' });
         alert('RSS source added successfully!');
       } else {
         alert(data.error || 'Failed to add RSS source');
@@ -776,7 +783,7 @@ export default function SecurityPulse() {
         <div className="mx-auto max-w-7xl px-4 py-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-2">
             <div className="flex items-center gap-3">
-              <h1 className="text-xl font-bold text-slate-900 tracking-tight">SECURITY PULSE</h1>
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">{categoryConfig.icon} {categoryConfig.name.toUpperCase()} PULSE</h1>
               <span className="px-2 py-0.5 bg-slate-800 text-slate-100 text-xs font-mono">
                 {getModuleVersion('pulse')}
               </span>
@@ -799,6 +806,28 @@ export default function SecurityPulse() {
           </div>
           <div className="text-xs text-slate-600 font-mono">
             THREAT INTELLIGENCE FEED • {unreadCount} UNREAD • {newCount} NEW
+          </div>
+        </div>
+
+        {/* Category Tabs */}
+        <div className="bg-gradient-to-r" style={{backgroundImage: `linear-gradient(to right, ${categoryConfig.primary}, ${categoryConfig.secondary})`}}>
+          <div className="mx-auto max-w-7xl px-4 py-2">
+            <div className="flex gap-1 overflow-x-auto">
+              {getAllCategories().map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setActiveCategory(category.id)}
+                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold whitespace-nowrap transition-all ${
+                    activeCategory === category.id
+                      ? 'bg-white text-slate-900 shadow-md'
+                      : 'bg-white/20 text-white hover:bg-white/30'
+                  }`}
+                >
+                  <span className="text-base">{category.icon}</span>
+                  <span>{category.name.toUpperCase()}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -1074,13 +1103,15 @@ export default function SecurityPulse() {
                               >
                                 QUEUE
                               </button>
-                              <button
-                                onClick={() => showAISummary(item)}
-                                className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
-                                title="AI Analysis"
-                              >
-                                ANALYZE
-                              </button>
+                              {categoryConfig.aiSummaryEnabled && (
+                                <button
+                                  onClick={() => showAISummary(item)}
+                                  className="w-full sm:w-auto text-xs px-2 py-1 bg-slate-200 hover:bg-slate-300 border border-slate-300 font-medium transition-colors text-center"
+                                  title="AI Analysis"
+                                >
+                                  ANALYZE
+                                </button>
+                              )}
                               {!isUnread && (
                                 <button
                                   onClick={() => {
